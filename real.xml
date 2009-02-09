@@ -11,15 +11,15 @@
     <module name="available" weight="200" mandatory="yes"/>
     <module name="timeplace" weight="500" mandatory="yes"/>
     <module name="sametimelight" weight="500" mandatory="yes"/>
-<!--     <module name="maxperday" weight="60" mandatory="no"> -->
-<!--       <option name="resourcetype">teacher</option> -->
-<!--       <option name="maxperday">1</option> -->
-<!--     </module> -->
+    <module name="maxperday" weight="100" mandatory="no">
+      <option name="resourcetype">operator</option>
+      <option name="maxperday">1</option>
+    </module>
     <module name="walk" weight="5" mandatory="no">
       <option name="resourcetype">operator</option>
     </module>
 
-    <module name="preferredroom" weight="100" mandatory="no"/>
+    <module name="preferredroom" weight="100" mandatory="yes"/>
     <module name="room_available" weight="500" mandatory="yes"/>
     <module name="nights" weight="500" mandatory="yes">
       <option name="max-nights-per-week">2</option>
