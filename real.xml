@@ -21,6 +21,10 @@
 
     <module name="preferredroom" weight="100" mandatory="no"/>
     <module name="room_available" weight="500" mandatory="yes"/>
+    <module name="nights" weight="500" mandatory="yes">
+      <option name="max-nights-per-week">2</option>
+      <option name="max-nights-weight">100</option>
+    </module>
   </modules>
 
   <resources>

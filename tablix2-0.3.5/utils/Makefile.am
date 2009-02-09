@@ -1,1 +1,0 @@
-dist_bin_SCRIPTS = tablix2_benchmark tablix2_plot
