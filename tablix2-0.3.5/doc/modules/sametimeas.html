@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>sametimeas.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>sametimeas.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds support for scheduleding events at the same time.
+This module uses updater functions, so the weight and mandatory
+values are ignored.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+<h3>same-time-as</h3>
+<pre>&lt;restriction type="same-time-as"&gt;event name&lt;/restriction&gt;</pre>
+<p>This restriction specifies that the current event needs to be scheduled
+at the same time as the event identified in the restriction.</p>
+<pre>&lt;event name="a" repeats="4"&gt;
+...
+&lt;restriction type="same-time-as"&gt;b&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name="b" repeats="5"&gt;
+...
+&lt;/event&gt;</pre>
+<p>In this case, four events "a" are scheduled at the same time as four events
+"b". The fifth event "b" can be scheduled at any time.</p>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p><h2>Credits</h2><p><p>
+Module ported to 0.2.x kernel and extended by 
+Nick Robinson &lt;npr@bottlehall.co.uk&gt;
+Modified to use updater functions by Antonio Duran</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

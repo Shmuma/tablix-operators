@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<!-- 
+
+No script required. Bug causes the following error message on startup
+
+Constant resource 'teacher1' (type 'teacher') has 0.0 blocks of 'test1' events 
+defined and maximum 2147483647 blocks per day, however only 4 days are defined
+
+-->
+
+<!-- 
+BEGIN TTF BLOCK
+(test-ttf
+	#t
+)
+END TTF BLOCK
+-->
+
+<ttm version="0.2.0">
+        <modules>
+                <module name="sametime.so" weight="60" mandatory="yes"/> 
+                <module name="timeplace.so" weight="60" mandatory="yes"/> 
+                <module name="sameday.so" weight="60" mandatory="yes"> 
+			<option name="resourcetype">teacher</option>
+		</module>
+         </modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="teacher1">
+					<restriction type="ignore-sameday"/>
+				</resource>
+				<resource name="teacher2"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="class1"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="4" height="7"/>
+			</resourcetype>
+			<resourcetype type="room">
+				<resource name="room1"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test1" repeats="1">
+			<resource type="teacher" name="teacher1"/>
+			<resource type="class" name="class1"/>
+		</event>
+	</events>
+</ttm>

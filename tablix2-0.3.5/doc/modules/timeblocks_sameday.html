@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>timeblocks_sameday.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>timeblocks_sameday.so module reference</h1>
+
+		<h2>Description</h2>
+<p>
+Adds a weight if two timeblocks are scheduled on the same day.</p>
+<p>This module divides repetitions of an event into groups of equal sizes. It
+then makes sure that two such groups aren't scheduled on the same day.</p>
+<p>This module is deprecated. <a href="sameday.html">sameday.so</a> module in combination with 
+<a href="consecutive.html">consecutive.so</a> provides the same functionality with better performance.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+<h3>periods-per-block</h3>
+<pre>&lt;restriction type="periods-per-block"&gt;periods&lt;/restriction&gt;</pre>
+<p>Set this restriction to schedule blocks of events on different days.</p>
+<p>For example:</p>
+<pre>&lt;event name="test" repeats="6"&gt;
+	&lt;resource type="teacher" name="a"/&gt;
+	&lt;resource type="class" name="2"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This restriction tells Tablix to schedule 2 events "test" on one day, 
+next 2 events "test" on some other day and next 2 events "test" again
+on a different day.</p>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Antonio Duran, <a href="mailto:antonio.duran.terres@gmail.com">antonio.duran.terres@gmail.com</a></p><h2>Credits</h2><p><p>
+Additional error checking by Tomaz Solc</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

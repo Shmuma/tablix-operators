@@ -1,0 +1,1555 @@
+# Slovenian translations for tablix package
+# Slovenski prevodi paketa Tablix.
+# Copyright (C) 2003-2004 Tomaž Šolc
+# This file is distributed under the same license as the tablix package.
+# Tomaž Šolc <tomaz.solc@tablix.org>, 2004.
+#
+# "resource" = "vir"
+# "resource type" = "vrsta virov"
+# "solver" = "reševalec"
+# "conflict" = "nasprotovanje"
+# "hint" = "namig"
+# "handler" = "upravljalnik"
+msgid ""
+msgstr ""
+"Project-Id-Version: Tablix 0.3.0\n"
+"Report-Msgid-Bugs-To: tomaz.solc@tablix.org\n"
+"POT-Creation-Date: 2007-07-03 12:51+0200\n"
+"PO-Revision-Date: 2005-11-04 14:42+0200\n"
+"Last-Translator: Tomaz Solc <tomaz.solc@tablix.org>\n"
+"Language-Team: Slovenian <tomaz.solc@tablix.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3);\n"
+
+#: src/counter.c:192
+#, c-format
+msgid "[%x] reports %d (%d) at %d"
+msgstr "[%x] sporoča %d (%d) na %d"
+
+#: src/counter.c:193
+#, c-format
+msgid ", %.1f GPM"
+msgstr ", %.1f GPM"
+
+#: src/counter.c:194
+#, c-format
+msgid ", %02d:%02d:%02d elapsed"
+msgstr ", preteklo %02d:%02d:%02d"
+
+#: src/counter.c:195
+#, c-format
+msgid ", %d/%d running "
+msgstr ", %d/%d v teku "
+
+#: src/data.c:276
+#, c-format
+msgid "Domain '%d' for resource type '%s' is empty"
+msgstr "Domena '%d' za vrsto virov '%s' je prazna"
+
+#: src/data.c:282
+#, c-format
+msgid "Domain '%d' is used by event '%s'"
+msgstr "Domeno '%d' uporablja dogodek '%s'"
+
+#: src/data.c:348
+#, c-format
+msgid "Duplicate resource type definition: %s"
+msgstr "Dvojna definicija vrste virov: %s"
+
+#: src/data.c:492
+#, c-format
+msgid "compact_conflicts: %s has %d conflicting resources"
+msgstr "compact_conflicts: %s ima %d nasprotujočih si virov"
+
+#: src/data.c:518
+#, c-format
+msgid "Duplicate resource definition (type %s): %s"
+msgstr "Dvojna definicija vira (vrsta %s): %s"
+
+#: src/data.c:1351 src/data.c:1372 src/main.c:560 src/master.c:385
+#: src/modsup.c:85 src/modsup.c:745 src/output.c:142 src/xmlsup.c:140
+#: src/xmlsup.c:485 src/xmlsup.c:635 src/xmlsup.c:660 src/xmlsup.c:669
+#: src/xmlsup.c:695 src/xmlsup.c:721 modules/available.c:105
+#: modules/consecutive.c:229 modules/consecutive.c:278
+#: modules/events_sameday.c:139 modules/fixedtime.c:101
+#: modules/fixedtime.c:129 modules/perday.c:151 modules/perday.c:176
+#: modules/placecapability.c:153 modules/preferredtime.c:194
+#: modules/recurrence.c:215 modules/recurrence.c:279 modules/sameday.c:527
+#: modules/sameday.c:541 modules/sametimeas.c:161 export/export_htmlcss2.c:188
+#: export/export_vcal.c:127
+msgid "Can't allocate memory"
+msgstr "Ne morem pridobiti pomnilnika"
+
+#: src/data.c:1359
+msgid "Size of the saved population does not match the configuration"
+msgstr "Velikost shranjene populacije ne ustreza konfiguraciji"
+
+#: src/data.c:1381
+msgid "Saved population and configuration do not match"
+msgstr "Shranjena populacija in konfiguracija se ne skladata"
+
+#: src/data.c:1435
+#, c-format
+msgid ""
+"Hint for event '%s', resource type '%s' conflicts with domain for that "
+"event. Ignored."
+msgstr ""
+"Namig za dogodek '%s', vrsta vira '%s' naprotuje domeni za ta dogodek "
+"Prezrto."
+
+#: src/depend.c:275
+#, c-format
+msgid "Event '%s' depends on event '%s'"
+msgstr "Dogodek '%s' je odvisen od dogodka '%s'"
+
+#: src/error-local.c:51
+#, c-format
+msgid "[%s] fatal: %s\n"
+msgstr "[%s] usodno: %s\n"
+
+#: src/genetic.c:185
+#, c-format
+msgid "sending migration to %x"
+msgstr "pošiljam migracijo na %x"
+
+#: src/main.c:367
+#, c-format
+msgid "New sibling %x"
+msgstr "Imam novega soseda %x"
+
+#: src/main.c:455
+msgid "Parameter syntax error"
+msgstr "Napaka v skladnji parametra"
+
+#: src/main.c:464
+msgid "Wrong arguments"
+msgstr "Napačni argumenti"
+
+#: src/main.c:488 src/master.c:253
+msgid "Locale not supported by C library. Using the fallback 'C' locale."
+msgstr ""
+"C knjižnica ne podpira lokalizacije. Uporabljena bo privzeta 'C' "
+"lokalizacija."
+
+#: src/main.c:511
+msgid "Can't open temporary file"
+msgstr "Ne morem odpreti začasne datoteke"
+
+#: src/main.c:522
+msgid "No tuples defined"
+msgstr "Ni definiranih terk"
+
+#: src/main.c:550
+#, c-format
+msgid "Loaded %d modules"
+msgstr "Naložil %d modulov"
+
+#: src/main.c:556
+msgid "Circular event dependency detected"
+msgstr "Zaznana je bila krožna odvisnost dogodkov"
+
+#: src/main.c:566
+msgid "Failed to initialize data structures"
+msgstr "Neuspešna inicializacija podatkovnih struktur"
+
+#: src/main.c:584
+msgid "Error receiving population from master"
+msgstr "Napaka pri sprejemu populacije od glavnega vozlišča"
+
+#: src/main.c:591 src/master.c:335 src/output.c:237
+#, c-format
+msgid "Failed to load %s"
+msgstr "Neuspešno nalaganje %s"
+
+#: src/main.c:601 src/output.c:245
+msgid "Error initializing population"
+msgstr "Napaka pri inicializaciji populacije"
+
+#: src/main.c:612
+#, c-format
+msgid "I have restored %d tuples"
+msgstr "Obnovil sem %d terk"
+
+#: src/main.c:614
+#, c-format
+msgid "I have %d tuples"
+msgstr "Imam %d terk"
+
+#: src/main.c:649
+msgid "I have solution"
+msgstr "Imam rešitev"
+
+#: src/main.c:676
+msgid "Can't send temporary file"
+msgstr "Ne morem poslati začasne datoteke"
+
+#: src/master.c:68 src/output.c:53
+#, c-format
+msgid ""
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2 of the License, or\n"
+"(at your option) any later version.\n"
+msgstr ""
+"Ta program spada med prosto programje; lahko ga razširjate in/ali\n"
+"spreminjate pod pogoji Splošnega dovoljenja GNU (GNU General Public\n"
+"License), kot ga je objavila ustanova Free Software Foundation; bodisi\n"
+"različice 2 ali (po vaši izbiri) katerekoli poznejše različice.\n"
+
+#: src/master.c:74 src/output.c:59
+#, c-format
+msgid ""
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+msgstr ""
+"Ta program se razširja v upanju, da bo uporaben, vendar BREZ VSAKRŠNEGA\n"
+"JAMSTVA; tudi brez posredne zagotovitve CENOVNE VREDNOSTI ali PRIMERNOSTI\n"
+"ZA DOLOČEN NAMEN.  Za podrobnosti glejte besedilo GNU General Public\n"
+"License.\n"
+
+#: src/master.c:80 src/output.c:65
+#, c-format
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA\n"
+msgstr ""
+"Skupaj s tem programom bi morali prejeti izvod Splošnega\n"
+"dovoljenja GNU (GNU General Public License); če ga niste,\n"
+"pišite na Free Software Foundation, Inc., Temple Place -\n"
+"Suite 330, Boston, MA 02111-1307, USA.\n"
+
+#: src/master.c:87
+#, c-format
+msgid "Compile time options:\n"
+msgstr "Izbire pri prevajanju:\n"
+
+#: src/master.c:89
+#, c-format
+msgid "\tParallel genetic algorithm (using PVM3)\n"
+msgstr "\tVzporedni genetski algoritem (uporablja PVM3)\n"
+
+#: src/master.c:91
+#, c-format
+msgid "\tLinear genetic algorith (debug mode)\n"
+msgstr "\tLinearni genetski algoritem (način za razhroščevanje)\n"
+
+#: src/master.c:94
+#, c-format
+msgid "\tSaving convergence info\n"
+msgstr "\tShranjujejo se podatki o konvergenci\n"
+
+#: src/master.c:96
+#, c-format
+msgid "\tSearching for modules in %s\n"
+msgstr "\tModuli se iščejo v %s\n"
+
+#: src/master.c:97
+#, c-format
+msgid "\tModule documentation available in %s\n"
+msgstr "\tDokumentacija o modulih se nahaja v %s\n"
+
+#: src/master.c:99
+#, c-format
+msgid "\tAssertion checks enabled (debug mode)\n"
+msgstr "\tVključeno preverjanje trditev (način za razhroščevanje)\n"
+
+#: src/master.c:102
+#, c-format
+msgid "\tNational language support enabled\n"
+msgstr "\tPodpora nacionalnim jezikom vključena\n"
+
+#: src/master.c:109
+#, c-format
+msgid "Usage: %s [OPTION]... [FILE]\n"
+msgstr "Uporaba: %s [IZBIRA]... [DATOTEKA]\n"
+
+#: src/master.c:112
+#, c-format
+msgid "  -n NODES              set number of computing nodes (default 4)\n"
+msgstr ""
+"  -n VOZLIŠČA           nastavi število računskih vozlišč (privzeto 4)\n"
+
+#: src/master.c:116
+#, c-format
+msgid ""
+"  -o PREFIX             use PREFIX when naming output files\n"
+"  -r                    restore saved populations\n"
+"  -h                    display this help\n"
+"  -v                    display version, compile time options and\n"
+"                        copyright information\n"
+msgstr ""
+
+#: src/master.c:124
+#, c-format
+msgid ""
+"  -l NODES              set number of computing nodes that are allowed to\n"
+"                        simultaneously perform local search (set to -1 for \n"
+"                        no limit or 0 to disable local search. Default 1)\n"
+msgstr ""
+
+#: src/master.c:130
+#, c-format
+msgid ""
+"  -d LEVEL              verbosity level (default 2)\n"
+"  -t N                  stop if no solution is found after N minutes (set\n"
+"                        to 0 for no time limit. Default 0)\n"
+"  -p PARAMETERS         set algorithm parameters. PARAMETERS is a comma\n"
+"                        separated string of options.\n"
+msgstr ""
+
+#: src/master.c:136
+#, c-format
+msgid ""
+"  -i PATH\t\tset path to fitness modules\n"
+"                        (Default %s)\n"
+msgstr ""
+
+#: src/master.c:142 src/output.c:101
+#, c-format
+msgid "Please report bugs to <tomaz.solc@tablix.org>.\n"
+msgstr "Poročila o napakah prosim pošljite na <tomaz.solc@tablix.org>.\n"
+
+#: src/master.c:223 src/output.c:194
+#, c-format
+msgid "TABLIX version %s, PGA general timetable solver\n"
+msgstr "TABLIX različica %s, PGA reševanje splošnih urnikov\n"
+
+#: src/master.c:259 src/output.c:223
+#, c-format
+msgid "Missing file name. Try '%s -h' for more information."
+msgstr "Manjka ime datoteke. Poiskusite '%s -h' za več podatkov."
+
+#: src/master.c:276
+msgid "all nodes failed."
+msgstr "nobeno vozlišče se ni uspelo zagnati."
+
+#: src/master.c:280
+#, c-format
+msgid "PGA using %d node"
+msgid_plural "PGA using %d nodes"
+msgstr[0] "PGA uporablja %d vozlišče"
+msgstr[1] "PGA uporablja %d vozlišči"
+msgstr[2] "PGA uporablja %d vozlišča"
+msgstr[3] "PGA uporablja %d vozlišč"
+
+#: src/master.c:281
+#, c-format
+msgid "on %d host"
+msgid_plural "on %d hosts"
+msgstr[0] "na %d gostitelju"
+msgstr[1] "na %d gostiteljih"
+msgstr[2] "na %d gostiteljih"
+msgstr[3] "na %d gostiteljih"
+
+#: src/master.c:286
+#, c-format
+msgid "maximum %d node will do local search"
+msgid_plural "maximum %d nodes will do local search"
+msgstr[0] "največ %d vozlišče bo izvajalo lokalno iskanje"
+msgstr[1] "največ %d vozlišči bo izvajalo lokalno iskanje"
+msgstr[2] "največ %d vozlišča bo izvajalo lokalno iskanje"
+msgstr[3] "največ %d vozlišč bo izvajalo lokalno iskanje"
+
+#: src/master.c:291
+msgid "local search disabled"
+msgstr "lokalno iskanje izklopljeno"
+
+#: src/master.c:293
+msgid "local search enabled on all nodes"
+msgstr "vsa vozlišča bodo izvajala lokalno iskanje"
+
+#: src/master.c:295
+msgid "multicasting XML data"
+msgstr "pošiljam XML podatke"
+
+#: src/master.c:315
+#, c-format
+msgid "Failed to send problem description '%s' to computing nodes"
+msgstr "Pošiljanje opisa problema '%s' računskim vozliščem ni uspelo"
+
+#: src/master.c:326
+msgid "Restoring saved populations"
+msgstr "Obnavljam shranjene populacije"
+
+#: src/master.c:355
+#, c-format
+msgid "%d nodes randomized"
+msgstr "%d vozlišč naključnih"
+
+#: src/master.c:364
+msgid "Initializing nodes"
+msgstr "Zaganjam vozlišča"
+
+#: src/master.c:378
+#, c-format
+msgid "parent ( %x ) listening\n"
+msgstr "starš ( %x ) posluša\n"
+
+#: src/master.c:399
+#, c-format
+msgid "Can't open file %s for writing"
+msgstr "Ne morem odpreti datoteke %s za pisanje"
+
+#: src/master.c:451
+#, c-format
+msgid "received message from unknown node %x"
+msgstr "prejel sporočilo od neznanega vozlišča %x"
+
+#: src/master.c:456
+#, c-format
+msgid "%x has %d fitness functions"
+msgstr "%x ima %d cenilnih funkcij"
+
+#: src/master.c:462
+#, c-format
+msgid "node %x has a different number of modules than others"
+msgstr "vozlišče %x ima različno število modulov od ostalih"
+
+#: src/master.c:484
+#, c-format
+msgid "%s: FATAL: %s"
+msgstr "%s: USODNO: %s"
+
+#: src/master.c:492
+#, c-format
+msgid "received quit notification from unknown node %x"
+msgstr "prejel obvestilo o ustavitvi od neznanega vozlišča %x"
+
+#: src/master.c:495
+#, c-format
+msgid "node %x has unexpectedly quit"
+msgstr "vozlišče %x se je nepričakovano ustavilo"
+
+#: src/master.c:506
+#, c-format
+msgid "node %x is uploading the result"
+msgstr "vozlišče %x nalaga rezultat"
+
+#: src/master.c:519
+#, c-format
+msgid "node %x is reporting too soon"
+msgstr "vozlišče %x sporoča prezgodaj"
+
+#: src/master.c:539
+#, c-format
+msgid "receiving population from %x"
+msgstr "prejemam populacijo od vozlišča %x"
+
+#: src/master.c:571
+#, c-format
+msgid "unknown message received from %x. Perhaps a version mismatch?"
+msgstr "prejeto neznano sporočilo od %x. Mogoče neustrezna različica?"
+
+#: src/master.c:584
+msgid "Time limit reached"
+msgstr "Dosežena je bila časovna omejitev"
+
+#: src/master.c:586
+msgid "Received interrupt"
+msgstr "Prejel prekinitev"
+
+#: src/master.c:591
+msgid "No results were received"
+msgstr "Ni bilo sprejetih rezultatov"
+
+#: src/master.c:593
+msgid "Some results were received"
+msgstr "Nekaj rezultatov je bilo sprejetih"
+
+#: src/master.c:595
+msgid "All results were received"
+msgstr "Sprejeti so bili vsi rezultati"
+
+#: src/master.c:604
+#, c-format
+msgid "node\tgenerations/minute\n"
+msgstr "vozlišče\tgeneracije/minuto\n"
+
+#: src/master.c:612
+#, c-format
+msgid ""
+"\n"
+"total generations per minute: %.1f\n"
+msgstr ""
+"\n"
+"skupno generacij na minuto: %.1f\n"
+
+#: src/master.c:613
+#, c-format
+msgid "total time: %02d:%02d:%02d\n"
+msgstr "skupni čas: %02d:%02d:%02d\n"
+
+#: src/modsup.c:324 src/modsup.c:356 src/modsup.c:361 src/modsup.c:399
+#, c-format
+msgid "Requested resource type '%s' not found"
+msgstr "Zahtevana vrsta virov '%s' ni bila najdena"
+
+#: src/modsup.c:366
+#, c-format
+msgid ""
+"Requested extension has constant and variable resource types set to '%s'"
+msgstr ""
+"Zahtevana razširitev ima konstantno in spremenljivo vrsto virov nastavljeno "
+"na '%s'"
+
+#: src/modsup.c:519 modules/consecutive.c:343 modules/freemorning.c:120
+#: modules/holes.c:113 modules/perday.c:139 modules/recurrence.c:319
+#: modules/sametimeas.c:168 modules/walk.c:107
+#, c-format
+msgid "Resource type '%s' not found"
+msgstr "Ne morem najti vrste virov '%s'"
+
+#: src/modsup.c:588 src/modsup.c:625
+#, c-format
+msgid "Restriction handler for restriction type '%s' failed"
+msgstr "Upravljalnik omejitve za vrsto omejitve '%s' ni bil uspešen"
+
+#: src/modsup.c:590
+#, c-format
+msgid "Processing resource '%s', resource type '%s'"
+msgstr "Procesiram vir '%s', vrsta vira '%s'"
+
+#: src/modsup.c:627
+#, c-format
+msgid "Processing tuple '%s'"
+msgstr "Procesiram terko '%s'"
+
+#: src/modsup.c:679
+#, c-format
+msgid "Stripping '.so' extension from '%s' module name."
+msgstr ""
+
+#: src/modsup.c:681
+msgid "Please use module names without extensions in new problem descriptions."
+msgstr ""
+
+#: src/modsup.c:749
+#, c-format
+msgid "Loading module %s"
+msgstr "Nalagam modul %s"
+
+#: src/modsup.c:752
+#, fuzzy, c-format
+msgid "Can't load module '%s'"
+msgstr "Ne morem najti vira '%s'."
+
+#: src/modsup.c:762
+#, fuzzy, c-format
+msgid "Can't find module_init() in module '%s'"
+msgstr "Ne morem najti vira '%s'."
+
+#: src/modsup.c:763 src/output.c:157
+msgid "Are you trying to use modules from an incompatible version of Tablix?"
+msgstr ""
+
+#: src/modsup.c:772
+#, c-format
+msgid "Initialization for module '%s' failed"
+msgstr "Inicializacija modula '%s' ni bila uspešna"
+
+#: src/nodes.c:186
+#, c-format
+msgid "Host '%s' is too slow and will be ignored."
+msgstr "Gostitelj '%s' je prepočasen in ne bo uporabljen."
+
+#: src/nodes.c:197
+#, c-format
+msgid "Some nodes on host '%s' failed to start."
+msgstr "Nekaterim vozliščem na gostitelju '%s' se ni uspelo zagnati."
+
+#: src/output.c:77
+#, c-format
+msgid "Usage: %s [OPTION]... [FORMAT] [FILE]\n"
+msgstr "Uporaba: %s [IZBIRA]... [FORMAT] [DATOTEKA]\n"
+
+#: src/output.c:79
+#, fuzzy, c-format
+msgid ""
+"  -o FILE               write output to file FILE instead of stdout\n"
+"  -h                    display this help\n"
+"  -v                    display version and copyright information\n"
+"  -s OPTIONS            pass OPTIONS to the export module\n"
+"  -d LEVEL              verbosity level (default 2)\n"
+"  -r FILE               FILE contains a saved population. Timetable with\n"
+"                        the lowest fitness value is exported instead\n"
+"                        of any result stored in the XML file. If this "
+"option\n"
+"                        is used, the XML file does not need to contain a\n"
+"                        solution.\n"
+"  -i PATH\t\tset path to fitness modules\n"
+"                        (Default %s)\n"
+msgstr ""
+"  -o DATOTEKA           zapiši izhod v DATOTEKO namesto v standardni izhod\n"
+"  -h                    pokaži to pomoč\n"
+"  -v                    pokaži različico in podatke o avtorskih pravicah\n"
+"  -s IZBIRE             podaj IZBIRE izvoznemu modulu\n"
+"  -d NIVO               nivo zgovornosti (privzeto 2)\n"
+"  -r DATOTEKA           DATOTEKA vsebuje shranjeno populacijo. Namesto "
+"rešitve\n"
+"                        problema, shranjene v XML datoteki, se bo izvozil\n"
+"                        urnik z najnižjo vrednostjo cenilke. Če je "
+"uporabljena\n"
+"                        ta izbira, se lahko uporabi tudi XML datoteka, ki "
+"ne\n"
+"                        vsebuje rešitve."
+
+#: src/output.c:149
+#, c-format
+msgid "Can't load export module module '%s'"
+msgstr ""
+
+#: src/output.c:156
+#, fuzzy, c-format
+msgid "Can't find export_function() in module '%s'"
+msgstr "Ne morem najti vira '%s'."
+
+#: src/output.c:220
+#, c-format
+msgid "Missing output format. Try '%s -h' for more information."
+msgstr "Manjka izhodni format. Poiskusite '%s -h' za izčrpnejša navodila."
+
+#: src/output.c:256
+msgid "Error loading export module"
+msgstr ""
+
+#: src/output.c:261
+msgid "Export function failed"
+msgstr "Funkcija za izvoz ni bila uspešna"
+
+#: src/params.c:177
+msgid "Genetic algorithm parameters:"
+msgstr "Parametri genetskega algoritma:"
+
+#: src/params.c:180
+#, c-format
+msgid "%s=%d"
+msgstr "%s=%d"
+
+#: src/xmlsup.c:52 src/xmlsup.c:56
+#, c-format
+msgid "Tag <%s> without required property '%s'"
+msgstr "Oznaka <%s> je brez zahtevane lastnosti '%s'"
+
+#: src/xmlsup.c:53 src/xmlsup.c:57
+#, c-format
+msgid "Invalid value of property '%s' in tag <%s>"
+msgstr "Neveljavna vrednost lastnosti '%s' oznake <%s>"
+
+#: src/xmlsup.c:114
+#, c-format
+msgid "%s (line %d)"
+msgstr "%s (vrstica %d)"
+
+#: src/xmlsup.c:222
+#, c-format
+msgid ""
+"Definition of event has multiple definitions for resource type '%s' (line %d)"
+msgstr ""
+"Definicija dogodka in večkratno definicijo za vrsto vira '%s' (vrstica %d)"
+
+#: src/xmlsup.c:335
+#, c-format
+msgid "Module %s failed to load"
+msgstr "Modul %s se ni uspešno naložil"
+
+#: src/xmlsup.c:377
+#, c-format
+msgid "Unknown event restriction '%s' (line %d)"
+msgstr "Neznana omejitev dogodka '%s' (vrstica %d)"
+
+#: src/xmlsup.c:418
+msgid ""
+"Unknown event restrictions found. Increase verbosity level for more "
+"information."
+msgstr ""
+"Najdene so bile neznane omejitve dogodkov. Povečajte nivo zgovornosti za "
+"podrobnosti."
+
+#: src/xmlsup.c:456
+#, c-format
+msgid ""
+"Definition of event '%s' is missing constant resource type '%s' (line %d)"
+msgstr ""
+"V definiciji dogodka '%s' manjka konstantna vrsta vira '%s' (vrstica %d)"
+
+#: src/xmlsup.c:523
+#, c-format
+msgid "Unknown resource restriction '%s' (line %d)"
+msgstr "Neznana omejitev vira '%s' (vrstica %d)"
+
+#: src/xmlsup.c:578
+msgid ""
+"Unknown resource restrictions found. Increase verbosity level for more "
+"information."
+msgstr ""
+"Najdene so bile neznane omejitve virov. Povečajte nivo zgovornosti za "
+"podrobnosti."
+
+#: src/xmlsup.c:1019
+msgid "This file does not seem to contain a solution"
+msgstr "Izgleda, kot da ta datoteka ne vsebuje rešitve"
+
+#: src/xmlsup.c:1039 src/xmlsup.c:1051
+msgid "Configuration file does not contain a complete solution"
+msgstr "Konfiguracijska datoteka ne vsebuje celotne rešitve"
+
+#: modules/available.c:80
+#, c-format
+msgid "Restriction '%s' requires an argument"
+msgstr "Omejitev '%s' potrebuje argument"
+
+#: modules/available.c:86
+#, c-format
+msgid ""
+"Sorry, you can currently only use restriction '%s' on constant resources"
+msgstr ""
+"Oprostite, trenutno lahko omejitev '%s' uporabite le na konstantnih virih"
+
+#: modules/available.c:98
+#, c-format
+msgid "Can't find resource '%s', resource type '%s'"
+msgstr "Ne morem najti vira '%s', vrste vira '%s'"
+
+#: modules/consecutive.c:173
+#, c-format
+msgid "restriction '%s' does not take an argument"
+msgstr "omejitev '%s' ne potrebuje argumenta"
+
+#: modules/consecutive.c:184
+#, c-format
+msgid "Invalid number of periods for '%s' restriction"
+msgstr "Nepravilno število ur za omejitev '%s'"
+
+#: modules/consecutive.c:241
+msgid ""
+"Number of consecutive events would exceed the number of periods in a day"
+msgstr "Število zaporednih dogodkov bi preseglo število ur v dnevu"
+
+#: modules/consecutive.c:271 modules/freemorning.c:132
+#: modules/freeperiod.c:199 modules/holes.c:125 modules/perday.c:157
+#: modules/preferredroom.c:177 modules/preferredtime.c:159
+#: modules/recurrence.c:272 modules/timeblocks.c:211
+#: modules/timeblocks_sameday.c:191 modules/walk.c:119
+#, c-format
+msgid "module '%s' has been loaded, but not used"
+msgstr "modul '%s' se je naložil, vendar ni uporabljen"
+
+#: modules/consecutive.c:296 modules/sametimeas.c:147
+#, c-format
+msgid "Event '%s' already depends on another event"
+msgstr "Dogodek '%s' je že odvisen od drugega dogodka"
+
+#: modules/consecutive.c:349 modules/recurrence.c:325
+#, c-format
+msgid "Resource type '%s' is not a matrix"
+msgstr "Vrsta virov '%s' ni matrika"
+
+#: modules/events_sameday.c:81 modules/sametimeas.c:92
+#, c-format
+msgid "restriction '%s' requires an argument"
+msgstr "omejitev '%s' potrebuje argument"
+
+#: modules/events_sameday.c:99
+#, c-format
+msgid "restriction '%s' specifies an unknown event '%s'"
+msgstr "omejitev '%s' omenja neznani dogodek '%s'"
+
+#: modules/events_sameday.c:133 modules/fixedtime.c:148
+#: modules/freeperiod.c:242 modules/preferredtime.c:203 modules/sameday.c:520
+#: modules/sametimeas.c:174 modules/timeblocks.c:243
+#: modules/timeblocks_sameday.c:235 export/export_htmlcss.c:452
+#: export/export_htmlcss2.c:767
+msgid "Resource type 'time' is not a matrix"
+msgstr "Vrsta virov 'time' ni matrika"
+
+#: modules/fixedtime.c:95
+msgid "Invalid fixed day"
+msgstr "Nepravilen nespremenljivi dan"
+
+#: modules/fixedtime.c:123
+msgid "Invalid fixed period"
+msgstr "Nepravilna nespremenljiva ura"
+
+#: modules/freemorning.c:126 modules/holes.c:119 modules/perday.c:145
+#: modules/walk.c:113
+#, c-format
+msgid "Resource type %s is not a matrix"
+msgstr "Vrsta virov %s ni matrika"
+
+#: modules/freeperiod.c:164
+msgid "invalid day or period in 'free-period' restriction"
+msgstr "nepravilen dan ali ura v omejitvi 'free-period'"
+
+#: modules/freeperiod.c:179
+msgid "invalid day in 'free-day' restriction"
+msgstr "nepravilen dan v omejitvi 'free-day'"
+
+#: modules/freeperiod.c:253
+msgid "invalid day or period in 'free-period' option"
+msgstr "nepravilen dan ali ura v izbiri 'free-period'"
+
+#: modules/placecapability.c:146
+#, c-format
+msgid "Resource type %s not found"
+msgstr "Vrsta virov %s ni bila najdena"
+
+#: modules/preferredroom.c:77 modules/preferredroom.c:95
+#: modules/preferredroom.c:113
+msgid "invalid room in preferred-room restriction"
+msgstr "nepravilna soba v omejitvi preferred-room"
+
+#: modules/preferredroom.c:82 modules/preferredroom.c:100
+#: modules/preferredroom.c:118
+msgid "Only one restriction per resource allowed"
+msgstr "Dovoljena je le ena omejitev na vir"
+
+#: modules/preferredroom.c:200
+#, c-format
+msgid "Required resource type '%s' not found"
+msgstr "Ne najdem potrebne vrste virov '%s'"
+
+#: modules/preferredtime.c:104
+msgid "invalid preferred day"
+msgstr "nepravilen najljubši dan"
+
+#: modules/preferredtime.c:119
+msgid "invalid preferred period"
+msgstr "nepravilna najljubša ura"
+
+#: modules/preferredtime.c:166
+msgid ""
+"restriction 'preferred-period' and 'preferred-day' only set on first "
+"instance of an event where 'repeats' > 1"
+msgstr ""
+"omejitev 'preferred-period' in 'preferred-day' je uporabljena samo na prvem "
+"primeru dogodka z več kot eno ponovitvijo"
+
+#: modules/preferredtime.c:172
+msgid ""
+"restriction 'preferred-day' only set on first instance of an event where "
+"'repeats' > 1"
+msgstr ""
+"omejitev 'preferred-day' je uporabljena samo na prvem primeru dogodka z več "
+"kot eno ponovitvijo"
+
+#: modules/preferredtime.c:178
+msgid ""
+"using only restriction 'preferred-period' where 'repeats' > 1 will cause "
+"problems with 'consecutive' restrictions"
+msgstr ""
+"uporaba omejitve 'preferred-period' na dogodku z več kot eno ponovitvijo bo "
+"povzročila težave z omejitvami 'consecutive'"
+
+#: modules/recurrence.c:163
+msgid "Invalid format of the 'recurrence' restriction"
+msgstr "Nepravilna oblika 'recurrence' omejitve"
+
+#: modules/recurrence.c:168
+#, c-format
+msgid "Week number for the start of recurrence %d is not between 0 and %d"
+msgstr "Številka tedna za začetek ponavljanja %d ni med 0 in %d"
+
+#: modules/recurrence.c:173
+msgid "Number of recurrences per week must be greater than 0"
+msgstr "Število ponovitev na teden mora biti večje od 0"
+
+#: modules/recurrence.c:178
+#, c-format
+msgid ""
+"Number of recurrences per week (%d) exceeds number of timeslots per week (%d)"
+msgstr ""
+"Število ponovitev na teden (%d) je večje od števila časovnih intervalov na "
+"teden (%d)"
+
+#: modules/recurrence.c:225
+msgid "Too many defined events"
+msgstr "Preveč definiranih dogodkov"
+
+#: modules/recurrence.c:332
+msgid "Number of days per week is greater than the number of defined days"
+msgstr "Število dni na teden je večje od števila definiranih dni"
+
+#: modules/sameday.c:206 modules/sameday.c:232
+#, c-format
+msgid "'%s' restriction valid only for constant resource types"
+msgstr "Omejitev '%s' se lahko uporabi samo za konstantne vrste virov"
+
+#: modules/sameday.c:239 modules/sameday.c:274 modules/sameday.c:292
+#: modules/timeblocks.c:126 modules/timeblocks_sameday.c:129
+msgid "Invalid number of periods"
+msgstr "Nepravilno število ur"
+
+#: modules/sameday.c:485
+#, c-format
+msgid ""
+"Constant resource '%s' (type '%s') has %.1f blocks of '%s' events defined "
+"and maximum %d blocks per day, however only %d days are defined"
+msgstr ""
+"Konstantni vir '%s' (tip '%s') ima definiranih %.1f blokov z '%s' dogodki in "
+"največ %d blokov na dan, vendar je definiranih samo %d dnevov"
+
+#: modules/sameday.c:560
+#, c-format
+msgid "Module '%s' has been loaded, but not used"
+msgstr "Modul '%s' se je naložil, vendar ni uporabljen"
+
+#: modules/sameday.c:562
+msgid ""
+"To obtain the same functionality as in version 0.3.0, add the following "
+"module options"
+msgstr ""
+"Če želite obdržati funkcionalnost iz različice 0.3.0 dodajte naslednje "
+"izbire modula"
+
+#: modules/sametime.c:104
+#, c-format
+msgid ""
+"Can't find resource '%s', resource type '%s' in 'conflicts-with' restriction"
+msgstr "Ne morem najti vira '%s', tip '%s', v 'conflicts-with' omejitvi"
+
+#: modules/sametime.c:207
+#, fuzzy, c-format
+msgid "Too many events for %s '%s'"
+msgstr "Preveč dogodkov za razred '%s'"
+
+#: modules/sametime.c:210
+#, c-format
+msgid "%d events with only %d available time slots"
+msgstr "%d dogodkov in samo %d prostih časovnih intervalov"
+
+#: modules/sametimeas.c:112
+#, c-format
+msgid "No events match name '%s' in 'same-time-as' restriction"
+msgstr "Noben dogodek ne ustreza imenu '%s' v omejitvi 'same-time-as'"
+
+#: modules/sametimeas.c:117
+#, c-format
+msgid ""
+"Repeats for this event must be less or equal than the target event '%s' in "
+"'same-time-as' restriction"
+msgstr ""
+"Trenutni dogodek se mora ponoviti manj- ali enakokrat kot ciljni dogodek '%"
+"s' v omejitvi 'same-time-as'"
+
+#: modules/sametimeas.c:123
+msgid ""
+"Source and target events for 'same-time-as' restriction are the same event"
+msgstr "Izvirni in ciljni dogodek omejitve 'same-time-as' je isti dogodek"
+
+#: modules/timeblocks.c:120 modules/timeblocks_sameday.c:123
+msgid "restriction 'periods-per-block' takes an argument"
+msgstr "omejitev 'periods-per-block' potrebuje argument"
+
+#: modules/timeblocks.c:217 modules/timeblocks_sameday.c:197
+#, c-format
+msgid "Useless 'periods-per-block' restriction for only one event '%s'"
+msgstr "Omejitev 'periods-per-block' za samo en dogodek '%s' nima pomena"
+
+#: modules/timeblocks.c:225 modules/timeblocks_sameday.c:205
+#: modules/timeblocks_sameday.c:216
+#, c-format
+msgid "Event '%s' has invalid 'periods-per-block' restriction"
+msgstr "Dogodek '%s' ima nepravilno omejitev 'periods-per-block'"
+
+#: modules/timeblocks.c:228 modules/timeblocks_sameday.c:208
+msgid ""
+"Number of periods per block is not divisible with the number of repetitions "
+"of the event"
+msgstr "Število ur na blok ni deljivo s številom ponovitev dogodka"
+
+#: modules/timeblocks_sameday.c:219
+msgid "Number of blocks is greater than number of days in a week"
+msgstr "Število blokov je večje od števila dni v tednu"
+
+#: modules/timeplace.c:75
+msgid "Too many events for the defined number of time slots and rooms"
+msgstr "Preveč dogodkov za definirano število časovnih intervalov in sob"
+
+#: export/export_html.c:46 export/export_htmlcss.c:470
+#, c-format
+msgid "Tablix output"
+msgstr "Tablix izpis"
+
+#: export/export_html.c:185 export/export_htmlcss.c:504
+#: export/export_htmlcss2.c:735
+#, c-format
+msgid "Fitness of this timetable: %d"
+msgstr "Ocena tega urnika: %d"
+
+#: export/export_html.c:188
+#, c-format
+msgid "Tablix, version %s"
+msgstr "Tablix, različica %s"
+
+#: export/export_htmlcss.c:211 export/export_htmlcss.c:423
+#: export/export_htmlcss2.c:276 export/export_htmlcss2.c:677
+#, c-format
+msgid "Can't find resource type '%s'"
+msgstr "Ne morem najti vrste vira '%s'"
+
+#: export/export_htmlcss.c:410
+msgid "Back to top"
+msgstr "Nazaj na začetek"
+
+#: export/export_htmlcss.c:449 export/export_htmlcss2.c:764
+msgid "Can't find resource type 'time'"
+msgstr "Ne morem najti vrste vira 'time'"
+
+#: export/export_htmlcss.c:492 export/export_htmlcss2.c:713
+msgid "Classes"
+msgstr "Razredi"
+
+#: export/export_htmlcss.c:493 export/export_htmlcss2.c:714
+msgid "Teachers"
+msgstr "Učitelji"
+
+#: export/export_htmlcss.c:507 export/export_htmlcss2.c:742
+#, c-format
+msgid "Created by <a href=\"http://www.tablix.org\">Tablix</a>, version %s"
+msgstr "Izdelano z <a href=\"http://www.tablix.org\">Tablix</a>, različica %s"
+
+#: export/export_htmlcss2.c:222
+#, c-format
+msgid "Can't open file '%s' for writing: %s"
+msgstr "Ne morem odpreti datoteke '%s' za pisanje: %s"
+
+#: export/export_htmlcss2.c:254 export/export_htmlcss2.c:261
+#, c-format
+msgid "Can't write to '%s': %s"
+msgstr "Ne morem pisati v '%s': %s"
+
+#: export/export_htmlcss2.c:415
+msgid "See also"
+msgstr "Glej tudi"
+
+#: export/export_htmlcss2.c:424 export/export_htmlcss2.c:646
+#, c-format
+msgid "Timetable for %s for week %d"
+msgstr "Urnik za %s za teden %d"
+
+#: export/export_htmlcss2.c:430 export/export_htmlcss2.c:657
+#, c-format
+msgid "Timetable for %s"
+msgstr "Urnik za %s"
+
+#: export/export_htmlcss2.c:598 export/export_htmlcss2.c:601
+#: export/export_htmlcss2.c:628
+msgid "Back to index"
+msgstr "Nazaj na kazalo"
+
+#: export/export_htmlcss2.c:611
+#, c-format
+msgid "Timetable index for %s"
+msgstr "Kazalo urnikov za %s"
+
+#: export/export_htmlcss2.c:623
+#, c-format
+msgid "Week %d"
+msgstr "Teden %d"
+
+#: export/export_htmlcss2.c:692
+#, c-format
+msgid "Can't create directory '%s': %s"
+msgstr "Ne morem ustvariti direktorija '%s': %s"
+
+#: export/export_htmlcss2.c:702
+msgid "Timetable index"
+msgstr "Kazalo urnikov"
+
+#: export/export_htmlcss2.c:715
+msgid "Rooms"
+msgstr "Sobe"
+
+#: export/export_htmlcss2.c:718
+msgid "Key"
+msgstr "Ključ"
+
+#: export/export_htmlcss2.c:719
+msgid "Normal lecture"
+msgstr "Običajna ura"
+
+#: export/export_htmlcss2.c:726
+msgid "Optional lecture or time slot shared with another class or teacher"
+msgstr ""
+"Izbirna ura ali časovni interval, deljen z drugim razredom ali učiteljem"
+
+#: export/export_htmlcss2.c:730
+msgid "Free time slot"
+msgstr "Prosti časovni interval"
+
+#: export/export_htmlcss2.c:756
+msgid ""
+"This export module can't use standard output. Please specify a file name on "
+"the command line."
+msgstr ""
+"Ta izvozni modul ne more uporabiti standardnega izhoda. Prosim navedite ime "
+"datoteke v ukazni vrstici."
+
+#: export/export_vcal.c:110 export/export_vcal.c:165
+#, c-format
+msgid "Can't find resource type '%s'."
+msgstr "Ne morem najti vrste virov '%s'."
+
+#: export/export_vcal.c:116
+#, c-format
+msgid "Resource type '%s' is not a matrix."
+msgstr "Vrsta virov '%s' ni matrika."
+
+#: export/export_vcal.c:121
+msgid ""
+"Sorry, only timetables with less than 7 days per week are currently "
+"supported."
+msgstr ""
+"Oprostite, trenutno so podprti samo urniki z manj kot 7 dnevi na teden."
+
+#: export/export_vcal.c:133 export/export_vcal.c:146 export/export_vcal.c:159
+#: export/export_vcal.c:171
+#, c-format
+msgid "Please specify '%s' option"
+msgstr "Prosimo, uporabite izbiro '%s'"
+
+#: export/export_vcal.c:139
+msgid "Contents of the 'starttime' option do not contain a valid date"
+msgstr "Izbira 'starttime' ne vsebuje pravilnega datuma"
+
+#: export/export_vcal.c:152
+msgid "Contents of the 'length' option do not contain a valid event length"
+msgstr "Izbira 'length' ne vsebuje pravilne dolžine dogodka"
+
+#: export/export_vcal.c:177
+#, c-format
+msgid "Can't find resource '%s'."
+msgstr "Ne morem najti vira '%s'."
+
+#: ttf/export_ttf.c:87
+msgid "Missing resource type"
+msgstr "Manjka vrsta vira"
+
+#: ttf/export_ttf.c:91
+msgid "Resource type not a string"
+msgstr "Vrsta vira ni niz znakov"
+
+#: ttf/export_ttf.c:99
+msgid "Resource type not found"
+msgstr "Ne morem najti vrste vira"
+
+#: ttf/export_ttf.c:113
+msgid "Missing tuple ID or tuple name"
+msgstr "Manjka ID ali ime terke"
+
+#: ttf/export_ttf.c:120
+#, c-format
+msgid "Tuple ID '%d' not found"
+msgstr "Ne morem najti ID terke '%d'"
+
+#: ttf/export_ttf.c:132
+#, c-format
+msgid "Tuple with name '%s' not found"
+msgstr "Ne morem najti terke z imenom '%s'"
+
+#: ttf/export_ttf.c:137 ttf/export_ttf.c:174
+msgid "Argument must be an integer or a string"
+msgstr "Argument mora biti celo število ali niz"
+
+#: ttf/export_ttf.c:151
+msgid "Missing resource ID or resource name"
+msgstr "Manjka ID ali ime vira"
+
+#: ttf/export_ttf.c:158
+#, c-format
+msgid "Resource ID '%d' not found"
+msgstr "Ne morem najti ID vira '%d'"
+
+#: ttf/export_ttf.c:168
+#, c-format
+msgid "Resource with name '%s' and type '%s' not found"
+msgstr "Ne morem najti vira z imenom '%s' vrste '%s'"
+
+#: ttf/export_ttf.c:286
+msgid "Scheme interpreter failed to initialize"
+msgstr "Interpreter za Scheme se ni uspel zagnati"
+
+#: ttf/export_ttf.c:305
+msgid "No config file specified"
+msgstr "Ni podane konfiguracijske datoteke"
+
+#: ttf/export_ttf.c:310
+#, c-format
+msgid "Can't open script file '%s'"
+msgstr "Ne morem odpreti skriptne datoteke '%s'"
+
+#: ttf/export_ttf.c:330
+msgid "Scheme interpreter error"
+msgstr "Napaka interpreterja za Scheme"
+
+#: ttf/export_ttf.c:338
+msgid "All tests passed"
+msgstr "Vsi preizkusi uspešno opravljeni"
+
+#: ttf/export_ttf.c:340
+msgid "Some tests failed"
+msgstr "Nekateri preizkusi niso bili uspešni"
+
+#~ msgid "Property 'mandatory' should be 'yes'or 'no'"
+#~ msgstr "Lastnost 'mandatory' mora biti 'yes' ali 'no'"
+
+#~ msgid "Restriction handler failed"
+#~ msgstr "Upravljalnik omejitve ni bil uspešen"
+
+#~ msgid "Resource already defined"
+#~ msgstr "Vir je že definiran"
+
+#~ msgid ""
+#~ "Value in 'from' property must be smaller than the value in 'to' property"
+#~ msgstr ""
+#~ "Vrednost lastnosti 'from' mora biti manjša od vrednosti lastnosti 'to'"
+
+#~ msgid "'name' property must contain '#'"
+#~ msgstr "Lastnost 'name' mora vsebovati '#'"
+
+#~ msgid "Root XML element is not 'ttm'"
+#~ msgstr "Korenski XML element ni enak 'ttm'"
+
+#~ msgid "Configuration file has incompatible TTM version"
+#~ msgstr "Konfiguracijska datoteka ima nezdružljivo različico TTM"
+
+#~ msgid "Too many events for teacher '%s'"
+#~ msgstr "Preveč dogodkov za učitelja '%s'"
+
+#~ msgid ""
+#~ "  -o PREFIX             use PREFIX when naming output files\n"
+#~ "  -r                    restore saved populations\n"
+#~ "  -h                    display this help\n"
+#~ "  -v                    display version, compile time options and\n"
+#~ "                        copyright information\n"
+#~ "  -l NODES              set number of computing nodes that are allowed "
+#~ "to\n"
+#~ "                        simultaneously perform local search (set to -1 "
+#~ "for \n"
+#~ "                        no limit or 0 to disable local search. Default "
+#~ "1)\n"
+#~ "  -d LEVEL              verbosity level (default 2)\n"
+#~ "  -t N                  stop if no solution is found after N minutes "
+#~ "(set\n"
+#~ "                        to 0 for no time limit. Default 0)\n"
+#~ "  -p PARAMETERS         set algorithm parameters. PARAMETERS is a comma\n"
+#~ "                        separated string of options.\n"
+#~ msgstr ""
+#~ "  -o PREDPONA           uporabi PREDPONO pri poimenovanju izhodnih "
+#~ "datotek\n"
+#~ "  -r                    obnovi shranjeno populacijo\n"
+#~ "  -h                    pokaži to pomoč\n"
+#~ "  -v                    pokaži različico, izbire pri prevajanju in\n"
+#~ "                        podatke o avtorskih pravicah\n"
+#~ "  -l VOZLIŠČA           nastavi število računskih vozlišč, ki jim je\n"
+#~ "                        dovoljeno hkrati izvajati lokalno iskanje "
+#~ "(izbira\n"
+#~ "                        -1 pomeni brez omejitve, 0 izklopi lokalno "
+#~ "iskanje.\n"
+#~ "                        Privzeto 1)\n"
+#~ "  -d NIVO               nivo zgovornosti (privzeto 2)\n"
+#~ "  -t N                  ustavi izvajanje, če rešitev ni najdena po N "
+#~ "minutah\n"
+#~ "                        (izbira 0 pomeni brez časovne omejitve. Privzeto "
+#~ "0)\n"
+#~ "  -p PARAMETRI          nastavi parametre algoritma. PARAMETRI je spisek\n"
+#~ "                        možnosti, ločenih z vejicami\n"
+
+#~ msgid "Created by <a href=\"http://www.tablix.org\">Tablix</a> , version %s"
+#~ msgstr ""
+#~ "Izdelano z <a href=\"http://www.tablix.org\">Tablix</a>, različica %s"
+
+#~ msgid "Requested resource type %s not found"
+#~ msgstr "Zahtevana vrsta virov %s ni bila najdena"
+
+#~ msgid "Tuple %s"
+#~ msgstr "Terka %s"
+
+#~ msgid "resource: %s resource type: %s"
+#~ msgstr "vir: %s vrsta vira: %s"
+
+#~ msgid "Can't allocate memory."
+#~ msgstr "Ne morem pridobiti pomnilnika."
+
+#~ msgid "module '%s' loaded, but not used"
+#~ msgstr "Modul se ni uspešno zagnal"
+
+#~ msgid "Usage: %s [OPTION]... [MODULE]\n"
+#~ msgstr "Uporaba: %s [IZBIRA]... [MODUL]\n"
+
+#~ msgid ""
+#~ "  -h                    display this help\n"
+#~ "  -v                    display version and copyright information\n"
+#~ "  -d LEVEL              verbosity level (default 2)\n"
+#~ msgstr ""
+#~ "  -h                    pokaži to pomoč\n"
+#~ "  -v                    pokaži različico in podatke o avtorskih pravicah\n"
+#~ "  -d NIVO               nivo zgovornosti (privzeto 2)\n"
+
+#~ msgid "Missing module name. Try '%s -h' for more information."
+#~ msgstr "Manjka ime modula. Poiskusite '%s -h' za več podatkov."
+
+#~ msgid "invalid format of same-time-as restriction"
+#~ msgstr "nepravilen razred v same-time-as omejitvi"
+
+#~ msgid "invalid class in same-time-as restriction"
+#~ msgstr "nepravilen razred v same-time-as omejitvi"
+
+#~ msgid "Not enough memory"
+#~ msgstr "Ni dovolj pomnilnika"
+
+#~ msgid "invalid teacher"
+#~ msgstr "nepravilen učitelj"
+
+#~ msgid "invalid period for morning end"
+#~ msgstr "nepravilna ura za konec dopoldneva"
+
+#~ msgid "no period defined for morning end"
+#~ msgstr "ura za konec dopoldneva ni definirana"
+
+#~ msgid "out of memory"
+#~ msgstr "ni dovolj pomnilnika"
+
+#~ msgid "invalid period"
+#~ msgstr "nepravilna ura"
+
+#~ msgid "invalid preferred room"
+#~ msgstr "nepravilna najljubša soba"
+
+#~ msgid "I have migration"
+#~ msgstr "Imam migracijo"
+
+#~ msgid "\tmore_teachers.so hack enabled\n"
+#~ msgstr "\tVklopljen popravek more_teachers.so\n"
+
+#~ msgid "\tTunable algorithm parameters enabled\n"
+#~ msgstr "\tNastavljivi parametri algoritma vključeni\n"
+
+#~ msgid "Tunable parameters not enabled"
+#~ msgstr "Nastavljivi parametri niso vključeni"
+
+#~ msgid "%x has %d modules"
+#~ msgstr "%x ima %d modulov"
+
+#~ msgid "All tuples immutable"
+#~ msgstr "Vse terke nespremenljive"
+
+#~ msgid "Unknown room"
+#~ msgstr "Neznan prostor"
+
+#~ msgid "Unknown tuple restriction '%s' (line %d)"
+#~ msgstr "Neznana omejitev terke '%s' (vrstica %d)"
+
+#~ msgid "Tag <timetable> without tag <class>"
+#~ msgstr "Oznaka <timetable> brez oznake <class>"
+
+#~ msgid "Unknown class restriction '%s' (line %d)"
+#~ msgstr "Neznana omejitev razreda '%s' (vrstica %d)"
+
+#~ msgid "No tid found for <subject>"
+#~ msgstr "tid za <subject> ni bilo mogoče najti"
+
+#~ msgid "Duplicate class definition"
+#~ msgstr "Dvojna definicija razreda"
+
+#~ msgid "Tag <subject> in tag <timetable> without definition"
+#~ msgstr "Oznaka <subject> v oznaki <timetable> brez definicije"
+
+#~ msgid "no stylesheet specified"
+#~ msgstr "slogi CSS niso določeni"
+
+#~ msgid "[%x:%s] fatal: %s\n"
+#~ msgstr "[%x:%s] usodno: %s\n"
+
+#~ msgid "[%x:%s] %s\n"
+#~ msgstr "[%x:%s] %s\n"
+
+#~ msgid "conflicts not defined in sametime.so"
+#~ msgstr "conflicts ni definiran v sametime.so"
+
+#~ msgid "tids not defined in more_teachers.so"
+#~ msgstr "tids ni definiran v more_teachers.so"
+
+#~ msgid "tidnums not defined in more_teachers.so"
+#~ msgstr "tidnums ni definiran v more_teachers.so"
+
+#~ msgid "Unknown option '%s' (line %d)"
+#~ msgstr "Neznana izbira '%s' (vrstica %d)"
+
+#~ msgid "Unknown subject"
+#~ msgstr "Neznan predmet"
+
+#~ msgid "too many group restrictions"
+#~ msgstr "preveč omejitev za skupine"
+
+#~ msgid "invalid format of conflicts-with restriction"
+#~ msgstr "nepravilen format conflicts-with omejitve"
+
+#~ msgid "XML input and saved population mismatch\n"
+#~ msgstr "XML vhod in shranjena populacija se ne skladata\n"
+
+#~ msgid "\tSearching for modules in dynamic linker's default directories\n"
+#~ msgstr ""
+#~ "\tModuli se iščejo v privzetih direktorijih dinamičnega povezovalnika\n"
+
+#~ msgid ""
+#~ "Known output formats:\n"
+#~ "  html                  default HTML\n"
+#~ "  htmlcss               XHTML 1.1 using CSS and UTF-8 encoding (use this "
+#~ "if\n"
+#~ "                        some characters do not display correctly in "
+#~ "browser)\n"
+#~ msgstr ""
+#~ "Poznani izhodni formati: \n"
+#~ "  html                  privzeti HTML\n"
+#~ "  htmlcss               XHTML 1.1 z uporabo CSS in UTF-8 kodiranja "
+#~ "(uporabite\n"
+#~ "                        to izbiro, če se nekateri znaki ne prikažejo "
+#~ "pravilno\n"
+#~ "                        v brskalniku)\n"
+
+#~ msgid "%s: Missing file name. Try '%s -h' for more information.\n"
+#~ msgstr "%s: Manjka ime datoteke. Poiskusite '%s -h' za več podatkov.\n"
+
+#~ msgid "%s: Unknown output format. Try '%s -h' for more information.\n"
+#~ msgstr ""
+#~ "%s: Neznan izhodni format. Poiskusite '%s -h' za izčrpnejša navodila.\n"
+
+#~ msgid "%s: %s: Some nodes failed to start. PVM error follows.\n"
+#~ msgstr ""
+#~ "%s: %s: Nekatera vozlišča se niso uspela zagnati. Sledi PVM napaka.\n"
+
+#~ msgid "*** [%x] reporting fatal error: %s\n"
+#~ msgstr "*** [%x] sporoča usodno napako: %s\n"
+
+#~ msgid "*** [%x] reporting: %s\n"
+#~ msgstr "*** [%x] sporoča: %s\n"
+
+#~ msgid "<option> with no name"
+#~ msgstr "<option> brez name"
+
+#~ msgid "<module> with no name"
+#~ msgstr "<module> brez name"
+
+#~ msgid "<module> with no weight"
+#~ msgstr "<module> brez name"
+
+#~ msgid "invalid weight value"
+#~ msgstr "nepravilna vrednost uteži"
+
+#~ msgid "<module> with no mandatory"
+#~ msgstr "<module> brez mandatory"
+
+#~ msgid "<time> with no periods"
+#~ msgstr "<time> brez periods"
+
+#~ msgid "invalid periods in <time>"
+#~ msgstr "nepravilen periods v <time>"
+
+#~ msgid "<time> with no days"
+#~ msgstr "<time> brez days"
+
+#~ msgid "invalid days in <time>"
+#~ msgstr "nepravilen days v <time>"
+
+#~ msgid "<internal> with no name"
+#~ msgstr "<internal> brez name"
+
+#~ msgid "<internal> with no weight"
+#~ msgstr "<internal> brez weight"
+
+#~ msgid "invalid <internal> weight name"
+#~ msgstr "nepravilno ime <internal> uteži"
+
+#~ msgid "<classroom> with no id"
+#~ msgstr "<classroom> brez id"
+
+#~ msgid "<capability> or <restriction> with no type"
+#~ msgstr "<capability> ali <restriction> brez type"
+
+#~ msgid "<classrooms> with no start"
+#~ msgstr "<classrooms> brez start"
+
+#~ msgid "invalid start in <classrooms>"
+#~ msgstr "nepravilen start v <classrooms>"
+
+#~ msgid "<classrooms> with no end"
+#~ msgstr "<classrooms> brez end"
+
+#~ msgid "invalid end in <classrooms>"
+#~ msgstr "nepravilen end v <classrooms>"
+
+#~ msgid "<subject> with no title"
+#~ msgstr "<subject> brez title"
+
+#~ msgid "<subject> with no teacher"
+#~ msgstr "<subject> brez teacher"
+
+#~ msgid "<restriction> with no type"
+#~ msgstr "<restriction> brez type"
+
+#~ msgid "invalid year in <class>"
+#~ msgstr "nepravilen year v <class>"
+
+#~ msgid "<class> with no name"
+#~ msgstr "<class> brez name"
+
+#~ msgid "<class> with no year"
+#~ msgstr "<class> brez year"
+
+#~ msgid "Invalid uid"
+#~ msgstr "Nepravilen uid"
+
+#~ msgid "<subject> without perweek or period"
+#~ msgstr "<subject> brez perweek ali period"
+
+#~ msgid "invalid period in <subject>"
+#~ msgstr "nepravilen period v <subject>"
+
+#~ msgid "<subject> without perweek or day"
+#~ msgstr "<subject> brez perweek ali day"
+
+#~ msgid "invalid day in <subject>"
+#~ msgstr "nepravilen day v <subject>"
+
+#~ msgid "<subject> without perweek or room"
+#~ msgstr "<subject> brez perweek ali room"
+
+#~ msgid "<subject> with invalid room"
+#~ msgstr "<subject> z nepravilnim room"
+
+#~ msgid "invalid perweek in <subject>"
+#~ msgstr "nepravilni perweek v <subject>"
+
+#~ msgid "<chromo> without grade"
+#~ msgstr "<chromo> brez grade"
+
+#~ msgid "invalid grade in <chromo>"
+#~ msgstr "nepravilen grade v <chromo>"
+
+#~ msgid "<gen> without period"
+#~ msgstr "<gen> brez period"
+
+#~ msgid "invalid period in <gen>"
+#~ msgstr "nepravilen period v <gen>"
+
+#~ msgid "<gen> without day"
+#~ msgstr "<gen> brez day"
+
+#~ msgid "invalid day in <gen>"
+#~ msgstr "nepravilen day v <gen>"
+
+#~ msgid "<gen> without room"
+#~ msgstr "<gen> brez room"
+
+#~ msgid "<gen> without uid"
+#~ msgstr "<gen> brez uid"
+
+#~ msgid "invalid uid in <gen>"
+#~ msgstr "nepravilen uid v <gen>"

@@ -1,0 +1,114 @@
+<!--
+BEGIN TTF BLOCK
+
+(define days 10)
+(define periods 10)
+(define times 100)
+
+(define block-len 3)
+(define block-num 3)
+
+(define time-ext (make-vector (+ times days) 0))
+
+(define (tuple-loop i j)
+	;; insert an empty element between days
+	(define day (quotient i periods))
+	(vector-set! time-ext (+ (get-time i) day) 1)
+	(if (< i j)
+		(tuple-loop (+ i 1) j)
+		#t
+	)
+)
+
+(define (check-ext)
+	(define x-block-len 0)
+	(define x-block-num 0)
+
+	(define i 0)
+	(define in #f)
+	(define ok #t)
+
+	(define (block-loop)
+		;; (display (vector-ref time-ext i))
+		(if (= (vector-ref time-ext i) 1)
+			(if in
+				(set! x-block-len (+ x-block-len 1))
+				(begin
+					(set! in #t)
+					(set! x-block-len 1)
+				)
+			)
+			(if in
+				(begin
+					(set! in #f)
+					(set! ok (and ok (= (modulo x-block-len block-len) 0)))
+					(set! x-block-num (+ x-block-num (quotient x-block-len block-len)))
+				)
+			)
+		)
+		(set! i (+ i 1))
+		(if (= i (+ times days) )
+			(begin
+				(if in
+					(begin
+						(set! ok (and ok (= x-block-len block-len)))
+						(set! x-block-num (+ x-block-num 1))
+					)
+				)
+				(and ok (= x-block-num block-num))
+			)
+			(block-loop)
+		)
+	)
+
+	(block-loop)
+)
+
+(test-ttf
+	(tuple-loop 1 9 #t)
+	(check-ext)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="timeblocks.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<linear name="#" from="1" to="3"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="10" height="10"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test" repeats="9">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+			<restriction type="periods-per-block">3</restriction>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="3"/>
+		</event>
+	</events>
+</ttm>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- BEGIN TTF BLOCK
+(display "debug: Hello world!")
+(newline)
+(test-ttf
+    #f
+)
+END TTF BLOCK -->
+
+<ttm version="0.2.0">
+        <modules>
+                <module name="hello.so" weight="10" mandatory="yes"/> 
+        </modules>
+
+	<resources>
+		<variable>
+			<resourcetype type="dummy-type">
+				<linear name="#" from="1" to="50"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+                <event name="dummy-event" repeats="1">
+		</event>
+	</events>
+</ttm>

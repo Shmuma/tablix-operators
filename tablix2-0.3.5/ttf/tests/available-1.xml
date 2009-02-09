@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+<!--
+BEGIN TTF BLOCK
+(define periods 10)
+(define days 10)
+
+(define bad-time-1 (+ 4 (* 4 periods)))
+(define bad-time-2 (+ 5 (* 1 periods)))
+
+(define (tuple-loop i j ok)
+	(if (< i j)
+		(tuple-loop (+ i 1) j 
+			(and 
+				ok 
+				(not (time i bad-time-1))
+				(not (time i bad-time-2))
+			)
+		)
+		ok
+	)
+	
+)
+(test-ttf
+	(tuple-loop 0 98 #t)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="available.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a">
+					<restriction type="not-available">4 4</restriction>
+				</resource>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1">
+					<restriction type="not-available">1 5</restriction>
+				</resource>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<resource name="1">
+				</resource>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="10" height="10"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="98">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+	</events>
+</ttm>

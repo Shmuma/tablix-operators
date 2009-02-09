@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<!-- 
+
+No script required. Bug causes time limit to be reached.
+
+-->
+
+<!-- 
+BEGIN TTF BLOCK
+(test-ttf
+	#t
+)
+END TTF BLOCK
+-->
+
+<ttm version="0.2.0">
+        <modules>
+                <module name="sametime.so" weight="60" mandatory="yes"/> 
+                <module name="timeplace.so" weight="60" mandatory="yes"/> 
+                <module name="sameday.so" weight="60" mandatory="yes"> 
+			<option name="resourcetype">teacher</option>
+		</module>
+         </modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="teacher1">
+					<restriction type="ignore-sameday"/>
+				</resource>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="class1"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="4" height="7"/>
+			</resourcetype>
+			<resourcetype type="room">
+				<resource name="room1"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test1" repeats="28">
+			<resource type="teacher" name="teacher1"/>
+			<resource type="class" name="class1"/>
+		</event>
+	</events>
+</ttm>

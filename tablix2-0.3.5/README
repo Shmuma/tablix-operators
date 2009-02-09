@@ -1,0 +1,81 @@
+Tablix, timetabling software
+Stable release, branch 0.3
+
+http://www.tablix.org
+
+About stable releases
+==========================
+
+This is a release from a stable branch of Tablix. Stable branches are forked
+off the development branch once the code is stable enough and a certain set of
+features has been implemented. Modules API and the XML configuration format are
+frozen during the stable branch.
+
+Where to look for the documentation
+===================================
+
+o Tablix User's Manual is available in the doc/ subdirectory in the PDF
+  format or on-line in HTML format
+
+  It should give you a basic understanding of how Tablix works. Consult this
+  document for installation instructions, detailed XML configuration file 
+  format description, answers to frequently asked questions and for
+  information on compatibility with older versions of Tablix.
+
+o Tablix man pages
+
+  All executables installed by Tablix have man pages available. Consult 
+  them for details about supported command line options, return values,
+  etc.
+
+o Tablix Modules Reference Manual in the doc/modules/ subdirectory or 
+  on-line in the HTML format
+
+  Modules reference contains detailed descriptions of all fitness modules
+  included in the distribution.
+  
+o Tablix Home Page at http://www.tablix.org
+
+  All important news about Tablix will be published there. News feeds are
+  available in several formats.
+  
+o Tablix Wiki at http://www.tablix.org/wiki/wiki.pl
+
+  This is a public editable Wiki where anyone can create or edit content. 
+  
+  The quality of information there largely depends on users like you. You
+  are invited to correct any errors you find there or describe your own
+  experiences with Tablix.
+
+o Tablix mailing list (see http://www.tablix.org/articles/list.html)
+
+  You are invited to join this mailing list to follow or participate
+  in discussions about Tablix. Also all important announcements will 
+  be sent to this mailing list. 
+  
+  Please consult the FAQ section of the manual and the list archive before 
+  asking questions.
+
+  This is the preferred method of contacting the author.
+
+  List archive can be found at the following URL
+  
+  http://www.tablix.org/lists/tablix-list/summary.html
+
+o Tablix Modules HOW-TO, parts 1 and 2, in the doc/ subdirectory in the PDF
+  format or on-line in HTML format
+
+  This HOW-TO contains a detailed introduction into Tablix kernel API 
+  for fitness and export modules.
+  
+  If you intend to write your own modules, this should be the first place 
+  to look.
+
+o Tablix API reference in the doc/doxygen/ subdirectory or on-line in the
+  HTML format
+
+  This is an automatically generated detailed description of all functions,
+  variables, types and preprocessor defines in the Tablix kernel.
+
+Have fun!
+Tomaz Solc

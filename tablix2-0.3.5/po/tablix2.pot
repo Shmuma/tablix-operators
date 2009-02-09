@@ -1,0 +1,1125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Tomaz Solc
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: tomaz.solc@tablix.org\n"
+"POT-Creation-Date: 2007-07-03 12:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: src/counter.c:192
+#, c-format
+msgid "[%x] reports %d (%d) at %d"
+msgstr ""
+
+#: src/counter.c:193
+#, c-format
+msgid ", %.1f GPM"
+msgstr ""
+
+#: src/counter.c:194
+#, c-format
+msgid ", %02d:%02d:%02d elapsed"
+msgstr ""
+
+#: src/counter.c:195
+#, c-format
+msgid ", %d/%d running "
+msgstr ""
+
+#: src/data.c:276
+#, c-format
+msgid "Domain '%d' for resource type '%s' is empty"
+msgstr ""
+
+#: src/data.c:282
+#, c-format
+msgid "Domain '%d' is used by event '%s'"
+msgstr ""
+
+#: src/data.c:348
+#, c-format
+msgid "Duplicate resource type definition: %s"
+msgstr ""
+
+#: src/data.c:492
+#, c-format
+msgid "compact_conflicts: %s has %d conflicting resources"
+msgstr ""
+
+#: src/data.c:518
+#, c-format
+msgid "Duplicate resource definition (type %s): %s"
+msgstr ""
+
+#: src/data.c:1351 src/data.c:1372 src/main.c:560 src/master.c:385
+#: src/modsup.c:85 src/modsup.c:745 src/output.c:142 src/xmlsup.c:140
+#: src/xmlsup.c:485 src/xmlsup.c:635 src/xmlsup.c:660 src/xmlsup.c:669
+#: src/xmlsup.c:695 src/xmlsup.c:721 modules/available.c:105
+#: modules/consecutive.c:229 modules/consecutive.c:278
+#: modules/events_sameday.c:139 modules/fixedtime.c:101
+#: modules/fixedtime.c:129 modules/perday.c:151 modules/perday.c:176
+#: modules/placecapability.c:153 modules/preferredtime.c:194
+#: modules/recurrence.c:215 modules/recurrence.c:279 modules/sameday.c:527
+#: modules/sameday.c:541 modules/sametimeas.c:161 export/export_htmlcss2.c:188
+#: export/export_vcal.c:127
+msgid "Can't allocate memory"
+msgstr ""
+
+#: src/data.c:1359
+msgid "Size of the saved population does not match the configuration"
+msgstr ""
+
+#: src/data.c:1381
+msgid "Saved population and configuration do not match"
+msgstr ""
+
+#: src/data.c:1435
+#, c-format
+msgid ""
+"Hint for event '%s', resource type '%s' conflicts with domain for that "
+"event. Ignored."
+msgstr ""
+
+#: src/depend.c:275
+#, c-format
+msgid "Event '%s' depends on event '%s'"
+msgstr ""
+
+#: src/error-local.c:51
+#, c-format
+msgid "[%s] fatal: %s\n"
+msgstr ""
+
+#: src/genetic.c:185
+#, c-format
+msgid "sending migration to %x"
+msgstr ""
+
+#: src/main.c:367
+#, c-format
+msgid "New sibling %x"
+msgstr ""
+
+#: src/main.c:455
+msgid "Parameter syntax error"
+msgstr ""
+
+#: src/main.c:464
+msgid "Wrong arguments"
+msgstr ""
+
+#: src/main.c:488 src/master.c:253
+msgid "Locale not supported by C library. Using the fallback 'C' locale."
+msgstr ""
+
+#: src/main.c:511
+msgid "Can't open temporary file"
+msgstr ""
+
+#: src/main.c:522
+msgid "No tuples defined"
+msgstr ""
+
+#: src/main.c:550
+#, c-format
+msgid "Loaded %d modules"
+msgstr ""
+
+#: src/main.c:556
+msgid "Circular event dependency detected"
+msgstr ""
+
+#: src/main.c:566
+msgid "Failed to initialize data structures"
+msgstr ""
+
+#: src/main.c:584
+msgid "Error receiving population from master"
+msgstr ""
+
+#: src/main.c:591 src/master.c:335 src/output.c:237
+#, c-format
+msgid "Failed to load %s"
+msgstr ""
+
+#: src/main.c:601 src/output.c:245
+msgid "Error initializing population"
+msgstr ""
+
+#: src/main.c:612
+#, c-format
+msgid "I have restored %d tuples"
+msgstr ""
+
+#: src/main.c:614
+#, c-format
+msgid "I have %d tuples"
+msgstr ""
+
+#: src/main.c:649
+msgid "I have solution"
+msgstr ""
+
+#: src/main.c:676
+msgid "Can't send temporary file"
+msgstr ""
+
+#: src/master.c:68 src/output.c:53
+#, c-format
+msgid ""
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2 of the License, or\n"
+"(at your option) any later version.\n"
+msgstr ""
+
+#: src/master.c:74 src/output.c:59
+#, c-format
+msgid ""
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+msgstr ""
+
+#: src/master.c:80 src/output.c:65
+#, c-format
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA\n"
+msgstr ""
+
+#: src/master.c:87
+#, c-format
+msgid "Compile time options:\n"
+msgstr ""
+
+#: src/master.c:89
+#, c-format
+msgid "\tParallel genetic algorithm (using PVM3)\n"
+msgstr ""
+
+#: src/master.c:91
+#, c-format
+msgid "\tLinear genetic algorith (debug mode)\n"
+msgstr ""
+
+#: src/master.c:94
+#, c-format
+msgid "\tSaving convergence info\n"
+msgstr ""
+
+#: src/master.c:96
+#, c-format
+msgid "\tSearching for modules in %s\n"
+msgstr ""
+
+#: src/master.c:97
+#, c-format
+msgid "\tModule documentation available in %s\n"
+msgstr ""
+
+#: src/master.c:99
+#, c-format
+msgid "\tAssertion checks enabled (debug mode)\n"
+msgstr ""
+
+#: src/master.c:102
+#, c-format
+msgid "\tNational language support enabled\n"
+msgstr ""
+
+#: src/master.c:109
+#, c-format
+msgid "Usage: %s [OPTION]... [FILE]\n"
+msgstr ""
+
+#: src/master.c:112
+#, c-format
+msgid "  -n NODES              set number of computing nodes (default 4)\n"
+msgstr ""
+
+#: src/master.c:116
+#, c-format
+msgid ""
+"  -o PREFIX             use PREFIX when naming output files\n"
+"  -r                    restore saved populations\n"
+"  -h                    display this help\n"
+"  -v                    display version, compile time options and\n"
+"                        copyright information\n"
+msgstr ""
+
+#: src/master.c:124
+#, c-format
+msgid ""
+"  -l NODES              set number of computing nodes that are allowed to\n"
+"                        simultaneously perform local search (set to -1 for \n"
+"                        no limit or 0 to disable local search. Default 1)\n"
+msgstr ""
+
+#: src/master.c:130
+#, c-format
+msgid ""
+"  -d LEVEL              verbosity level (default 2)\n"
+"  -t N                  stop if no solution is found after N minutes (set\n"
+"                        to 0 for no time limit. Default 0)\n"
+"  -p PARAMETERS         set algorithm parameters. PARAMETERS is a comma\n"
+"                        separated string of options.\n"
+msgstr ""
+
+#: src/master.c:136
+#, c-format
+msgid ""
+"  -i PATH\t\tset path to fitness modules\n"
+"                        (Default %s)\n"
+msgstr ""
+
+#: src/master.c:142 src/output.c:101
+#, c-format
+msgid "Please report bugs to <tomaz.solc@tablix.org>.\n"
+msgstr ""
+
+#: src/master.c:223 src/output.c:194
+#, c-format
+msgid "TABLIX version %s, PGA general timetable solver\n"
+msgstr ""
+
+#: src/master.c:259 src/output.c:223
+#, c-format
+msgid "Missing file name. Try '%s -h' for more information."
+msgstr ""
+
+#: src/master.c:276
+msgid "all nodes failed."
+msgstr ""
+
+#: src/master.c:280
+#, c-format
+msgid "PGA using %d node"
+msgid_plural "PGA using %d nodes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/master.c:281
+#, c-format
+msgid "on %d host"
+msgid_plural "on %d hosts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/master.c:286
+#, c-format
+msgid "maximum %d node will do local search"
+msgid_plural "maximum %d nodes will do local search"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/master.c:291
+msgid "local search disabled"
+msgstr ""
+
+#: src/master.c:293
+msgid "local search enabled on all nodes"
+msgstr ""
+
+#: src/master.c:295
+msgid "multicasting XML data"
+msgstr ""
+
+#: src/master.c:315
+#, c-format
+msgid "Failed to send problem description '%s' to computing nodes"
+msgstr ""
+
+#: src/master.c:326
+msgid "Restoring saved populations"
+msgstr ""
+
+#: src/master.c:355
+#, c-format
+msgid "%d nodes randomized"
+msgstr ""
+
+#: src/master.c:364
+msgid "Initializing nodes"
+msgstr ""
+
+#: src/master.c:378
+#, c-format
+msgid "parent ( %x ) listening\n"
+msgstr ""
+
+#: src/master.c:399
+#, c-format
+msgid "Can't open file %s for writing"
+msgstr ""
+
+#: src/master.c:451
+#, c-format
+msgid "received message from unknown node %x"
+msgstr ""
+
+#: src/master.c:456
+#, c-format
+msgid "%x has %d fitness functions"
+msgstr ""
+
+#: src/master.c:462
+#, c-format
+msgid "node %x has a different number of modules than others"
+msgstr ""
+
+#: src/master.c:484
+#, c-format
+msgid "%s: FATAL: %s"
+msgstr ""
+
+#: src/master.c:492
+#, c-format
+msgid "received quit notification from unknown node %x"
+msgstr ""
+
+#: src/master.c:495
+#, c-format
+msgid "node %x has unexpectedly quit"
+msgstr ""
+
+#: src/master.c:506
+#, c-format
+msgid "node %x is uploading the result"
+msgstr ""
+
+#: src/master.c:519
+#, c-format
+msgid "node %x is reporting too soon"
+msgstr ""
+
+#: src/master.c:539
+#, c-format
+msgid "receiving population from %x"
+msgstr ""
+
+#: src/master.c:571
+#, c-format
+msgid "unknown message received from %x. Perhaps a version mismatch?"
+msgstr ""
+
+#: src/master.c:584
+msgid "Time limit reached"
+msgstr ""
+
+#: src/master.c:586
+msgid "Received interrupt"
+msgstr ""
+
+#: src/master.c:591
+msgid "No results were received"
+msgstr ""
+
+#: src/master.c:593
+msgid "Some results were received"
+msgstr ""
+
+#: src/master.c:595
+msgid "All results were received"
+msgstr ""
+
+#: src/master.c:604
+#, c-format
+msgid "node\tgenerations/minute\n"
+msgstr ""
+
+#: src/master.c:612
+#, c-format
+msgid ""
+"\n"
+"total generations per minute: %.1f\n"
+msgstr ""
+
+#: src/master.c:613
+#, c-format
+msgid "total time: %02d:%02d:%02d\n"
+msgstr ""
+
+#: src/modsup.c:324 src/modsup.c:356 src/modsup.c:361 src/modsup.c:399
+#, c-format
+msgid "Requested resource type '%s' not found"
+msgstr ""
+
+#: src/modsup.c:366
+#, c-format
+msgid ""
+"Requested extension has constant and variable resource types set to '%s'"
+msgstr ""
+
+#: src/modsup.c:519 modules/consecutive.c:343 modules/freemorning.c:120
+#: modules/holes.c:113 modules/perday.c:139 modules/recurrence.c:319
+#: modules/sametimeas.c:168 modules/walk.c:107
+#, c-format
+msgid "Resource type '%s' not found"
+msgstr ""
+
+#: src/modsup.c:588 src/modsup.c:625
+#, c-format
+msgid "Restriction handler for restriction type '%s' failed"
+msgstr ""
+
+#: src/modsup.c:590
+#, c-format
+msgid "Processing resource '%s', resource type '%s'"
+msgstr ""
+
+#: src/modsup.c:627
+#, c-format
+msgid "Processing tuple '%s'"
+msgstr ""
+
+#: src/modsup.c:679
+#, c-format
+msgid "Stripping '.so' extension from '%s' module name."
+msgstr ""
+
+#: src/modsup.c:681
+msgid "Please use module names without extensions in new problem descriptions."
+msgstr ""
+
+#: src/modsup.c:749
+#, c-format
+msgid "Loading module %s"
+msgstr ""
+
+#: src/modsup.c:752
+#, c-format
+msgid "Can't load module '%s'"
+msgstr ""
+
+#: src/modsup.c:762
+#, c-format
+msgid "Can't find module_init() in module '%s'"
+msgstr ""
+
+#: src/modsup.c:763 src/output.c:157
+msgid "Are you trying to use modules from an incompatible version of Tablix?"
+msgstr ""
+
+#: src/modsup.c:772
+#, c-format
+msgid "Initialization for module '%s' failed"
+msgstr ""
+
+#: src/nodes.c:186
+#, c-format
+msgid "Host '%s' is too slow and will be ignored."
+msgstr ""
+
+#: src/nodes.c:197
+#, c-format
+msgid "Some nodes on host '%s' failed to start."
+msgstr ""
+
+#: src/output.c:77
+#, c-format
+msgid "Usage: %s [OPTION]... [FORMAT] [FILE]\n"
+msgstr ""
+
+#: src/output.c:79
+#, c-format
+msgid ""
+"  -o FILE               write output to file FILE instead of stdout\n"
+"  -h                    display this help\n"
+"  -v                    display version and copyright information\n"
+"  -s OPTIONS            pass OPTIONS to the export module\n"
+"  -d LEVEL              verbosity level (default 2)\n"
+"  -r FILE               FILE contains a saved population. Timetable with\n"
+"                        the lowest fitness value is exported instead\n"
+"                        of any result stored in the XML file. If this "
+"option\n"
+"                        is used, the XML file does not need to contain a\n"
+"                        solution.\n"
+"  -i PATH\t\tset path to fitness modules\n"
+"                        (Default %s)\n"
+msgstr ""
+
+#: src/output.c:149
+#, c-format
+msgid "Can't load export module module '%s'"
+msgstr ""
+
+#: src/output.c:156
+#, c-format
+msgid "Can't find export_function() in module '%s'"
+msgstr ""
+
+#: src/output.c:220
+#, c-format
+msgid "Missing output format. Try '%s -h' for more information."
+msgstr ""
+
+#: src/output.c:256
+msgid "Error loading export module"
+msgstr ""
+
+#: src/output.c:261
+msgid "Export function failed"
+msgstr ""
+
+#: src/params.c:177
+msgid "Genetic algorithm parameters:"
+msgstr ""
+
+#: src/params.c:180
+#, c-format
+msgid "%s=%d"
+msgstr ""
+
+#: src/xmlsup.c:52 src/xmlsup.c:56
+#, c-format
+msgid "Tag <%s> without required property '%s'"
+msgstr ""
+
+#: src/xmlsup.c:53 src/xmlsup.c:57
+#, c-format
+msgid "Invalid value of property '%s' in tag <%s>"
+msgstr ""
+
+#: src/xmlsup.c:114
+#, c-format
+msgid "%s (line %d)"
+msgstr ""
+
+#: src/xmlsup.c:222
+#, c-format
+msgid ""
+"Definition of event has multiple definitions for resource type '%s' (line %d)"
+msgstr ""
+
+#: src/xmlsup.c:335
+#, c-format
+msgid "Module %s failed to load"
+msgstr ""
+
+#: src/xmlsup.c:377
+#, c-format
+msgid "Unknown event restriction '%s' (line %d)"
+msgstr ""
+
+#: src/xmlsup.c:418
+msgid ""
+"Unknown event restrictions found. Increase verbosity level for more "
+"information."
+msgstr ""
+
+#: src/xmlsup.c:456
+#, c-format
+msgid ""
+"Definition of event '%s' is missing constant resource type '%s' (line %d)"
+msgstr ""
+
+#: src/xmlsup.c:523
+#, c-format
+msgid "Unknown resource restriction '%s' (line %d)"
+msgstr ""
+
+#: src/xmlsup.c:578
+msgid ""
+"Unknown resource restrictions found. Increase verbosity level for more "
+"information."
+msgstr ""
+
+#: src/xmlsup.c:1019
+msgid "This file does not seem to contain a solution"
+msgstr ""
+
+#: src/xmlsup.c:1039 src/xmlsup.c:1051
+msgid "Configuration file does not contain a complete solution"
+msgstr ""
+
+#: modules/available.c:80
+#, c-format
+msgid "Restriction '%s' requires an argument"
+msgstr ""
+
+#: modules/available.c:86
+#, c-format
+msgid ""
+"Sorry, you can currently only use restriction '%s' on constant resources"
+msgstr ""
+
+#: modules/available.c:98
+#, c-format
+msgid "Can't find resource '%s', resource type '%s'"
+msgstr ""
+
+#: modules/consecutive.c:173
+#, c-format
+msgid "restriction '%s' does not take an argument"
+msgstr ""
+
+#: modules/consecutive.c:184
+#, c-format
+msgid "Invalid number of periods for '%s' restriction"
+msgstr ""
+
+#: modules/consecutive.c:241
+msgid ""
+"Number of consecutive events would exceed the number of periods in a day"
+msgstr ""
+
+#: modules/consecutive.c:271 modules/freemorning.c:132
+#: modules/freeperiod.c:199 modules/holes.c:125 modules/perday.c:157
+#: modules/preferredroom.c:177 modules/preferredtime.c:159
+#: modules/recurrence.c:272 modules/timeblocks.c:211
+#: modules/timeblocks_sameday.c:191 modules/walk.c:119
+#, c-format
+msgid "module '%s' has been loaded, but not used"
+msgstr ""
+
+#: modules/consecutive.c:296 modules/sametimeas.c:147
+#, c-format
+msgid "Event '%s' already depends on another event"
+msgstr ""
+
+#: modules/consecutive.c:349 modules/recurrence.c:325
+#, c-format
+msgid "Resource type '%s' is not a matrix"
+msgstr ""
+
+#: modules/events_sameday.c:81 modules/sametimeas.c:92
+#, c-format
+msgid "restriction '%s' requires an argument"
+msgstr ""
+
+#: modules/events_sameday.c:99
+#, c-format
+msgid "restriction '%s' specifies an unknown event '%s'"
+msgstr ""
+
+#: modules/events_sameday.c:133 modules/fixedtime.c:148
+#: modules/freeperiod.c:242 modules/preferredtime.c:203 modules/sameday.c:520
+#: modules/sametimeas.c:174 modules/timeblocks.c:243
+#: modules/timeblocks_sameday.c:235 export/export_htmlcss.c:452
+#: export/export_htmlcss2.c:767
+msgid "Resource type 'time' is not a matrix"
+msgstr ""
+
+#: modules/fixedtime.c:95
+msgid "Invalid fixed day"
+msgstr ""
+
+#: modules/fixedtime.c:123
+msgid "Invalid fixed period"
+msgstr ""
+
+#: modules/freemorning.c:126 modules/holes.c:119 modules/perday.c:145
+#: modules/walk.c:113
+#, c-format
+msgid "Resource type %s is not a matrix"
+msgstr ""
+
+#: modules/freeperiod.c:164
+msgid "invalid day or period in 'free-period' restriction"
+msgstr ""
+
+#: modules/freeperiod.c:179
+msgid "invalid day in 'free-day' restriction"
+msgstr ""
+
+#: modules/freeperiod.c:253
+msgid "invalid day or period in 'free-period' option"
+msgstr ""
+
+#: modules/placecapability.c:146
+#, c-format
+msgid "Resource type %s not found"
+msgstr ""
+
+#: modules/preferredroom.c:77 modules/preferredroom.c:95
+#: modules/preferredroom.c:113
+msgid "invalid room in preferred-room restriction"
+msgstr ""
+
+#: modules/preferredroom.c:82 modules/preferredroom.c:100
+#: modules/preferredroom.c:118
+msgid "Only one restriction per resource allowed"
+msgstr ""
+
+#: modules/preferredroom.c:200
+#, c-format
+msgid "Required resource type '%s' not found"
+msgstr ""
+
+#: modules/preferredtime.c:104
+msgid "invalid preferred day"
+msgstr ""
+
+#: modules/preferredtime.c:119
+msgid "invalid preferred period"
+msgstr ""
+
+#: modules/preferredtime.c:166
+msgid ""
+"restriction 'preferred-period' and 'preferred-day' only set on first "
+"instance of an event where 'repeats' > 1"
+msgstr ""
+
+#: modules/preferredtime.c:172
+msgid ""
+"restriction 'preferred-day' only set on first instance of an event where "
+"'repeats' > 1"
+msgstr ""
+
+#: modules/preferredtime.c:178
+msgid ""
+"using only restriction 'preferred-period' where 'repeats' > 1 will cause "
+"problems with 'consecutive' restrictions"
+msgstr ""
+
+#: modules/recurrence.c:163
+msgid "Invalid format of the 'recurrence' restriction"
+msgstr ""
+
+#: modules/recurrence.c:168
+#, c-format
+msgid "Week number for the start of recurrence %d is not between 0 and %d"
+msgstr ""
+
+#: modules/recurrence.c:173
+msgid "Number of recurrences per week must be greater than 0"
+msgstr ""
+
+#: modules/recurrence.c:178
+#, c-format
+msgid ""
+"Number of recurrences per week (%d) exceeds number of timeslots per week (%d)"
+msgstr ""
+
+#: modules/recurrence.c:225
+msgid "Too many defined events"
+msgstr ""
+
+#: modules/recurrence.c:332
+msgid "Number of days per week is greater than the number of defined days"
+msgstr ""
+
+#: modules/sameday.c:206 modules/sameday.c:232
+#, c-format
+msgid "'%s' restriction valid only for constant resource types"
+msgstr ""
+
+#: modules/sameday.c:239 modules/sameday.c:274 modules/sameday.c:292
+#: modules/timeblocks.c:126 modules/timeblocks_sameday.c:129
+msgid "Invalid number of periods"
+msgstr ""
+
+#: modules/sameday.c:485
+#, c-format
+msgid ""
+"Constant resource '%s' (type '%s') has %.1f blocks of '%s' events defined "
+"and maximum %d blocks per day, however only %d days are defined"
+msgstr ""
+
+#: modules/sameday.c:560
+#, c-format
+msgid "Module '%s' has been loaded, but not used"
+msgstr ""
+
+#: modules/sameday.c:562
+msgid ""
+"To obtain the same functionality as in version 0.3.0, add the following "
+"module options"
+msgstr ""
+
+#: modules/sametime.c:104
+#, c-format
+msgid ""
+"Can't find resource '%s', resource type '%s' in 'conflicts-with' restriction"
+msgstr ""
+
+#: modules/sametime.c:207
+#, c-format
+msgid "Too many events for %s '%s'"
+msgstr ""
+
+#: modules/sametime.c:210
+#, c-format
+msgid "%d events with only %d available time slots"
+msgstr ""
+
+#: modules/sametimeas.c:112
+#, c-format
+msgid "No events match name '%s' in 'same-time-as' restriction"
+msgstr ""
+
+#: modules/sametimeas.c:117
+#, c-format
+msgid ""
+"Repeats for this event must be less or equal than the target event '%s' in "
+"'same-time-as' restriction"
+msgstr ""
+
+#: modules/sametimeas.c:123
+msgid ""
+"Source and target events for 'same-time-as' restriction are the same event"
+msgstr ""
+
+#: modules/timeblocks.c:120 modules/timeblocks_sameday.c:123
+msgid "restriction 'periods-per-block' takes an argument"
+msgstr ""
+
+#: modules/timeblocks.c:217 modules/timeblocks_sameday.c:197
+#, c-format
+msgid "Useless 'periods-per-block' restriction for only one event '%s'"
+msgstr ""
+
+#: modules/timeblocks.c:225 modules/timeblocks_sameday.c:205
+#: modules/timeblocks_sameday.c:216
+#, c-format
+msgid "Event '%s' has invalid 'periods-per-block' restriction"
+msgstr ""
+
+#: modules/timeblocks.c:228 modules/timeblocks_sameday.c:208
+msgid ""
+"Number of periods per block is not divisible with the number of repetitions "
+"of the event"
+msgstr ""
+
+#: modules/timeblocks_sameday.c:219
+msgid "Number of blocks is greater than number of days in a week"
+msgstr ""
+
+#: modules/timeplace.c:75
+msgid "Too many events for the defined number of time slots and rooms"
+msgstr ""
+
+#: export/export_html.c:46 export/export_htmlcss.c:470
+#, c-format
+msgid "Tablix output"
+msgstr ""
+
+#: export/export_html.c:185 export/export_htmlcss.c:504
+#: export/export_htmlcss2.c:735
+#, c-format
+msgid "Fitness of this timetable: %d"
+msgstr ""
+
+#: export/export_html.c:188
+#, c-format
+msgid "Tablix, version %s"
+msgstr ""
+
+#: export/export_htmlcss.c:211 export/export_htmlcss.c:423
+#: export/export_htmlcss2.c:276 export/export_htmlcss2.c:677
+#, c-format
+msgid "Can't find resource type '%s'"
+msgstr ""
+
+#: export/export_htmlcss.c:410
+msgid "Back to top"
+msgstr ""
+
+#: export/export_htmlcss.c:449 export/export_htmlcss2.c:764
+msgid "Can't find resource type 'time'"
+msgstr ""
+
+#: export/export_htmlcss.c:492 export/export_htmlcss2.c:713
+msgid "Classes"
+msgstr ""
+
+#: export/export_htmlcss.c:493 export/export_htmlcss2.c:714
+msgid "Teachers"
+msgstr ""
+
+#: export/export_htmlcss.c:507 export/export_htmlcss2.c:742
+#, c-format
+msgid "Created by <a href=\"http://www.tablix.org\">Tablix</a>, version %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:222
+#, c-format
+msgid "Can't open file '%s' for writing: %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:254 export/export_htmlcss2.c:261
+#, c-format
+msgid "Can't write to '%s': %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:415
+msgid "See also"
+msgstr ""
+
+#: export/export_htmlcss2.c:424 export/export_htmlcss2.c:646
+#, c-format
+msgid "Timetable for %s for week %d"
+msgstr ""
+
+#: export/export_htmlcss2.c:430 export/export_htmlcss2.c:657
+#, c-format
+msgid "Timetable for %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:598 export/export_htmlcss2.c:601
+#: export/export_htmlcss2.c:628
+msgid "Back to index"
+msgstr ""
+
+#: export/export_htmlcss2.c:611
+#, c-format
+msgid "Timetable index for %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:623
+#, c-format
+msgid "Week %d"
+msgstr ""
+
+#: export/export_htmlcss2.c:692
+#, c-format
+msgid "Can't create directory '%s': %s"
+msgstr ""
+
+#: export/export_htmlcss2.c:702
+msgid "Timetable index"
+msgstr ""
+
+#: export/export_htmlcss2.c:715
+msgid "Rooms"
+msgstr ""
+
+#: export/export_htmlcss2.c:718
+msgid "Key"
+msgstr ""
+
+#: export/export_htmlcss2.c:719
+msgid "Normal lecture"
+msgstr ""
+
+#: export/export_htmlcss2.c:726
+msgid "Optional lecture or time slot shared with another class or teacher"
+msgstr ""
+
+#: export/export_htmlcss2.c:730
+msgid "Free time slot"
+msgstr ""
+
+#: export/export_htmlcss2.c:756
+msgid ""
+"This export module can't use standard output. Please specify a file name on "
+"the command line."
+msgstr ""
+
+#: export/export_vcal.c:110 export/export_vcal.c:165
+#, c-format
+msgid "Can't find resource type '%s'."
+msgstr ""
+
+#: export/export_vcal.c:116
+#, c-format
+msgid "Resource type '%s' is not a matrix."
+msgstr ""
+
+#: export/export_vcal.c:121
+msgid ""
+"Sorry, only timetables with less than 7 days per week are currently "
+"supported."
+msgstr ""
+
+#: export/export_vcal.c:133 export/export_vcal.c:146 export/export_vcal.c:159
+#: export/export_vcal.c:171
+#, c-format
+msgid "Please specify '%s' option"
+msgstr ""
+
+#: export/export_vcal.c:139
+msgid "Contents of the 'starttime' option do not contain a valid date"
+msgstr ""
+
+#: export/export_vcal.c:152
+msgid "Contents of the 'length' option do not contain a valid event length"
+msgstr ""
+
+#: export/export_vcal.c:177
+#, c-format
+msgid "Can't find resource '%s'."
+msgstr ""
+
+#: ttf/export_ttf.c:87
+msgid "Missing resource type"
+msgstr ""
+
+#: ttf/export_ttf.c:91
+msgid "Resource type not a string"
+msgstr ""
+
+#: ttf/export_ttf.c:99
+msgid "Resource type not found"
+msgstr ""
+
+#: ttf/export_ttf.c:113
+msgid "Missing tuple ID or tuple name"
+msgstr ""
+
+#: ttf/export_ttf.c:120
+#, c-format
+msgid "Tuple ID '%d' not found"
+msgstr ""
+
+#: ttf/export_ttf.c:132
+#, c-format
+msgid "Tuple with name '%s' not found"
+msgstr ""
+
+#: ttf/export_ttf.c:137 ttf/export_ttf.c:174
+msgid "Argument must be an integer or a string"
+msgstr ""
+
+#: ttf/export_ttf.c:151
+msgid "Missing resource ID or resource name"
+msgstr ""
+
+#: ttf/export_ttf.c:158
+#, c-format
+msgid "Resource ID '%d' not found"
+msgstr ""
+
+#: ttf/export_ttf.c:168
+#, c-format
+msgid "Resource with name '%s' and type '%s' not found"
+msgstr ""
+
+#: ttf/export_ttf.c:286
+msgid "Scheme interpreter failed to initialize"
+msgstr ""
+
+#: ttf/export_ttf.c:305
+msgid "No config file specified"
+msgstr ""
+
+#: ttf/export_ttf.c:310
+#, c-format
+msgid "Can't open script file '%s'"
+msgstr ""
+
+#: ttf/export_ttf.c:330
+msgid "Scheme interpreter error"
+msgstr ""
+
+#: ttf/export_ttf.c:338
+msgid "All tests passed"
+msgstr ""
+
+#: ttf/export_ttf.c:340
+msgid "Some tests failed"
+msgstr ""

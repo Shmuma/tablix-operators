@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r0.dtd">
+<!--
+BEGIN TTF BLOCK
+(define periods 5)
+(define days-per-week 4)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-week tupleid) (quotient (get-day tupleid) days-per-week))
+
+(test-ttf
+	(= (get-week 0) 1)
+	(= (get-week 1) 1)
+	(= (get-week 2) 2)
+	(= (get-week 3) 2)
+	(= (get-week 4) 3)
+	(= (get-week 5) 3)
+	(= (get-week 6) 4)
+	(= (get-week 7) 4)
+	(= (get-week 8) 5)
+	(= (get-week 9) 5)
+
+	(= (get-week 10) 5)
+	(= (get-week 11) 5)
+	(= (get-week 12) 6)
+	(= (get-week 13) 6)
+	(= (get-week 14) 7)
+	(= (get-week 15) 7)
+	(= (get-week 16) 8)
+	(= (get-week 17) 8)
+	(= (get-week 18) 9)
+	(= (get-week 19) 9)
+	(= (get-week 20) 10)
+	(= (get-week 21) 10)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="recurrence.so" weight="60" mandatory="yes">
+			<option name="days-per-week">4</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="teacher"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="class"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<resource name="room"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<!-- weeks 0 - 10 -->
+				<matrix width="42" height="5"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<!-- ids 0 - 9 -->
+		<event name="test1" repeats="10">
+			<resource type="teacher" name="teacher"/>
+			<resource type="class" name="class"/>
+			<restriction type="recurrence">1 2</restriction>
+		</event>
+		<!-- ids 10 - 21 -->
+		<event name="test2" repeats="12">
+			<resource type="teacher" name="teacher"/>
+			<resource type="class" name="class"/>
+			<restriction type="recurrence">5 2</restriction>
+		</event>
+	</events>
+</ttm>

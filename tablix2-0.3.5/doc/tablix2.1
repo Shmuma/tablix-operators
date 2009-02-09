@@ -1,0 +1,154 @@
+.\" These macros were copied from MPlayer manpage, written by Gabucino, 
+.\" Diego Biurrun and Jonas Jermann. 
+..
+.\" default indentation is 7, don't change!
+.nr IN 7
+.\" define indentation for suboptions
+.nr SS 5
+.\" add new suboption
+.de IPs
+.IP "\\$1" \n(SS
+..
+.\" begin of first level suboptions, end with .RE
+.de RSs
+.RS \n(IN+3
+..
+.TH TABLIX 1 2005-09-03 "Tomaz Solc" "Tablix User's Manual"
+.SH NAME
+tablix2 \- general timetable solver
+.SH SYNOPSIS
+.B tablix2
+[
+.I options
+]
+.I file
+.SH DESCRIPTION
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+.P
+It operates by trying to assign variable resources to a number of events (sometimes called tuples) in a most efficient way. Various fitness modules can be specified in the problem description file to control the behaviour of the genetic algorithm. 
+.P
+Output is given in the form of a XML file. This file can be further processed by
+.B tablix2_output
+utility to export timetable data to a number of human or machine readable formats. Output XML file can also be used again as a problem description (input) file. In that case the previous solution will be used as a hint for Tablix when searching for a new solution.
+.SH OPTIONS
+.TP
+.B \-n N
+Start 
+.B N
+slave processes (kernels). This is the number of spawned PVM3 tasks on the virtual machine. A larger number means larger total population, steeper convergence graph, more exhaustive search for solutions and a smaller chance of premature convergence. However, optimal number depends on the number and speed of computing nodes. For a virtual machine composed of reasonably fast machines start with 
+.B N = 4 * i
+where
+.B i
+is the number of computing nodes. Tablix will try to arrange tasks so that all computing nodes will have equal load. (Be sure to set
+.B speed
+field correctly in your PVM3 hostfile). Default is 4.
+.TP
+.B \-l N
+When a population in a slave process (computing node) reaches a local minimum that process will try to execute an algorithm called local search. This is a way to nudge the main genetic algorithm out of a local minimum trap if it gets caught in it. However it is usually not efficient for this algorithm to run simultaneously on many nodes. This option sets the number of computing nodes that are allowed to simultaneously perform local search.
+Setting
+.B N
+to 0 disables local search and -1 means no limit. Default is 1.
+.TP
+.B \-r
+Restore saved populations instead of starting with random ones. Populations are loaded from a number of 
+.I PREFIXsave?.txt 
+files, where PREFIX is the prefix, specified with the \-o option. See below.
+.TP
+.B \-o PREFIX
+Specify a prefix for output files. All output files (result, saved populations and convergence graph info) will have PREFIX prepended.  
+.TP
+.B \-d LEVEL
+Set the verbosity level, where LEVEL is one of the following:
+.RSs
+.IPs 0
+(only fatal error messages are shown),
+.IPs 1
+(fatal and non-fatal errors),
+.IPs 2
+(errors and a progress indicator),
+.IPs 3
+(all of the above plus some informational messages) or
+.IPs 4
+(all of the above plus debug messages).
+.RE
+.TP
+.B \-h
+Shows a brief help message.
+.TP
+.B \-v
+Shows compile time options, path to modules and copyright information.
+.TP
+.B \-t MINUTES
+Sets a time limit for the genetic algorithm. Tablix will stop if no solution is found after set number of minutes. The effect is same as when Ctrl-C is pressed. Setting 
+.B MINUTES
+to 0 disables this feature. Default is disabled. Use this option to prevent Tablix to run indefinitely if there is no possible solution.
+.TP
+.B \-p PARAMETERS 
+Set algorithm parameters. This is rarely used. The defaults should work fine in most cases. PARAMETERS is a comma separated string of 
+.I parameter=value 
+pairs. Following parameters are available:
+.RSs
+.IPs popsize
+Population size of one node in cluster. Bigger populations mean less generations per minute but also in some cases more optimized results. Default 500.
+.IPs toursize
+Tournament size. Bigger tournament sizes result in faster convergence, which can result in finding a local instead of a global minimum. Default 3.
+.IPs mutatepart
+What part of the population will mutate each generation. 2 means one half, 3 means one third, etc. More mutations usually result in slower convergence but can help to avoid local minimums. Default 4.
+.IPs randpart
+What part of the population will be randomized each generation. Randomizations have the same effect as mutations. Default 6.
+.IPs maxequal
+How many equally graded timetables can exist at the same time in a population. Smaller values result in slower convergence but can help to avoid local minimums. Default 20.
+.IPs finish
+Tablix will finish when the number of all mandatory errors in the best solution reaches zero and this best solution had the same fitness value for N sequential populations. This option enables you to set the value of N. It has no effect if there are no non-mandatory errors defined (in that case Tablix finishes as soon as the number of all mandatory errors reaches zero). Default 300.
+.IPs migrtime
+How often do parts of populations migrate between nodes. Smaller value means more migrations, which results in faster convergence. Default 40.
+.IPs migrpart
+What part of population will migrate between nodes. Default 10.
+.IPs localtresh
+How many equally graded populations to wait before starting local search (if enabled). Default 100.
+.IPs localstep
+Initial step for the local search algorithm. Larger values mean more exhaustive and slower search. Default 4.
+.IPs pophint
+If the user has loaded an XML file that already contains a partial or a full solution, then a part of the population can be initialized with this solution.  This parameter defines the percentage of the timetables in the population that will be initialized (other timetables will be initialized with random values). Values must be between 0 and 100. Larger values mean that the solution given in the XML file will have a greater possibility of being included in the final solution. If there is no solution in the XML file then this parameter has no effect. Default 25.
+.IPs cachesize
+This is the maximum number of timetable fitness values that will be held
+in the fitness cache. Larger values mean more cache search overhead but may improve cache hit/miss ratio. It is probably unwise to use caches larger than 32.
+In general fitness caching will reduce performance at the start of the genetic algorithm and improve it at the end. Set to 0 to turn off caching. Default 16.
+.RE
+.TP
+.B \-i PATH
+Sets the path to fitness modules. By default the module path is set to the location where fitness modules were installed by 
+.B make install
+command.
+.SH USAGE
+When you run 
+.B tablix2
+, you actually start the  master  process  that  will spawn the requested number of slave processes (kernels) on  the  virtual machine. It will then multicast the configuration file to all the  nodes  and start listening for their reports.
+.P
+You can press Ctrl-C (or send  SIGINT)  to  stop  the  process. Tablix will save its state in a number of files  called  save?.txt  (it  will prepend your prefix, if given). You can later resume the process  by  running Tablix with the -r parameter.
+.P
+This feature will only  work if  you don't change the input XML file between saving and restoring  the  process. Changes to the number of computing nodes (-n parameter) or to the physical configuration of the cluster are allowed however.
+.P
+Tablix will save population convergence information for each node during the computation into files with names conv?.txt. These files allow the user to track the progress and sometimes predict the required time to find the solution to the given problem. Data in these files can be graphically represented with the
+.B tablix2_plot
+utility.
+.P
+When all the criteria defined by the fitness modules are satisfied, Tablix will output one XML  file  for each node (file names will be result?.xml, prefix will be prepended if given).
+.SH NOTES
+.B tablix2_kernel
+is executable for the slave process. It should not be started by hand, unless you know what your are doing (e.g. during debugging)
+.SH DIAGNOSTICS
+Exit status is 0 if solutions were found, and 1 if the time limit was reached or the user has pressed Ctrl-C. Exit status is more or less undefined in case of errors during the execution (ideally it should be 2 in this case).
+.SH BUGS
+Tablix will not notify the user if he or she is trying to create an impossible time table. 
+.SH AUTHOR
+Tomaz Solc (tomaz.solc@tablix.org)
+.SH SEE ALSO
+.BR pvm (1PVM),
+.BR pvmd (1PVM),
+.BR tablix2_output (1),
+.BR tablix2_plot (1),
+.BR tablix2_benchmark (1),
+.BR tablix2_test (1),
+Tablix User's Manual,
+Tablix modules HOWTO

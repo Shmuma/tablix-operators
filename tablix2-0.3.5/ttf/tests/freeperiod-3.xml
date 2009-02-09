@@ -1,0 +1,53 @@
+<!--
+BEGIN TTF BLOCK
+(define periods 2)
+(define (period tuple p)
+	(= p (modulo (get-time tuple) periods))
+)
+(define (day tuple p)
+	(= p (quotient (get-time tuple) periods))
+)
+(test-ttf
+	(not (day 0 1))
+	(not (day 1 1))
+	(not (day 2 1))
+	(not (day 3 1))
+	(not (day 4 1))
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="freeperiod.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a">
+				<restriction type="free-day">1</restriction> 
+				</resource>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="a"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="4" height="2"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="5">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="a"/>
+		</event>
+	</events>
+</ttm>

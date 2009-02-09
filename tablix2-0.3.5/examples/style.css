@@ -1,0 +1,98 @@
+body {
+	background: #fffff5;
+	color: #000000;
+	font-family: sans-serif;
+	text-align: center;
+}
+
+a {
+	color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+
+hr {
+	border: 1px solid #000000;
+	background: #000000;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+}
+
+p {
+	margin: 0.2cm;
+}
+
+p.event {
+	font-style: italic;
+}
+
+#index td {
+	background: #ffffff;
+	border: 3px solid #000000;
+	padding-top: 0.1cm;
+	padding-bottom: 0.1cm;
+	padding-left: 1cm;
+	padding-right: 1cm;
+}
+
+#index td.empty {
+	border: 1px solid #000000;
+	background: #fffff5;
+}
+
+td {
+	background: #ffffff;
+	border: 3px solid #000000;
+	padding: 0.1cm;
+}
+
+td.empty {
+	background: #fffff5;
+	border: 1px solid #000000;
+	padding: 0.1cm;
+}
+
+td.conf {
+	background: #eeeeee;
+	border: 3px solid #000000;
+	padding: 0.1cm;
+}
+
+p.conf {
+	font-size: small;
+}
+
+b.footnote {
+	font-weight: bold;
+}
+
+h3.footnote {
+	font-weight: bold;
+	font-size: small;
+}
+
+td.footnote-empty {
+	border: none;
+	background: #fffff5;
+	font-size: small;
+}
+
+td.footnote {
+	border: none;
+	background: #fffff5;
+	font-size: small;
+}
+
+th {
+	border: none;
+	padding: 0.5cm;
+	background: #fffff5;
+}

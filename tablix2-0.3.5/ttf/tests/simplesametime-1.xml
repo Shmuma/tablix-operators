@@ -1,0 +1,70 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(not (time 0 (get-time 1)))
+	(not (time 0 (get-time 2)))
+	(not (time 0 (get-time 3)))
+	(not (time 0 (get-time 4)))
+	(not (time 1 (get-time 0)))
+	(not (time 1 (get-time 2)))
+	(not (time 1 (get-time 3)))
+	(not (time 1 (get-time 4)))
+	(not (time 2 (get-time 0)))
+	(not (time 2 (get-time 1)))
+	(not (time 2 (get-time 3)))
+	(not (time 2 (get-time 4)))
+	(not (time 3 (get-time 0)))
+	(not (time 3 (get-time 1)))
+	(not (time 3 (get-time 2)))
+	(not (time 3 (get-time 4)))
+	(not (time 4 (get-time 0)))
+	(not (time 4 (get-time 1)))
+	(not (time 4 (get-time 2)))
+	(not (time 4 (get-time 3)))
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="simplesametime.so" weight="60" mandatory="yes"/> 
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="local">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="visitor">
+				<linear name="#" from="1" to="5"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="3" height="2"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="1">
+			<resource type="local" name="a"/>
+			<resource type="visitor" name="1"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="local" name="a"/>
+			<resource type="visitor" name="2"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="local" name="a"/>
+			<resource type="visitor" name="3"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="local" name="a"/>
+			<resource type="visitor" name="4"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="local" name="a"/>
+			<resource type="visitor" name="5"/>
+		</event>
+	</events>
+</ttm>

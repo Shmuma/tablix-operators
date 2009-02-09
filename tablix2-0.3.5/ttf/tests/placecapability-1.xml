@@ -1,0 +1,47 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(or (room "test1" "special1") (room "test1" "special2"))
+	(room "test2" "special2")
+	(or (room "test3" "special2") (room "test3" "special3"))
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="placecapability.so" weight="60" mandatory="yes"/> 
+	</modules>
+
+	<resources>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+				<resource name="special1">
+					<restriction type="capability">A</restriction>
+				</resource>
+				<resource name="special2">
+					<restriction type="capability">A</restriction>
+					<restriction type="capability">B</restriction>
+				</resource>
+				<resource name="special3">
+					<restriction type="capability">B</restriction>
+				</resource>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="dummy" repeats="10">
+		</event>
+		<event name="test1" repeats="1">
+			<restriction type="capability">A</restriction>
+		</event>
+		<event name="test2" repeats="1">
+			<restriction type="capability">A</restriction>
+			<restriction type="capability">B</restriction>
+		</event>
+		<event name="test3" repeats="1">
+			<restriction type="capability">B</restriction>
+		</event>
+	</events>
+</ttm>

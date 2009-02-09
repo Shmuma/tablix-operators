@@ -1,0 +1,1935 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r0.dtd">
+
+<!-- ======================================================================
+
+     Example XML data file for Tablix 0.2.0                               
+     Copyright (C) 2002-2005 Tomaz Solc                        
+
+     File tough2.xml
+
+     $Id: tough2.xml,v 1.3 2006-01-27 21:50:06 avian Exp $
+
+     ======================================================================
+
+     This file demonstrates the use of Tablix for high school scheduling.
+
+     This is a four year high school residing in a very small building. Most
+     lectures must have dedicated classrooms. Some lectures can be held
+     in any classroom that isn't a specialized lab.
+
+     Students in the first three years have fixed timetables. Students in the 
+     final year attend a number of mandatory courses and can additionaly
+     choose to attend one of available optional courses (defined in the 
+     "4 MA-" classes in this XML file).
+
+     Students and teachers should start lectures as early in the morning 
+     as possible.
+
+     All students have three hours of mandatory physical exercise (SVZ) per 
+     week. These three hours should be divided into a block of two consecutive 
+     hours and one separate hour on a different day.
+
+     Because of the lack of space some classes share the use of the gym for
+     physical exercise with other classes. Groups for physical exercise
+     are divided into groups for girls and groups for boys.
+     
+     Neither students nor teachers should have holes in their timetables.
+
+     Students and teachers should have lectures evenly distributed throughout
+     the whole week.
+     
+     Students should change classrooms as little as possible.
+
+     ====================================================================== -->
+
+<ttm version="0.2.0">
+	<info>
+		<title>Example high school</title>
+		<author>Tablix</author>
+	</info>
+	<modules>
+		<module name="sametime.so" weight="600" mandatory="yes"/>
+		<module name="timeplace.so" weight="900" mandatory="yes"/>
+                <module name="placecapability.so" weight="100" mandatory="yes"/>
+
+                <module name="freemorning.so" weight="1" mandatory="no">
+			<option name="resourcetype">class</option>	
+		</module>
+                <module name="walk.so" weight="1" mandatory="no">
+			<option name="resourcetype">class</option>	
+		</module>
+                <module name="holes.so" weight="10" mandatory="no">
+			<option name="resourcetype">class</option>	
+		</module>
+                <module name="holes.so" weight="5" mandatory="no">
+			<option name="resourcetype">teacher</option>	
+		</module>
+                <module name="perday.so" weight="1" mandatory="no">
+			<option name="resourcetype">class</option>	
+			<option name="resourcetype">teacher</option>	
+		</module>
+		<module name="consecutive.so" weight="100" mandatory="yes"/> 
+	</modules>
+	<resources>
+		<constant>
+		<resourcetype type="teacher">
+				<resource name="Prof. SJK 1"/>
+				<resource name="Prof. SJK 2"/>
+				<resource name="Prof. SJK 3"/>
+				<resource name="Prof. SJK 4"/>
+				<resource name="Prof. ANJ 1"/>
+				<resource name="Prof. ANJ 2"/>
+				<resource name="Prof. ANJ 3"/>
+				<resource name="Prof. ANJ 4"/>
+				<resource name="Prof. FRA 1"/>
+				<resource name="Prof. NEJ 1"/>
+				<resource name="Prof. NEJ 2"/>
+				<resource name="Prof. NEJ 3"/>
+				<resource name="Prof. MAT 1"/>
+				<resource name="Prof. MAT 2"/>
+				<resource name="Prof. MAT 3"/>
+				<resource name="Prof. MAT 4"/>
+				<resource name="Prof. UVZ 1"/>
+				<resource name="Prof. GLA 1"/>
+				<resource name="Prof. BIE 1"/>
+				<resource name="Prof. BIE 2"/>
+				<resource name="Prof. KEM 1"/>
+				<resource name="Prof. KEM 2"/>
+				<resource name="Prof. FIZ 1"/>
+				<resource name="Prof. FIZ 2"/>
+				<resource name="Prof. ZGO 1"/>
+				<resource name="Prof. ZGO 2"/>
+				<resource name="Prof. ZGO 3"/>
+				<resource name="Prof. GEO 1"/>
+				<resource name="Prof. GEO 2"/>
+				<resource name="Prof. PSI 1"/>
+				<resource name="Prof. SOC 1"/>
+				<resource name="Prof. FIL 1"/>
+				<resource name="Prof. INF 1"/>
+				<resource name="Prof. SVZ 1"/>
+				<resource name="Prof. SVZ 2"/>
+				<resource name="Prof. SVZ 3"/>
+		</resourcetype>
+		<resourcetype type="class">
+			<resource name="1 A">
+				<restriction type="conflicts-with">1 SVZ-M-1</restriction>
+			</resource>
+			<resource name="1 B">
+				<restriction type="conflicts-with">1 SVZ-M-1</restriction>
+				<restriction type="conflicts-with">1 SVZ-Z-1</restriction>
+			</resource>
+			<resource name="1 C">
+				<restriction type="conflicts-with">1 SVZ-Z-1</restriction>
+				<restriction type="conflicts-with">1 SVZ-M-2</restriction>
+			</resource>
+			<resource name="1 D">
+				<restriction type="conflicts-with">1 SVZ-M-3</restriction>
+			</resource>
+			<resource name="1 E">
+				<restriction type="conflicts-with">1 SVZ-M-3</restriction>
+			</resource>
+			<resource name="1 M"/>
+			<resource name="1 N"/>
+			<resource name="1 SVZ-M-1"/>
+			<resource name="1 SVZ-Z-1"/>
+			<resource name="1 SVZ-M-2"/>
+			<resource name="1 SVZ-M-3"/>
+			<resource name="2 A">
+				<restriction type="conflicts-with">2 SVZ-M-1</restriction>
+			</resource>
+			<resource name="2 B">
+				<restriction type="conflicts-with">2 SVZ-M-2</restriction>
+			</resource>
+			<resource name="2 C">
+				<restriction type="conflicts-with">2 SVZ-M-2</restriction>
+			</resource>
+			<resource name="2 D">
+				<restriction type="conflicts-with">2 SVZ-M-1</restriction>
+			</resource>
+			<resource name="2 E">
+				<restriction type="conflicts-with">1 SVZ-M-2</restriction>
+			</resource>
+			<resource name="2 SVZ-M-1"/>
+			<resource name="2 SVZ-M-2"/>
+			<resource name="3 A">
+				<restriction type="conflicts-with">3 SVZ-M-1</restriction>
+			</resource>
+			<resource name="3 B">
+				<restriction type="conflicts-with">3 SVZ-M-2</restriction>
+				<restriction type="conflicts-with">3 SVZ-Z-1</restriction>
+			</resource>
+			<resource name="3 C">
+				<restriction type="conflicts-with">3 SVZ-Z-1</restriction>
+				<restriction type="conflicts-with">3 SVZ-M-1</restriction>
+			</resource>
+			<resource name="3 D">
+				<restriction type="conflicts-with">3 SVZ-M-2</restriction>
+			</resource>
+			<resource name="3 SVZ-M-1"/>
+			<resource name="3 SVZ-Z-1"/>
+			<resource name="3 SVZ-M-2"/>
+			<resource name="4 A">
+				<restriction type="conflicts-with">4 SVZ-M-1</restriction>
+				<restriction type="conflicts-with">4 SVZ-Z-1</restriction>
+				<restriction type="conflicts-with">4 MA-GEO</restriction>
+				<restriction type="conflicts-with">4 MA-BIE</restriction>
+				<restriction type="conflicts-with">4 MA-KEM</restriction>
+				<restriction type="conflicts-with">4 MA-FIZ</restriction>
+				<restriction type="conflicts-with">4 MA-PSI</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-1</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-2</restriction>
+				<restriction type="conflicts-with">4 MA-ZGO</restriction>
+				<restriction type="conflicts-with">4 MA-NEJ</restriction>
+				<restriction type="conflicts-with">4 MA-UVZ</restriction>
+				<restriction type="conflicts-with">4 MA-MAT</restriction>
+				<restriction type="conflicts-with">4 MA-ANJ</restriction>
+			</resource>
+			<resource name="4 B">
+				<restriction type="conflicts-with">4 SVZ-M-2</restriction>
+				<restriction type="conflicts-with">4 SVZ-Z-2</restriction>
+				<restriction type="conflicts-with">4 MA-GEO</restriction>
+				<restriction type="conflicts-with">4 MA-BIE</restriction>
+				<restriction type="conflicts-with">4 MA-KEM</restriction>
+				<restriction type="conflicts-with">4 MA-FIZ</restriction>
+				<restriction type="conflicts-with">4 MA-PSI</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-1</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-2</restriction>
+				<restriction type="conflicts-with">4 MA-ZGO</restriction>
+				<restriction type="conflicts-with">4 MA-NEJ</restriction>
+				<restriction type="conflicts-with">4 MA-UVZ</restriction>
+				<restriction type="conflicts-with">4 MA-MAT</restriction>
+				<restriction type="conflicts-with">4 MA-ANJ</restriction>
+			</resource>
+			<resource name="4 C">
+				<restriction type="conflicts-with">4 SVZ-M-1</restriction>
+				<restriction type="conflicts-with">4 SVZ-Z-1</restriction>
+				<restriction type="conflicts-with">4 MA-GEO</restriction>
+				<restriction type="conflicts-with">4 MA-BIE</restriction>
+				<restriction type="conflicts-with">4 MA-KEM</restriction>
+				<restriction type="conflicts-with">4 MA-FIZ</restriction>
+				<restriction type="conflicts-with">4 MA-PSI</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-1</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-2</restriction>
+				<restriction type="conflicts-with">4 MA-ZGO</restriction>
+				<restriction type="conflicts-with">4 MA-NEJ</restriction>
+				<restriction type="conflicts-with">4 MA-UVZ</restriction>
+				<restriction type="conflicts-with">4 MA-MAT</restriction>
+				<restriction type="conflicts-with">4 MA-ANJ</restriction>
+			</resource>
+			<resource name="4 D">
+				<restriction type="conflicts-with">4 SVZ-M-2</restriction>
+				<restriction type="conflicts-with">4 SVZ-Z-2</restriction>
+				<restriction type="conflicts-with">4 MA-GEO</restriction>
+				<restriction type="conflicts-with">4 MA-BIE</restriction>
+				<restriction type="conflicts-with">4 MA-KEM</restriction>
+				<restriction type="conflicts-with">4 MA-FIZ</restriction>
+				<restriction type="conflicts-with">4 MA-PSI</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-1</restriction>
+				<restriction type="conflicts-with">4 MA-SOC-2</restriction>
+				<restriction type="conflicts-with">4 MA-ZGO</restriction>
+				<restriction type="conflicts-with">4 MA-NEJ</restriction>
+				<restriction type="conflicts-with">4 MA-UVZ</restriction>
+				<restriction type="conflicts-with">4 MA-MAT</restriction>
+				<restriction type="conflicts-with">4 MA-ANJ</restriction>
+			</resource>
+			<resource name="4 SVZ-M-1"/>
+			<resource name="4 SVZ-Z-1"/>
+			<resource name="4 SVZ-M-2"/>
+			<resource name="4 SVZ-Z-2"/>
+			<resource name="4 MA-GEO"/>
+			<resource name="4 MA-BIE"/>
+			<resource name="4 MA-KEM"/>
+			<resource name="4 MA-FIZ"/>
+			<resource name="4 MA-PSI"/>
+			<resource name="4 MA-SOC-1"/>
+			<resource name="4 MA-SOC-2"/>
+			<resource name="4 MA-ZGO"/>
+			<resource name="4 MA-NEJ"/>
+			<resource name="4 MA-UVZ"/>
+			<resource name="4 MA-MAT"/>
+			<resource name="4 MA-ANJ"/>
+		</resourcetype>
+		</constant>
+		<variable>
+		<resourcetype type="room">
+			<resource name="1">
+				<restriction type="capability">Nemscina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="2">
+				<restriction type="capability">Kemija</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="3">
+				<restriction type="capability">Kemija-Lab</restriction>
+			</resource>
+			<resource name="4">
+				<restriction type="capability">Slovenscina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="5">
+				<restriction type="capability">Slovenscina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="6">
+				<restriction type="capability">Jeziki</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="7">
+				<restriction type="capability">Racunalnistvo</restriction>
+			</resource>
+			<resource name="8">
+				<restriction type="capability">SocPsiFil</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="9">
+				<restriction type="capability">Zgodovina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="10">
+				<restriction type="capability">Anglescina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="11">
+				<restriction type="capability">Anglescina</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="12">
+				<restriction type="capability">Fizika</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="13">
+				<restriction type="capability">Geografija</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="14">
+				<restriction type="capability">Umetnost</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="15">
+				<restriction type="capability">Matematika</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="16">
+				<restriction type="capability">Matematika</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="17">
+				<restriction type="capability">Biologija</restriction>
+				<restriction type="capability">Normal</restriction>
+			</resource>
+			<resource name="T1">
+				<restriction type="capability">Telovadba</restriction>
+			</resource>
+			<resource name="T2">
+				<restriction type="capability">Telovadba</restriction>
+			</resource>
+		</resourcetype>
+		<resourcetype type="time">
+			<matrix width="5" height="14"/>
+		</resourcetype>
+
+		</variable>
+	</resources>
+	<events>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="1 A"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="FRA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="LIV" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="GLA" repeats="2">
+			<resource type="teacher" name="Prof. GLA 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="1 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="1 B"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 2"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="LIV" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="GLA" repeats="2">
+			<resource type="teacher" name="Prof. GLA 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 B"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="1 C"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 3"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="LIV" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="GLA" repeats="2">
+			<resource type="teacher" name="Prof. GLA 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="1 C"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="1 D"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 3"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="LIV" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="GLA" repeats="2">
+			<resource type="teacher" name="Prof. GLA 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="1 E"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 3"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="ITA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="LIV" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="GLA" repeats="2">
+			<resource type="teacher" name="Prof. GLA 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 E"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="1 M"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="5">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="4">
+			<resource type="teacher" name="Prof. NEJ 3"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="ZGO" repeats="5">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="5">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="PSI" repeats="6">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="1 M"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="1 N"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="5">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="ZGO" repeats="5">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="5">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="PSI" repeats="6">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="1 N"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="1 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="1 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="1 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="1 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 SVZ-M-3"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="1 SVZ-M-3"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="2 A"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="FRA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="UVZ" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="PSI" repeats="2">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="2 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="2 B"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="UVZ" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="PSI" repeats="2">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 B"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="2 C"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="UVZ" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="PSI" repeats="2">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Telovadba</restriction>
+                	<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 C"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="2 D"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="UVZ" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="PSI" repeats="2">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="2 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="2 E"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="4">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="ITA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="FIZ" repeats="1">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM" repeats="1">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="UVZ" repeats="2">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="PSI" repeats="2">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="INF" repeats="1">
+			<resource type="teacher" name="Prof. INF 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Racunalnistvo</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="FIZ-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 1"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="2 E"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="2 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="2 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="2 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="2 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="3 A"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 3"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="SOC" repeats="2">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="FIL" repeats="2">
+			<resource type="teacher" name="Prof. FIL 1"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. NEJ 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 2"/>
+			<resource type="class" name="3 A"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 2"/>
+			<resource type="class" name="3 B"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 3"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 3"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 2"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="SOC" repeats="2">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="FIL" repeats="2">
+			<resource type="teacher" name="Prof. FIL 1"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 B"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="3 C"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="ITA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="SOC" repeats="2">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="FIL" repeats="2">
+			<resource type="teacher" name="Prof. FIL 1"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. ANJ 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 C"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SJK" repeats="4">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="3 D"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="3">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="ITA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="BIE" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="2">
+			<resource type="teacher" name="Prof. FIZ 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="GEO" repeats="2">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="SOC" repeats="2">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="FIL" repeats="2">
+			<resource type="teacher" name="Prof. FIL 1"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="KEM-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Kemija-Lab</restriction>
+		</event>
+		<event name="BIE-Vaje" repeats="2">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="3 D"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="3 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="3 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="3 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="3 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="3 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="3 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="4 A"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="4 A"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="4 A"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="4 A"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="4 A"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="4 A"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 4"/>
+			<resource type="class" name="4 B"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 4"/>
+			<resource type="class" name="4 B"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="4 B"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="4 B"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 1"/>
+			<resource type="class" name="4 B"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="4 B"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="4 C"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="4 C"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 2"/>
+			<resource type="class" name="4 C"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="NEJ" repeats="3">
+			<resource type="teacher" name="Prof. NEJ 1"/>
+			<resource type="class" name="4 C"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 3"/>
+			<resource type="class" name="4 C"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. SJK 1"/>
+			<resource type="class" name="4 C"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SJK" repeats="5">
+			<resource type="teacher" name="Prof. SJK 3"/>
+			<resource type="class" name="4 D"/>
+			<restriction type="capability">Slovenscina</restriction>
+		</event>
+		<event name="MAT" repeats="5">
+			<resource type="teacher" name="Prof. MAT 1"/>
+			<resource type="class" name="4 D"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="4">
+			<resource type="teacher" name="Prof. ANJ 1"/>
+			<resource type="class" name="4 D"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+		<event name="ITA" repeats="3">
+			<resource type="teacher" name="Prof. FRA 1"/>
+			<resource type="class" name="4 D"/>
+                	<restriction type="capability">Jeziki</restriction>
+		</event>
+		<event name="ZGO" repeats="2">
+			<resource type="teacher" name="Prof. ZGO 2"/>
+			<resource type="class" name="4 D"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="R.U." repeats="1">
+			<resource type="teacher" name="Prof. ZGO 2"/>
+			<resource type="class" name="4 D"/>
+                	<restriction type="capability">Normal</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="4 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="4 SVZ-M-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="4 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="4 SVZ-Z-1"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-M-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="4 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-M-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 1"/>
+			<resource type="class" name="4 SVZ-M-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="SVZ-Z-1" repeats="2">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="4 SVZ-Z-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+			<restriction type="consecutive"/>
+		</event>
+		<event name="SVZ-Z-2" repeats="1">
+			<resource type="teacher" name="Prof. SVZ 3"/>
+			<resource type="class" name="4 SVZ-Z-2"/>
+                	<restriction type="capability">Telovadba</restriction>
+		</event>
+		<event name="GEO" repeats="4">
+			<resource type="teacher" name="Prof. GEO 1"/>
+			<resource type="class" name="4 MA-GEO"/>
+                	<restriction type="capability">Geografija</restriction>
+		</event>
+		<event name="BIE" repeats="3">
+			<resource type="teacher" name="Prof. BIE 2"/>
+			<resource type="class" name="4 MA-BIE"/>
+                	<restriction type="capability">Biologija</restriction>
+		</event>
+		<event name="KEM" repeats="4">
+			<resource type="teacher" name="Prof. KEM 2"/>
+			<resource type="class" name="4 MA-KEM"/>
+                	<restriction type="capability">Kemija</restriction>
+		</event>
+		<event name="FIZ" repeats="4">
+			<resource type="teacher" name="Prof. FIZ 1"/>
+			<resource type="class" name="4 MA-FIZ"/>
+                	<restriction type="capability">Fizika</restriction>
+		</event>
+		<event name="PSI" repeats="6">
+			<resource type="teacher" name="Prof. PSI 1"/>
+			<resource type="class" name="4 MA-PSI"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="SOC" repeats="6">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="4 MA-SOC-1"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="SOC" repeats="6">
+			<resource type="teacher" name="Prof. SOC 1"/>
+			<resource type="class" name="4 MA-SOC-2"/>
+                	<restriction type="capability">SocPsiFil</restriction>
+		</event>
+		<event name="ZGO" repeats="4">
+			<resource type="teacher" name="Prof. ZGO 2"/>
+			<resource type="class" name="4 MA-ZGO"/>
+                	<restriction type="capability">Zgodovina</restriction>
+		</event>
+		<event name="NEJ" repeats="4">
+			<resource type="teacher" name="Prof. NEJ 3"/>
+			<resource type="class" name="4 MA-NEJ"/>
+                	<restriction type="capability">Nemscina</restriction>
+		</event>
+		<event name="UVZ" repeats="6">
+			<resource type="teacher" name="Prof. UVZ 1"/>
+			<resource type="class" name="4 MA-UVZ"/>
+                	<restriction type="capability">Umetnost</restriction>
+		</event>
+		<event name="MAT" repeats="1">
+			<resource type="teacher" name="Prof. MAT 2"/>
+			<resource type="class" name="4 MA-MAT"/>
+                	<restriction type="capability">Matematika</restriction>
+		</event>
+		<event name="ANJ" repeats="1">
+			<resource type="teacher" name="Prof. ANJ 4"/>
+			<resource type="class" name="4 MA-ANJ"/>
+                	<restriction type="capability">Anglescina</restriction>
+		</event>
+	</events>
+</ttm>

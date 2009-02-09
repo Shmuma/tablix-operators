@@ -1,0 +1,1380 @@
+<!DOCTYPE module-documentation PUBLIC "-//Tablix//DTD Module Reference 0.2.1//EN" "http://www.tablix.org/releases/dtd/modulesref2r0.dtd">
+<module-documentation>
+	<module>
+		<basic-info>
+			<filename>available.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>General</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Specifies that a particular constant resource is not available 
+at certain timeslots.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>not-available</name>
+				<required-resourcetypes>
+					<all-resourcetypes/>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="not-available"&gt;day period&lt;/restriction&gt;</pre>
+<p>This tuple restriction specifies that the current resource is not available
+at time slot at the specified day and period.</p>
+<p>For example:</p>
+<pre>&lt;resourcetype type="teacher"&gt;
+	&lt;resource name="A"&gt;
+		&lt;restriction type="not-available"&gt;1 1&lt;/restriction&gt;
+	&lt;/resource&gt;
+&lt;/resource&gt;</pre>
+<p>This means that no event for teacher A will be scheduled on the second 
+period of the second day (day and period numbers start at 0).</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>consecutive.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+			<credits>
+<p>
+Original idea for this module by Nick Robinson (npr@bottlehall.co.uk).
+Module was later rewritten to serve as an example for the new updater 
+function feature in 0.3.1 by Tomaz Solc.</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds support for events that must be scheduled adjacent to one
+another. This module uses updater functions, so the weight and mandatory
+values are ignored.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>consecutive</name>
+				<description>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled consecutively.</p>
+<p>Please note that this module distinguishes events by the 
+assignments of constant resources and event names. The way events are 
+defined in the XML file has no effect. The following two examples will 
+therefore both result in one block of four consecutive "Lecture" events.</p>
+<p>Example 1:</p>
+<pre>&lt;event name ="Lecture" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+<p>Example 2:</p>
+<pre>&lt;event name ="Lecture" repeats="4"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+<p>If you would like to have two blocks of two consecutive "Lecture" events, 
+you must either change the names of two events like in the following example 
+or use the periods-per-block restriction.</p>
+<pre>&lt;event name ="Lecture 1" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture 2" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>periods-per-block</name>
+				<description>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled blocks of N consecutive events. If the number of repeats is
+not divisible by N, then one block will have less than N events.</p>
+<p>Events in the following example will be scheduled in two blocks of three
+consecutive events, two blocks of two consecutive events and one single
+event.</p>
+<pre>&lt;event name ="Lecture" repeats="6"&gt;
+	&lt;resource type="teacher" name="A"/&gt;
+	&lt;resource type="class" name="B"/&gt;
+	&lt;restriction type="periods-per-block"&gt;3&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture" repeats="5"&gt;
+	&lt;resource type="teacher" name="A"/&gt;
+	&lt;resource type="class" name="B"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>events_sameday.so</filename>
+			<author>Antonio Duran</author>
+			<authoremail>antonio.duran.terres@gmail.com</authoremail>
+			<credits>
+<p>
+Modified by Tomaz Solc</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>General</group>
+		</module-groups>
+		<description>
+<p>
+Adds a weight if two specified events are scheduled on the same day.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>not-same-day-as</name>
+				<description>
+<p>Set this restriction to prevent the current event from being scheduled in 
+the same day as the one specified in the restriction.</p>
+<p>Example:</p>
+<pre>&lt;event name="A" repeats="3"&gt;
+	...
+	&lt;restriction type="not-same-day-as"&gt;B&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name="B" repeats="4"&gt;
+	...
+&lt;/event&gt;</pre>
+<p>In this example no "A" event will be scheduled on the same day as a "B"
+event</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>firstlastequal.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>This module counts the number of occupied first and last time slots in
+teacher's (or any other constant resource type) timetables. The number of 
+weights added is equal to the difference between the number of occupied 
+first time slots and the number of occupied last time slots.</p>
+<p>For example if a teacher has two events scheduled on the first time slot in 
+a day then it must also have two events scheduled on the last time slot. 
+(E.g. A teacher teaches first period for Monday and Tuesday, and the last 
+period for Wednesday, Tuesday, Friday. So that he/she can go home earlier 
+on Monday/Tuesday and come in later on Wednesday, Tuesday, Friday.)</p>
+<p>The following example will make this module check teacher's timetable:</p>
+<pre>&lt;module name="firstlastequal" weight="60" mandatory="yes"&gt;
+	&lt;option name="resourcetype"&gt;teacher&lt;/option&gt;
+&lt;/module&gt;</pre>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify a constant resource type for which this module
+will be in effect.</p>
+<p>You can use multiple resourcetype options for one module.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>firstorlast.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>This module prevents constant resources of one type (for example
+teachers) to have events scheduled on the first and the last time slots on 
+the same day.</p>
+<p>For example if a teacher has an event scheduled on the first time slot in 
+a day then it must have the last time slot in that day free. On the other 
+hand if a teacher has an event scheduled on the last time slot it must have 
+the first time slot free.</p>
+<p>The number of weights added by this module is equal to the number of days
+in the timetable that do not conform to this constraint.</p>
+<p>The following example will make this module check teacher's timetable:</p>
+<pre>&lt;module name="firstorlast" weight="60" mandatory="yes"&gt;
+	&lt;option name="resourcetype"&gt;teacher&lt;/option&gt;
+&lt;/module&gt;</pre>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify a constant resource type for which this module
+will be in effect.</p>
+<p>You can use multiple resourcetype options for one module.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>fixed.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>General</group>
+		</module-groups>
+		<description>
+<p>Specifies that a particular event must use a specified resource.</p>
+<p>This module allows you to make a fixed assignement of a certain variable 
+resource to a certain event.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+<p>This module works with any combination of defined resource types. For each
+resource type a "fixed-xxx" event restriction is defined, where xxx is 
+replaced with the name of a variable resource type.</p>
+<p>Consider the following example:</p>
+<pre>&lt;event name="example" repeats="2"&gt;
+	...
+	&lt;restriction type="fixed-room"&gt;10&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This will force both repeats of the event "example" to be scheduled in the 
+room 10. Of course the room resource type must be defined somewhere in the
+rest of the XML file.</p>
+		</description>
+		<required-resourcetypes>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>fixedtime.so</filename>
+			<author>Nick Robinson</author>
+			<authoremail>npr@bottlehall.co.uk</authoremail>
+			<credits>
+<p>Extended by Tomaz Solc</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Specifies that a particular event must be scheduled at the specified
+day and/or period.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+<p>Consider the following example:</p>
+<pre>&lt;event name="A" repeats="1"&gt;
+	&lt;restriction type="fixed-day"&gt;3&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name="B" repeats="1"&gt;
+	&lt;restriction type="fixed-day"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name="C" repeats="1"&gt;
+	&lt;restriction type="fixed-day"&gt;4&lt;/restriction&gt;
+	&lt;restriction type="fixed-period"&gt;5&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>Event "A" can be scheduled on any period of the fourth day of the week. 
+Event "B" can be scheduled on the third period of any day of the week.
+Event "C" can only be scheduled on the sixth period of the fifth day.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>fixed-day</name>
+				<description>
+<pre>&lt;restriction type="fixed-day"&gt;day&lt;/restriction&gt;</pre>
+<p>This tuple restriction specifies that the time slots at the specified day
+should be used to schedule the lesson. "day" must be an integer between 0
+and number of days minus 1.</p>
+<p>It only makes sense to use one such restriction per event.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>fixed-period</name>
+				<description>
+<pre>&lt;restriction type="fixed-period"&gt;period&lt;/restriction&gt;</pre>
+<p>This tuple restriction specifies that the time slots at the specified period
+should be used to schedule the lesson. "period" must be an integer between
+0 and number of periods minus 1.</p>
+<p>It only makes sense to use one such restriction per event.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>freemorning.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight if a constant resource of the specified type 
+has the first event of a day later than the specified first period.</p>
+<p>This module is commonly used in school scheduling when it is desired that
+all teachers and/or all students start their day before or at a specified 
+hour.</p>
+<p>For example, if you do not want students to have free periods in the
+morning:</p>
+<pre>&lt;module name="freemorning.so" weight="50" mandatory="yes"&gt; 
+	&lt;option name="resourcetype"&gt;class&lt;/option&gt;
+	&lt;option name="first-period"&gt;0&lt;/option&gt;
+&lt;/module&gt;</pre>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>first-period</name>
+				<description>
+<p>Use this option to specify the first period. Resource types specified with
+the "resourcetype" option will have events scheduled so, that the first 
+event each day will be at or before this period.</p>
+<p>If you don't specify this option, the default value of 0 is used.</p>
+				</description>
+			</module-option>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>freeperiod.so</filename>
+			<author>Nick Robinson</author>
+			<authoremail>npr@bottlehall.co.uk</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Specifies that some time slots should never be used by any lessons.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>teacher</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>day-off</name>
+				<required-resourcetypes>
+					<resourcetype>teacher</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="day-off"&gt;day&lt;/restriction&gt;</pre>
+<p>Synonym for 'free-day'</p>
+				</description>
+			</resource-restriction>
+			<resource-restriction>
+				<name>free-day</name>
+				<required-resourcetypes>
+					<resourcetype>teacher</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="free-day"&gt;day&lt;/restriction&gt;</pre>
+<p>This option specifies that no slots on "day" should ever 
+be used to schedule lessons for a teacher.</p>
+				</description>
+			</resource-restriction>
+			<resource-restriction>
+				<name>free-period</name>
+				<required-resourcetypes>
+					<resourcetype>teacher</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="free-period"&gt;day period&lt;/restriction&gt;</pre>
+<p>This option specifies that the time slot at "day period" should never 
+be used to schedule lessons for a teacher.</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>free-period</name>
+				<description>
+<pre>&lt;option name="free-period"&gt;day period&lt;/option&gt;</pre>
+<p>This option specifies that the time slot at "day period" should never 
+be used to schedule lessons.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>holes.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight for each hole (free period) in the timetable for the
+constant resources of the specified type.</p>
+<p>For example: two free periods surrounded by non-free periods add two weights.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked for holes by this module.</p>
+<p>For example, if you do not want students to have free periods in the middle
+of lectures:</p>
+<pre>&lt;module name="holes.so" weight="50" mandatory="yes"&gt; 
+	&lt;option name="resourcetype"&gt;class&lt;/option&gt;
+&lt;/module&gt;</pre>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>maxconsecutive.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>This module allows you to set a limit for the maximum number of
+consecutive events in a teacher's timetable. Additionally you can also set
+the number of different lectures that a teacher can have without a pause.</p>
+<p>Two lectures are different if they differ in the title and the attending 
+group of students (i.e. they must differ in the name of the event and all 
+assigned constant resources). The way these lectures are defined in the 
+XML file has no effect (for example with a single &lt;event&gt; tag with repeats 
+or two identical &lt;event&gt; tags - see also consecutive.so documentation)</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-consecutive"&gt;4&lt;/option&gt;
+	&lt;option name="max-different"&gt;3&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>With the above options the following combinations are allowed (where A, B, C
+denote time slots assigned to different lectures and . denotes a free 
+time slot):</p>
+<p>. A B C . (max-different limit reached)</p>
+<p>. A A B B . (max-consecutive limit reached)</p>
+<p>. A A B C . (both max-different and max-consecutive limits reached)</p>
+<p>And the following combination isn't allowed:</p>
+<p>A A B B C . (over the max-consecutive limit)</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>teacher</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>max-consecutive</name>
+				<description>
+<p>Use this option to specify the maximum length of a consecutive block of 
+events in a teacher's timetable.</p>
+<p>For example:</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-consecutive"&gt;3&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>In this case a teacher can have at most 3 lectures (3 occupied time slots) 
+before requiring at least one time slot of pause.</p>
+				</description>
+			</module-option>
+			<module-option>
+				<name>max-different</name>
+				<description>
+<p>Use this option to specify the maximum number of different events in a 
+consecutive block of events in a teacher's timetable.</p>
+<p>For example:</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-different"&gt;2&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>In this case a teacher can have at most 2 different lectures (and any number
+of occupied time slots) before requiring at least one time slot of pause.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>maxperday.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>This module prevents resources of one constant type (e.g. teachers 
+or class) to have more than the set maximum number of events scheduled per 
+day.</p>
+<p>For each resource the number of weights added is equal to the number of
+events scheduled in a day that exceeds the maximum number (in the example
+below if a teacher has 7 events scheduled on one day, this module will
+add 2 weights)</p>
+<p>If you would like to use this module for more than one resource type, you
+can safely include two &lt;module&gt; tags with different "resourcetype" options.</p>
+<p>The following example will make this module check if each teacher has no
+more than 5 events scheduled per day.</p>
+<pre>&lt;module name="maxperday" weight="60" mandatory="yes"&gt;
+	&lt;option name="resourcetype"&gt;teacher&lt;/option&gt;
+	&lt;option name="maxperday"&gt;5&lt;/option&gt;
+&lt;/module&gt;</pre>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>maxperday</name>
+				<description>
+<p>Use this option to specify the maximum number of events per day, Its contents
+must be a positive integer.</p>
+				</description>
+			</module-option>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify a constant resource type for which this module
+will be in effect.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>minrooms.so</filename>
+			<author>Seppe vanden Broucke</author>
+			<authoremail></authoremail>
+			<credits>
+<p>Minor modifications by Tomaz Solc</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>Simple meeting scheduling</group>
+		</module-groups>
+		<description>
+<p>
+The number of weights added by this module is equal to the total number 
+of used rooms minus 1.</p>
+<p>Of course, you have to use this in combination with the timeplace.so 
+module, otherwise the best fit would be to place all events in the same 
+room. Also, this module may not be used as a mandatory one, because a 
+fitness of zero is unlikely.</p>
+<p>Finally: I've had best results with small weights, which is also logical.</p>
+<p>The module is used like all the others, with no other options or directives:</p>
+<pre>&lt;module name="minrooms.so" weight="10" mandatory="no"/&gt;</pre>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>room</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>perday.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>This module calculates weekly dispersion of non-free time slots for 
+different resources (usually classes and teachers). Number of added weights 
+is equal to the sum of dispersions for all classes.</p>
+<p>This module tries to ensure that students have their work evenly 
+distributed throughout the week. For example: This module would add zero 
+weights if a class has 5 non-free periods on each day of the week. On the 
+other hand, it would add 2 weights if this class has 6 non-free periods on
+monday, 4 on tuesday and 5 on wednesday, thursday and friday. This is done
+by calculating mathematical dispersion of non-free periods through the 
+weekdays.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>placecapability.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Use this module if you want to schedule certain events only in 
+classrooms that have the neccessary capabilities.</p>
+<p>This module does not use a fitness function. This means that the "mandatory"
+and "weight" options are ignored. This restriction is always mandatory.</p>
+<p>See "preferredroom.so" module if you need a non-mandatory restriction of
+a similar type.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>room</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>capability</name>
+				<required-resourcetypes>
+					<resourcetype>room</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;resource name="special-classroom"&gt;
+	&lt;restriction type="capability"&gt;special-capability&lt;/restriction&gt;
+&lt;/resource&gt;</pre>
+<p>Use this restriction to specify which capabilities does a certain classroom
+have. You can have more than one capability per classroom.</p>
+<p>A classroom has no capabilities by default.</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>capability</name>
+				<description>
+<pre>&lt;event name="special-event" repeats="1"&gt;
+	&lt;restriction type="capability"&gt;special-capability&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>Use this restriction to specify that the current event can only be scheduled
+in rooms with the specified capability.</p>
+<p>You can use more than one restriction per event. This means that this event
+can only be scheduled in rooms that have all of the specified capabilities.</p>
+<p>An event can be scheduled in any room by default.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>preferredroom.so</filename>
+			<author>Nick Robinson</author>
+			<authoremail>npr@bottlehall.co.uk</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever a class, teacher or an event is not in a
+preferred room.</p>
+<p>In case multiple conflicting "preferred-room" restrictions are defined
+for an event, the restriction with the highest priority is used.</p>
+<p>Event restrictions have the highest priority, class resource restrictions 
+have a middle priority and teacher resource restrictions have the lowest
+priority.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>class</resourcetype>
+			<resourcetype>room</resourcetype>
+			<resourcetype>teacher</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>preferred-room</name>
+				<required-resourcetypes>
+					<resourcetype>teacher</resourcetype>
+					<resourcetype>class</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="preferred-room"&gt;room name&lt;/restriction&gt;</pre>
+<p>This restriction can be used in teacher or class resources and specifies 
+that current class or teacher should teach have all lessons scheduled in the 
+room specified in the restriction.</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>preferred-room</name>
+				<description>
+<pre>&lt;restriction type="preferred-room"&gt;room name&lt;/restriction&gt;</pre>
+<p>This restriction specifies the current lesson should be scheduled in the 
+room specified in the restriction.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>preferredtime.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+			<credits>
+<p>
+Ideas taken from a patch for Tablix 0.0.3 by 
+Jaume Obrador &lt;obrador@espaiweb.net&gt;</p>
+<p>Ported to version 0.2.0 and extended by Nick Robinson &lt;npr@bottlehall.co.uk&gt;</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>General</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever an event is not scheduled at the specified 
+preferred day and/or time slot.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>preferred-day</name>
+				<description>
+<pre>&lt;restriction type="preferred-day"&gt;day&lt;/restriction&gt;</pre>
+<p>This restriction specifies the preferred day for an event.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>preferred-period</name>
+				<description>
+<pre>&lt;restriction type="preferred-period"&gt;period&lt;/restriction&gt;</pre>
+<p>This restriction specifies the preferred period for an event.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>recurrence.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>This module enables you to specify how should Tablix distribute 
+the recurrences of an event throughout a multiweek timetable.</p>
+<p>This module only affects resource domains, so the weight and mandatory
+values are ignored.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>recurrence</name>
+				<description>
+<p>This restriction specifies two recurrence parameters: The week when the
+recurrence starts and how many times per week should this event appear.</p>
+<p>Consider the following example:</p>
+<pre>&lt;event name="Lecture" repeats="24"&gt;
+	&lt;resource type="teacher" name="A"/&gt;
+	&lt;resource type="class" name="B"/&gt;
+	&lt;restriction type="recurrence"&gt;2 3&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This means that events named 'Lecture' will appear for 8 consecutive weeks
+(24 repeats divided by 3 recurrences per week) starting on the third week
+(week are numbered starting from 0) with 3 events per week.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>days-per-week</name>
+				<description>
+<p>This option specifies the number of work days per week. If this option is
+not specified a default number of 5 is used.</p>
+<p>Example:</p>
+<pre>&lt;module name="recurrence.so" weight="60" mandatory="yes"&gt;
+	&lt;option name="days-per-week"&gt;6&lt;/option&gt;
+&lt;/module&gt;
+.
+.
+.
+&lt;resourcetype type="time"&gt;
+	&lt;matrix width="30" height="5"/&gt;
+&lt;/resourcetype&gt;</pre>
+<p>This combination of options would result in a timetable that is 6 weeks long
+(30 weeks long divided by 6 days per week).</p>
+<p>Please note that if you changed the default number of days per week you will
+also have to give this option to the 'htmlcss2' export module to get the
+expected result.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>sameday.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+			<credits>
+<p>
+Ideas taken from a patch for Tablix 0.0.3 by 
+Jaume Obrador &lt;obrador@espaiweb.net&gt;</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>
+Adds a weight if a class or a teacher (as specified by the "resourcetype"
+module option) has the same subject more than N 
+times in a day.</p>
+<p>Default for N is 1. Default value can be changed with the module option 
+"default". Default value for N can also be overridden for individual 
+teachers, classes and events with various restrictions.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>ignore-sameday</name>
+				<required-resourcetypes>
+					<all-resourcetypes/>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="example-class"&gt;
+		&lt;restriction type="ignore-sameday"/&gt;
+	&lt;/resource&gt;
+&lt;/resourcetype&gt;</pre>
+<p>Set this restriction to a class or a teacher that you don't want to be 
+checked for multiple occurrences of the same subject in a day.</p>
+<p>This module then ignores classes that have this restriction, however this
+setting can be overridden for individual events if "set-sameday" restriction 
+is used on an event for this class or teacher.</p>
+				</description>
+			</resource-restriction>
+			<resource-restriction>
+				<name>set-sameday</name>
+				<required-resourcetypes>
+					<all-resourcetypes/>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="example-class"&gt;
+		&lt;restriction type="set-sameday"&gt;2&lt;/restriction&gt;
+	&lt;/resource&gt;
+&lt;/resourcetype&gt;</pre>
+<p>With this restriction you can set a maximum number of equal events a class
+or a teacher can have in a day. This setting can be overridden for 
+individual events if "set-sameday" event restriction is used on an event 
+for this class or teacher.</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>consecutive</name>
+				<description>
+<p>This is an alias for "ignore-sameday" restriction. It is defined for 
+convenience when this module is used together with consecutive.so module.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>ignore-sameday</name>
+				<description>
+<p>Set this restriction to all events that you do not want to be checked for
+multiple occurences per day.</p>
+<p>This retriction overrides the default setting and settings made by 
+any resource restrictions.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>periods-per-block</name>
+				<description>
+<p>This is an alias for "set-sameday-blocksize" restriction. It is defined for 
+convenience when this module is used together with consecutive.so module.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>set-sameday</name>
+				<description>
+<pre>&lt;event name="example" repeats="5"&gt;
+		...
+		&lt;restriction type="set-sameday"&gt;2&lt;/restriction&gt;
+&lt;/resourcetype&gt;</pre>
+<p>With this restriction you can set a maximum number of events of type type
+that a class or a teacher can have in a day.</p>
+<p>This retriction overrides the default setting and settings made by 
+any resource restrictions.</p>
+				</description>
+			</tuple-restriction>
+			<tuple-restriction>
+				<name>set-sameday-blocksize</name>
+				<description>
+<p>With this restriction you can tell this module that the current event 
+will be scheduled in blocks of this number of equal consecutive events.</p>
+<p>Module will then consider a block of events as a single event when checking 
+for multiple occurences per day.</p>
+<p>Default block size is 1.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>default</name>
+				<description>
+<p>Use this option to set the default number of equal events classes or 
+teachers can have in day.</p>
+				</description>
+			</module-option>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+<p>Use option</p>
+<pre>&lt;option name="resourcetype"&gt;class&lt;/option&gt;</pre>
+<p>to get the same behaviour as this module had before Tablix version 0.3.1.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>sametime.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever a teacher or a class is required to be in two 
+rooms at the same time.</p>
+<p>Please note that this module will not consider it as an error if a teacher or
+a class has two events scheduled at the same time in the same room. This
+means that in 99% of cases you need to use this module together with
+timeplace.so to get the expected results.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>class</resourcetype>
+			<resourcetype>room</resourcetype>
+			<resourcetype>teacher</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>conflicts-with</name>
+				<required-resourcetypes>
+					<resourcetype>class</resourcetype>
+					<resourcetype>teacher</resourcetype>
+				</required-resourcetypes>
+				<description>
+<pre>&lt;restriction type="conflicts-with"&gt;name&lt;/restriction&gt;</pre>
+<p>This restriction specifies that current class or teacher should never have 
+lessons at the same time as the class or teacher specified in the 
+restriction.</p>
+<p>There are two common uses for this restriction: When multiple classes share
+an event and when multiple teachers share an event. Consider the following 
+example:</p>
+<p>Let's say we have two groups of students. Each group has its own timetable
+except a couple of lessons which they share.</p>
+<p>We define each group of students plus an extra group for the shared lessons.</p>
+<pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="Group 1"&gt;
+		&lt;restriction type="conflicts-with"&gt;Group 1+2&lt;/restriction&gt;
+	&lt;/resource&gt;
+	&lt;resource name="Group 2"&gt;
+		&lt;restriction type="conflicts-with"&gt;Group 1+2&lt;/restriction&gt;
+	&lt;/resource&gt;
+	&lt;resource name="Group 1+2"/&gt;
+&lt;/resourcetype&gt;</pre>
+<p>This way group 1+2 will never have lessons at the same time as
+groups 1 and 2 and students from either group will be able to attend
+lectures in group 1+2.</p>
+<p>Multiple teachers per event can be defined in a similar way.</p>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>recursive-conflicts</name>
+				<description>
+<p>If this module option is present (any option value is ignored), then all
+"conflicts-with" restrictions become recursive.</p>
+<p>For example: if class A conflicts with class B and class A conflicts with 
+class C, then class B will also automatically conflict with class C.</p>
+<p>Without this option class C will not conflict with class B unless you 
+specify this with another "conflicts-with" restriction.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>sametimeas.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+			<credits>
+<p>
+Module ported to 0.2.x kernel and extended by 
+Nick Robinson &lt;npr@bottlehall.co.uk&gt;
+Modified to use updater functions by Antonio Duran</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds support for scheduleding events at the same time.
+This module uses updater functions, so the weight and mandatory
+values are ignored.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>same-time-as</name>
+				<description>
+<pre>&lt;restriction type="same-time-as"&gt;event name&lt;/restriction&gt;</pre>
+<p>This restriction specifies that the current event needs to be scheduled
+at the same time as the event identified in the restriction.</p>
+<pre>&lt;event name="a" repeats="4"&gt;
+...
+&lt;restriction type="same-time-as"&gt;b&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name="b" repeats="5"&gt;
+...
+&lt;/event&gt;</pre>
+<p>In this case, four events "a" are scheduled at the same time as four events
+"b". The fifth event "b" can be scheduled at any time.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>simplesametime.so</filename>
+			<author>Seppe vanden Broucke</author>
+			<authoremail></authoremail>
+			<credits>
+<p>Based on sametime.so module by Tomaz Solc</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>Simple meeting scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever a local or visiting company is required to 
+have two meetings at the same time.</p>
+<p>This module is similar to sametime.so except that it does not require
+"room" resoure type to be defined. Use it instead of sametime.so / i
+timeplace.so combination when you do not need to assign rooms to 
+meetings.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>local</resourcetype>
+			<resourcetype>time</resourcetype>
+			<resourcetype>visitor</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+			<resource-restriction>
+				<name>conflicts-with</name>
+				<required-resourcetypes>
+					<resourcetype>local</resourcetype>
+					<resourcetype>visitor</resourcetype>
+				</required-resourcetypes>
+				<description>
+<p>Example use:</p>
+<pre>&lt;restriction type="conflicts-with"&gt;name&lt;/restriction&gt;</pre>
+				</description>
+			</resource-restriction>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>recursive-conflicts</name>
+				<description>
+<p>If this module option is present (any option value is ignored), then all
+"conflicts-with" restrictions become recursive.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>timeblocks.so</filename>
+			<author>Antonio Duran</author>
+			<authoremail>antonio.duran.terres@gmail.com</authoremail>
+			<credits>
+<p>
+This module is a minor modification of consecutive2 module by Tomaz Solc 
+Original consecutive module by Nick Robinson</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever events are not scheduled in blocks of 
+consecutive periods.</p>
+<p>Use this module to schedule multiple repetitions of an event in one or more 
+blocks.</p>
+<p>This module is deprecated. consecutive.so module provides the same 
+functionality with better performance.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>periods-per-block</name>
+				<description>
+<pre>&lt;restriction type="periods-per-block"&gt;periods&lt;/restriction&gt;</pre>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled in blocks of 'periods' consecutive periods.</p>
+<p>For example:</p>
+<pre>&lt;event name="test" repeats="6"&gt;
+	&lt;resource type="teacher" name="a"/&gt;
+	&lt;resource type="class" name="2"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This restriction tells Tablix to schedule 6 events "test" in three blocks
+of two consecutive "test" events.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>timeblocks_sameday.so</filename>
+			<author>Antonio Duran</author>
+			<authoremail>antonio.duran.terres@gmail.com</authoremail>
+			<credits>
+<p>
+Additional error checking by Tomaz Solc</p>
+			</credits>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+		</module-groups>
+		<description>
+<p>
+Adds a weight if two timeblocks are scheduled on the same day.</p>
+<p>This module divides repetitions of an event into groups of equal sizes. It
+then makes sure that two such groups aren't scheduled on the same day.</p>
+<p>This module is deprecated. sameday.so module in combination with 
+consecutive.so provides the same functionality with better performance.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+			<tuple-restriction>
+				<name>periods-per-block</name>
+				<description>
+<pre>&lt;restriction type="periods-per-block"&gt;periods&lt;/restriction&gt;</pre>
+<p>Set this restriction to schedule blocks of events on different days.</p>
+<p>For example:</p>
+<pre>&lt;event name="test" repeats="6"&gt;
+	&lt;resource type="teacher" name="a"/&gt;
+	&lt;resource type="class" name="2"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This restriction tells Tablix to schedule 2 events "test" on one day, 
+next 2 events "test" on some other day and next 2 events "test" again
+on a different day.</p>
+				</description>
+			</tuple-restriction>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>timeplace.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>Adds a weight whenever two events are scheduled in the same room at 
+the same time.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>room</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+		</defined-options>
+	</module>
+	<module>
+		<basic-info>
+			<filename>walk.so</filename>
+			<author>Tomaz Solc</author>
+			<authoremail>tomaz.solc@tablix.org</authoremail>
+		</basic-info>
+		<module-groups>
+			<group>School scheduling</group>
+			<group>Multiweek scheduling</group>
+		</module-groups>
+		<description>
+<p>This module calculates how many times constant resources of the 
+specified type (usually classes or teachers) must change classrooms. 
+It then adds equal number of weights.</p>
+<p>This module is commonly used in school scheduling when it is desired that
+teachers and/or students change classrooms between lectures as little 
+as possible.</p>
+		</description>
+		<required-resourcetypes>
+			<resourcetype>room</resourcetype>
+			<resourcetype>time</resourcetype>
+		</required-resourcetypes>
+		<defined-resource-restrictions>
+		</defined-resource-restrictions>
+		<defined-tuple-restrictions>
+		</defined-tuple-restrictions>
+		<defined-options>
+			<module-option>
+				<name>resourcetype</name>
+				<description>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+				</description>
+			</module-option>
+		</defined-options>
+	</module>
+</module-documentation>

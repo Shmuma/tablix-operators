@@ -1,0 +1,2579 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<book>
+<bookinfo>
+<title>Tablix modules HOW-TO, part 1</title>
+<author>
+<firstname>Toma&zcaron;</firstname>
+<surname>&Scaron;olc</surname>
+<authorblurb>
+<para><email>tomaz.solc@tablix.org</email></para>
+</authorblurb>
+</author>
+<pubdate>
+$Id: modules.db,v 1.21 2007-03-06 17:47:33 avian Exp $
+</pubdate>
+<abstract>
+<para>
+Modules are pieces of code that are dynamically linked with the Tablix kernel at run time and provide most of the functionality of Tablix. This document describes in detail how to write and build new fitness modules. It explains how to use kernel API interfaces for this kind of modules, module documentation utilities and testing framework.
+</para>
+</abstract>
+<legalnotice>
+<para>
+Copyright (C) 2005 by Toma&zcaron; &Scaron;olc.
+</para>
+</legalnotice>
+
+<mediaobject>
+    <imageobject><imagedata align="center" fileref="images/lines.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata align="center" fileref="images/lines.png" format="PNG"/></imageobject>
+</mediaobject>
+
+</bookinfo>
+
+<toc></toc>
+
+<chapter>
+<title>Introduction</title>
+
+<sect1>
+
+<title>Introduction to modules</title>
+
+<para>
+As of version 0.0.4 Tablix supports loadable modules that include timetable fitness functions. The fitness module interface changed considerably with the kernel rewrite during 0.2.x branch.
+</para>
+
+<para>
+There are two distinct types of modules: <phrase>Fitness modules</phrase> contain <phrase>partial fitness functions</phrase> and provide handlers for various <phrase>restrictions</phrase>. They are loaded by the kernel as specified in the XML configuration file. Fitness functions are then used by the genetic algorithm to select best timetables out of a large search space. <phrase>Export modules</phrase> on the other hand are loaded by the <filename>tablix2_output</filename> utility and contain functions that translate data from the internal kernel structures to a file in a certain format. For example: HTML export module, comma separated value format export module. This document describes <phrase>fitness modules</phrase> although many things also apply to the export modules. Export modules specifics are detailed in the second part of this HOW-TO
+</para>
+
+<para>
+I recommend reading the Tablix User's Manual and the Tablix Timetabling Model formal description before attempting to write your own module. Also while reading this text you should keep a browser window nearby with the Tablix kernel API reference manual loaded. Some important structures are also described in the text, but mostly only references to the reference manual will be given.
+</para>
+
+<note>
+<para>
+All example XML configuration files and module source code can be found in the <filename>examples/modules/</filename> subdirectory in the Tablix source tree.
+</para>
+</note>
+
+</sect1>
+
+<sect1>
+<title>
+Brief theoretical background on fitness functions
+</title>
+
+<para>
+Tablix uses a simple weighted sum to compute a fitness value of a timetable. This is implemented with a for loop in function <function>table_fitness()</function> in <filename>modsup.c</filename>. It looks like this in pseudo code:
+</para>
+
+<programlisting>
+FOR each partial fitness function defined by loaded modules DO
+        CALL partial fitness function
+        MULTIPLY the result with the weight of this module
+        ADD the result to the total fitness of this timetable
+DONE
+</programlisting>
+
+<para>
+Lower fitness value for a timetable means a better timetable. A perfect timetable that has no errors would have the fitness value equal to zero. 
+</para>
+
+<para>
+Each module usually defines one partial fitness function. This function in most cases returns the number of errors of a certain type in the timetable. There are some cases where this is not possible (for example when a module is calculating a dispersion of events). In that case the function should return lower values for better timetables. It is not mandatory that a timetable with fitness zero exists although it is desirable (a module can not be declared <phrase>mandatory</phrase> if its fitness function can never reach zero).
+</para>
+
+<para>
+It is important that the return value of the partial fitness function depends only on one type of errors in the timetable. Because user can define which modules will be used by the kernel this enables her to customize the search for solution. By assigning different weight values to different modules she can assign more computational effort to solving a specific type of errors. This would not be possible if a fitness value depended on more than one type of errors. Experience also shows that partial fitness functions that are not orthogonal (if a value of one fitness function strongly affects the value of another) sometimes cause instability in the genetic algorithm.
+</para>
+
+<para>
+Genetic algorithm gives best results if the fitness functions are continuous. This means that the fitness value should gradually decrease as the timetable gets better (has less errors). An example of the worst kind of a fitness function would be a function that returns zero for a perfect timetable and some fixed value for non-perfect ones
+</para>
+
+</sect1>
+
+</chapter>
+<chapter>
+<title>
+Kernel API
+</title>
+
+<sect1>
+<title>A basic module</title>
+
+<para>
+Let's begin with a simple "hello world" type of a module:
+</para>
+
+<programlisting>
+#include "module.h"
+
+int module_init(moduleoption *opt)
+{
+        debug("Hello world!");
+        debug("Weight: %d", option_int(opt, "weight"));
+
+        return(0);
+}
+</programlisting>
+
+<para>
+As you can see this module contains only the <function>module_init()</function> function. This function is called right after the kernel loads the module and is the only symbol that must be defined in all fitness modules for Tablix kernels in 0.2.x branch (prototype is defined in <filename>modsup.h</filename>, see <type>init_f</type>). No other function in the module is called unless you specifically request so in <function>module_init()</function>.
+</para>
+
+<note>
+<para>
+<function>module_init()</function> is equivalent to <function>init_mod()</function> in 0.1.x kernels.
+</para>
+</note>
+
+<para>
+Parameter <parameter>opt</parameter> of <function>module_init()</function> is a structure holding all module options that were specified in the configuration file as <parameter>&lt;option&gt;</parameter> tags. You can get values of these options from the <structname>moduleoption</structname> structure by using following two functions:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>
+char *<function>option_str</function>(moduleoption *<parameter>opt</parameter>, char *<parameter>name</parameter>)
+</term>
+<listitem>
+<para>
+This function returns the string contents of the option with the name <parameter>name</parameter> or returns NULL if the option was not specified in the XML file. You should free the returned string after use with <function>free()</function>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+int <function>option_int</function>(moduleoption *<parameter>opt</parameter>, char *<parameter>name</parameter>)
+</term>
+<listitem>
+<para>
+This function is equal to <function>option_str()</function>. Additionally it converts the contents of the option to an integer. If that is not possible or the option was not found, it returns INT_MIN. 
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+Two options are always defined: The <symbol>weight</symbol> option always holds the integer value of the weight for this module that was specified in the XML configuration file. The <symbol>mandatory</symbol> option always contains either integer 1 or integer 0, depending whether the mandatory option for this module was set to "yes" or "no" in the configuration file.
+</para>
+
+<warning>
+<para>
+Pointer to the linked list of module options is only passed to the <function>module_init()</function> function. Immediately after this function returns the memory used by the list is freed. This means that this pointer is only valid in <function>module_init()</function>.
+</para>
+</warning>
+
+<para>
+This simple module also demonstrates the use of the error reporting functions that are defined in <filename>error.h</filename>. Functions <function>error()</function>, <function>info()</function> and <function>debug()</function> can be used to report various warnings and errors back to the user. They are used much like the <function>printf</function> function from the standard library. 
+</para>
+
+<para>
+You can also see that <function>module_init()</function> returns 0 in this case. This means that there were no errors. In case of errors this function should return a value less than zero. The same holds for all other functions we will later add to our fitness module. In fact that is the case with most functions in Tablix that return an integer.
+</para>
+
+<para>
+You should avoid using <function>fatal()</function> in modules, because that function immediately terminates the kernel. Use <function>error()</function> to report the error and then use the function return value to signal that a fatal error has occurred in the module. The kernel will then terminate in a cleaner way.
+</para>
+
+<sect2>
+<title>
+Compiling your module
+</title>
+
+<para>
+There are two ways of compiling your module. In most cases you would want to use the first way. The second way described here requires up to date autotools installed on your machine and is recommended only if you would like to compile your module in the exactly the same way the official modules in the distribution are compiled.
+</para>
+
+<sect3>
+<title>The simple way</title>
+
+<para>
+Create a subdirectory in the Tablix source tree, for example <filename>local/</filename>. Name the file with the source code of your module <filename>hello.c</filename> and save it into the subdirectory you've made. Now create a file named <filename>Makefile</filename> in that directory with the following contents (you <emphasis>must</emphasis> use tabs to indent lines!):
+</para>
+
+<programlisting>
+CFLAGS = -Wall -O2
+INCLUDES = -I../src -I..
+
+MODULES = <userinput>hello.so</userinput>
+
+all: $(MODULES)
+
+%.so: %.o
+        gcc -shared -Wl,-soname,$@ -o $@ $&lt; -lc
+%.o: %.c
+        gcc $(CFLAGS) $(INCLUDES) -c -o $@ $&lt;
+
+clean:
+        -rm *.o *.so
+
+install:
+        cp $(MODULES) <userinput>/usr/local/lib/tablix2</userinput>
+</programlisting>
+
+<para>
+Later when you add more custom modules to your collection, you can add their names to the <userinput>MODULES =</userinput> line after <userinput>hello.so</userinput>. Just be sure to replace the <userinput>.c</userinput> extension with the <userinput>.so</userinput>.
+</para>
+
+<para>
+Modules are usually installed in <filename>/usr/local/lib/tablix2</filename>, but that may be different on your system, depending on any <parameter>--prefix</parameter> options during Tablix configuration and / or your operating system. You can find the proper location by running the following command:
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix -v</userinput>
+</screen>
+
+<para>
+Fix the path in the install rule if necessary.
+</para>
+
+<para>
+You can now compile and install your module with the following command:
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>make</userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+</screen>
+
+</sect3>
+
+<sect3>
+<title>The autotools way</title>
+
+<note>
+<para>
+This method requires a recent version of <ulink url="http://www.gnu.org/software/autoconf">Autoconf</ulink>, <ulink url="http://www.gnu.org/software/automake">Automake</ulink> and related software. This is the way the official modules in the distribution are compiled.
+</para>
+<para>
+If you get any strange errors while running <filename>autoconf</filename> or <filename>automake</filename>, this 99% of cases means that you have the wrong version of autotools installed. Warnings about "underquoted definitions" are normal and can be ignored (they have nothing to do with Tablix).
+</para>
+</note>
+
+<para>
+Put the file with the source code of your module into the <filename>modules</filename> subdirectory. Now you have to edit the <filename>Makefile.am</filename> file. First add the following two lines at the end of the file
+</para>
+
+<programlisting>
+<userinput>hello</userinput>_la_SOURCES = <userinput>hello.c</userinput>
+<userinput>hello</userinput>_la_LDFLAGS = -module -avoid-version
+</programlisting>
+
+<para>
+Then add <userinput>hello.la</userinput> to the end of the line beginning with <parameter>pkglib_LTLIBRARIES</parameter>. 
+</para>
+
+<para>
+Now you have to run <userinput>autoconf</userinput> and <userinput>automake</userinput> from the top directory and rerun <userinput>./configure</userinput> to refresh the actual <filename>Makefile</filename>s. You can also run <userinput>make -f Makefile.cvs</userinput> if you are using the CVS version.
+</para>
+
+<para>
+You can now compile and install your module with the following commands:
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>make</userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+</screen>
+
+</sect3>
+
+</sect2>
+
+<sect2>
+<title>
+Testing your module
+</title>
+
+<para>
+First we need a Tablix configuration file that uses our new module. Because this simple modulus doesn't do anything, we can keep it as simple as possible. We only need to define one resource and one event to keep the kernel happy.
+</para>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="hello.so" weight="10" mandatory="yes"/&gt;
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="dummy-type"&gt;
+                                &lt;resource name="dummy-resource"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="dummy-event" repeats="1"/&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+Save this configuration to a file named <filename>hello.xml</filename> and run Tablix. Because we used the <function>debug()</function> function in the module, you have to run Tablix with the <parameter>-d5</parameter> option to see the "Hello world!" message.
+</para>
+
+<para>
+A few screenfulls of messages will scroll past in the console as you run Tablix. Because <filename>hello.so</filename> module hasn't defined any fitness functions all timetables get fitness value 0 and Tablix will only run for a few hundred generations before declaring it has found the solution. Somewhere at the beginning of the output you should find the "Hello world!" message.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix2 -d5 hello.xml</userinput>
+TABLIX version 0.2.1, PGA general timetable solver
+Copyright (C) 2002-2005 Tomaz Solc
+
+[tablix] PGA using 4 nodes on 1 host
+[tablix] maximum 1 node will do local search
+[tablix] multicasting XML data
+[tablix] Initializing nodes
+...
+[xxxxx] xmlsup: variable dummy-type: 1 resources
+[xxxxx] xmlsup: Loading module /home/avian/software/lib/tablix2/hello.so
+<emphasis>[xxxxx] xmlsup: Hello world!</emphasis>
+[xxxxx] xmlsup: Weight: 10
+[xxxxx] kernel: I have 1 tuples
+...
+</screen>
+</sect2>
+
+</sect1>
+
+<sect1>
+<title>
+Fitness function, chromosomes, event restriction
+</title>
+
+<para>
+Let's extend our basic module so that it will actually do something useful. Following is the source code of a module that will force selected event to use a certain resource from resource type "dummy-type". It defines a new event restriction named "fixed-dummy-type". The contents of this restriction tell which resource from the "dummy-type" resource type should this event use.
+</para>
+
+<programlisting>
+#include &lt;stdlib.h&gt;
+#include "module.h"
+
+#define        RESTYPE                "dummy-type"
+
+struct fixed {
+        int tupleid;
+        int resid;
+};
+
+static int fixed_num;
+static struct fixed *fixed_tuples;
+
+static resourcetype *dummy;
+
+int handler(char *restriction, char *content, tupleinfo *tuple)
+{
+        int resid;
+
+        resid=res_findid(dummy, content);
+        if(resid==INT_MIN) {
+                error(_("Resource '%s' not found"), content);
+                return -1;
+        }
+
+        fixed_tuples[fixed_num].resid=resid;
+        fixed_tuples[fixed_num].tupleid=tuple-&gt;tupleid;
+
+        fixed_num++;
+
+        return 0;
+}
+
+int fitness(chromo **c, ext **e, slist **s)
+{
+        chromo *dummy_c;
+        int n, sum;
+        int tupleid, resid;
+
+        dummy_c=c[0];
+
+        sum=0;
+
+        for(n=0;n&lt;fixed_num;n++) {
+                tupleid=fixed_tuples[n].tupleid;
+                resid=fixed_tuples[n].resid;
+
+                if(dummy_c-&gt;gen[tupleid]!=resid) sum++;
+        }
+
+        return sum;
+}
+
+int module_init(moduleoption *opt)
+{
+        fitnessfunc *f;
+
+        dummy=restype_find(RESTYPE);
+        if(dummy==NULL) {
+                error(_("Resource type '%s' not found"), RESTYPE);
+                return -1;
+        }
+
+        fixed_tuples=malloc(sizeof(*fixed_tuples)*dat_tuplenum);
+        fixed_num=0;
+
+        if(fixed_tuples==NULL) {
+                error(_("Can't allocate memory"));
+                return -1;
+        }
+
+        if(handler_tup_new("fixed-" RESTYPE, handler)==NULL) return -1;
+
+        f=fitness_new("fixed",
+                option_int(opt, "weight"),
+                option_int(opt, "mandatory"),
+                fitness);
+
+        if(f==NULL) return -1;
+
+        fitness_request_chromo(f, RESTYPE);
+
+        return(0);
+}
+</programlisting>
+
+<para>
+We have two new functions here: <function>fitness()</function> is our fitness function and <function>handler()</function> is the restriction handler for the type of event restrictions we defined.
+</para>
+
+<note>
+<para>
+All global variables in modules should be declared as static.
+</para>
+</note>
+
+<sect2>
+<title>
+Module initialization
+</title>
+
+<para>
+Let's follow the <function>module_init()</function> function: First we try to find the <structname>resourcetype</structname> structure for the resource type named "dummy-type". If we can't find it, we report an error and exit. Note that this made our module dependend on the definition of a certain resource type in the configuration file.
+</para>
+
+<para>
+Also note that all error messages are enclosed in gettext translation macros. You should use translation macro <function>_()</function> around any warning or error message that will be seen by users. Don't put it around resource type names or restriction types. Also don't use it with debug messages.
+</para>
+
+<para>
+Next we allocate memory for the <varname>fixed_tuples</varname> array. This array stores the information about which tuples (events) had defined fixed resources defined by our restriction. Since it doesn't make sense to have more than one restriction of this type per event, we make the length of the array
+equal to the number of events (stored in the global <varname>dat_tuplenum</varname>). <varname>fixed_num</varname> stores the number of used restrictions.
+</para>
+
+<para>
+Now comes the important part. First we define a new event restriction type with the <function>handler_tup_new()</function>. Second we define our fitness function with the <function>fitness_new()</function>. We named this partial fitness value "fixed" (this name is used for example by <filename>tablix2_plot</filename> utility) and passed unchanged weight and mandatory values from the config file to <function>fitness_new()</function>.
+</para>
+
+<note>
+<para>
+Your fitness functions should have short, descriptive names that should be easy for the user to connect with your module. 
+</para>
+</note>
+
+<para>
+Finally we must tell the kernel in which form do we want the timetable to be passed to our fitness function. Kernel supports three forms of timetables: chromosome form, which is the native form of the genetic algorithm and is used in most cases, chromosome extension form and slist form. In this example we use a chromosome. Other two forms will be explained in later sections.
+</para>
+
+<figure>
+<title>
+Timetable representation in the Tablix kernel.
+</title>
+<mediaobject>
+    <imageobject><imagedata fileref="images/table.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata fileref="images/table.png" format="PNG"/></imageobject>
+</mediaobject>
+</figure>
+
+<para>
+A timetable is fully described with N chromosomes, where N is the number of resource types. For the purpose of this example a chromosome is an array of resource IDs. Length of the array is equal to the number of defined events. Mth resource ID in the array is the ID of the resource that is used by event with tuple ID equal to M.
+</para>
+
+<note>
+<para>
+Resource ID is an unique numerical representation of a resource within its resource type (two resources can have the same resource ID if they are from different resource types).
+</para>
+<para>
+Tuple ID is an unique numerical representation of an event. Two events always have different tuple IDs. Tuples defined with a single <parameter>&lt;event&gt;</parameter> tag and <parameter>repeats</parameter> greater than 1 have sequential IDs.
+</para>
+</note>
+
+<caution>
+<para>
+You may have noticed that the <structname>tupleinfo</structname> structure, passed by the kernel to event restriction handlers, also contains resource IDs for a tuple. You should never use those values in fitness functions. Resource IDs stored in <structname>tupleinfo</structname> are those defined in the XML file and may have changed in the timetable that must be evaluated by the fitness function.
+</para>
+</caution>
+
+<note>
+<para>
+The length of the chromosome is stored in the <structfield>gennum</structfield> field of the chromosome structure. This number is equal to the number of defined events in the <varname>dat_tuplenum</varname> global variable. However you should use the <structfield>gennum</structfield> field when iterating through the whole chromosome in case of any future changes in the kernel.
+</para>
+</note>
+
+<para>
+In this example we request the chromosome for the resource type "dummy-type" to be passed to our fitness function by calling <function>fitness_request_chromo</function>.
+</para>
+
+<note>
+<para>
+It does not matter if a resource type of the chromosome you requested is defined as variable or as constant in the configuration file.
+</para>
+</note>
+</sect2>
+
+<sect2>
+<title>
+Event restriction
+</title>
+
+<para>
+The <function>handler()</function> function shouldn't require much explanation. It is called once for each event that had our restriction in the configuration file. 
+</para>
+
+<note>
+<para>
+If an event restriction is used in an <parameter>&lt;event&gt;</parameter> tag with <parameter>repeats</parameter> property greater than one, then the restriction handler function will be called multiple times, once for each event defined by the <parameter>&lt;event&gt;</parameter>  tag (with <varname>tuple</varname> pointer set accordingly).
+</para>
+</note>
+
+<para>
+<varname>restriction</varname> argument holds the type of the restriction this handler was called for. Since we only used <function>handler()</function> function in one type of restrictions ("fixed-dummy-type") we don't need to check its value. Otherwise this argument would enable us to use a single function as a handler for multiple restriction types.
+</para>
+
+<para>
+<varname>tuple</varname> is a pointer to <structname>tupleinfo</structname> structure that describes the event for which this restriction was defined. Here we only use it to get the tuple ID of the event and store its value in the <varname>fixed_tuples</varname> array. <varname>content</varname> holds the content of the restriction in string form. We interpret this string as a name of a resource and try to find and store its resource ID by using the <function>res_findid</function> function.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Fitness function
+</title>
+
+<para>
+<function>fitness()</function> function is more interesting. Kernel passes to it three arrays with the requested forms of the timetable to evaluate. First is an array of pointers to chromosomes <varname>c</varname>. First pointer points to the chromosome for the first requested resource type, second pointer to the second requested resource type, etc. <varname>e</varname> and <varname>s</varname> are similar arrays of pointers to chromosome extensions and slists. Since we only requested one chromosome in this example a pointer to it is stored in the first location in the chromosome array.
+</para>
+
+<para>
+The rest of fitness function is a loop that checks each tuple in the <varname>fixed_tuples</varname> array if it is using the correct resource. If it is not the error count <varname>sum</varname> is increased by one. When all tuples have been checked the function exits, returning the total number of tuples that are not using the correct resource. Fitness functions must always return a positive integer.
+</para>
+
+<note>
+<para>
+Fitness function should not change any structures or arrays that are passed to it.
+</para>
+</note>
+
+<tip>
+<para>
+Fitness functions are one of the most often called functions in Tablix. It must be called for each timetable in a generation. One generation includes by default 500 timetables and it takes many thousand generations to find a solution. Because of this they should be as optimized as possible.
+</para>
+</tip>
+</sect2>
+
+<sect2>
+<title>
+Testing the module
+</title>
+
+<para>
+We need to construct an XML configuration file that will use the event restriction we defined with our module. We also have to define a few resources of the type "dummy-type" because our module depends on this resource type. To keep things simple, only one event is defined in the following example. 
+</para>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="fixed.so" weight="10" mandatory="yes"/&gt;
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="dummy-type"&gt;
+                                &lt;linear name="#" from="1" to="50"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="dummy-event" repeats="1"&gt;
+                        &lt;restriction type="fixed-dummy-type"&gt;30&lt;/restriction&gt;
+                &lt;/event&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+Again save this file under a name <filename>fixed.xml</filename> and run Tablix. You will have to wait a few moments for Tablix to find a solution. You can then examine one of the result files:
+</para>
+
+<programlisting>
+&lt;event name="dummy-event" repeats="1" tupleid="0"&gt;
+        &lt;restriction type="fixed-dummy-type"&gt;30&lt;/restriction&gt;
+        &lt;resource type="dummy-type" name="30"/&gt;
+&lt;/event&gt;
+</programlisting>
+
+<para>
+You can see that Tablix scheduled event "dummy-event" so, that it is using resource with the name "30" as we requested (resource "30" is one of 50 resources with names from "1" to "50" that were defined with the <parameter>&lt;linear&gt;</parameter> tag).
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Possible improvements
+</title>
+
+<para>
+This module can be improved in many ways. First, it does not check if there is more than one restriction per event in the configuration file (in that case the number of errors could never reach zero). It could also cause a segmentation fault in that case because the number of defined restrictions would exceed the number of defined events. Second, it depends on the definition of the "dummy-type" resource type in the configuration file while such dependency isn't strictly necessary (this module is general enough that it would be useful in a number of different situations). The solution to these problems is left as an exercise for the reader.
+</para>
+</sect2>
+
+</sect1>
+<sect1>
+<title>
+Matrices, domains
+</title>
+
+<sect2>
+<title>
+About matrices
+</title>
+
+<para>
+Sometimes it is useful if resources of one resource type can be arranged in a two dimensional array. The most common example of this is when you have a fixed number of time slots per day and a fixed number of days per week. Such resource types are called <phrase>matrix resource types</phrase> or <phrase>matrices</phrase>.
+</para>
+
+<note>
+<para>
+Matrix resource types are a generalization of days / periods in 0.1.x Tablix kernels. New kernel allows any resource type to be a matrix resource type. Many modules that were ported from the older kernels still depend on the time resource type to be a matrix.
+</para>
+</note>
+
+<para>
+All resources in a matrix always have special names in the form of two integers separated by a single space. First integer gives the column index (x coordinate) and the second integer gives the row index (y coordinate). Resources in a matrix are also always ordered first by rows and then by columns (see <function>res_new_matrix()</function> function documentation for more information).
+</para>
+
+<table pgwide="0" frame="topbot">
+<title>Example order of resources in a matrix (height = 4)</title>
+<tgroup cols="2">
+<colspec colname="c1"/>
+<colspec colname="c2"/>
+<thead>
+<row>
+<entry>Resource ID</entry>
+<entry>Resource name</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>"0 0"</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>"0 1"</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>"0 2"</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>"0 3"</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>"1 0"</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>"1 1"</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>"1 2"</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>"1 3"</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>"2 0"</entry>
+</row>
+<row>
+<entry>...</entry>
+<entry>...</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<note>
+<para>
+Resource type is a matrix only and only if all of its resources are defined by a single <parameter>&lt;matrix&gt;</parameter> tag. It is valid to combine <parameter>&lt;matrix&gt;</parameter> tag with other tags for the definition of resources, but the resulting resource type is not a matrix.
+</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>
+Modified module
+</title>
+
+<para>
+Let's say we want to modify the previous example module so that we could define only the row of a resource an event will be using, not the exact resource. We will also modify the module so that it will be using resource domains, a new feature in 0.2.x kernels.
+</para>
+
+<programlisting>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "module.h"
+
+#define        RESTYPE                "dummy-type"
+
+static resourcetype *dummy;
+static int width, height;
+
+int handler(char *restriction, char *content, tupleinfo *tuple)
+{
+        int row;
+        int result;
+        int typeid;
+
+        int *resid_list;
+        int resid_num;
+
+        int n;
+
+        domain *dom;
+
+        result=sscanf(content, "%d", &amp;row);
+        if(result!=1) {
+                error(_("Row index must be an integer"));
+                return -1;
+        }
+
+        if(row&lt;0||row&gt;height-1) {
+                error(_("Row index must be between 0 and %d"), height-1);
+                return -1;
+        }
+
+        typeid=dummy-&gt;typeid;
+
+        resid_list=malloc(sizeof(*resid_list)*width);
+        if(resid_list==NULL) {
+                error(_("Can't allocate memory"));
+                return -1;
+        }
+
+        for(n=0;n&lt;width;n++) resid_list[n]=row+n*height;
+        resid_num=width;
+
+        dom=tuple-&gt;dom[typeid];
+
+        domain_and(dom, resid_list, resid_num);
+
+        free(resid_list);
+        
+        return 0;
+}
+
+int module_init(moduleoption *opt)
+{
+        int result;
+
+        dummy=restype_find(RESTYPE);
+        if(dummy==NULL) {
+                error(_("Resource type '%s' not found"), RESTYPE);
+                return -1;
+        }
+
+        result=res_get_matrix(dummy, &amp;width, &amp;height);
+        if(result) {
+                error(_("Resource type " RESTYPE " is not a matrix"));
+                return -1;
+        }
+
+        if(handler_tup_new("row-" RESTYPE, handler)==NULL) return -1;
+
+        return(0);
+}
+</programlisting>
+</sect2>
+
+<sect2>
+<title>
+Module initialization
+</title>
+
+<para>
+First thing you might notice is that this module doesn't define a fitness function. Because of this module initialization function is pretty straightforward. First we try to find our resource type. Then we use the <function>res_get_matrix()</function> function to get the dimensions <varname>width</varname> and <varname>height</varname> of the matrix. It is important that we check whether the resource type is really a matrix: <function>res_get_matrix()</function> will return -1 if it cannot determine the dimensions and 0 on success. The last thing in the initialization is the familiar call to <function>handler_tup_new()</function> to define a new tuple restriction handler.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Restriction handler
+</title>
+
+<para>
+As you can see the important part of the code is this time in the restriction handler. Instead of using a fitness function to tell the genetic algorithm which timetables are better we will simply narrow the search space of the genetic algorithm. This of course means that it is impossible to make a non-mandatory restriction with this approach. As far as the genetic algorithm is concerned, timetables that do not satisfy our restriction are not even considered for a solution.
+</para>
+
+<para>
+If you look at the restriction handler code you can see that we first read the row number specified by the user and do a check if it falls within the allowed range. Then we make a list of all resource IDs our event can use. Since we know in which row the allowed resources must be and we know how resources are ordered in a matrix it is quite straightforward to construct it.
+</para>
+
+<para>
+Array <varname>resid_list</varname> holds the resource ID values and integer <varname>resid_num</varname> holds the length of the array. There are exactly <varname>width</varname> resources in a row, so we can set the length immediately. Resources are ordered first by row numbers and then by column numbers. So the first resource in the row <varname>row</varname> has the ID equal to <varname>row</varname>. The distance to the second resource is exactly <varname>height</varname> resources.
+</para>
+
+<para>
+Now we pass the list of allowed resource to the <function>domain_and()</function> function. This function takes a <phrase>resource domain</phrase> and a list of resources as its arguments. Then it removes all resources from the domain that aren't also in the list. Note that this effectively narrows the search space to the lowest common denominator of all restrictions of this type, even those defined by other modules using <function>domain_and()</function> function.
+</para>
+
+<figure>
+<title>
+Resource domains in Tablix kernel.
+</title>
+<mediaobject>
+    <imageobject><imagedata fileref="images/domain.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata fileref="images/domain.png" format="PNG"/></imageobject>
+</mediaobject>
+</figure>
+
+<note>
+<para>
+A <phrase>resource domain</phrase> is a list of resources that can be used by an event. Each event has one resource domain for each defined resource type. 
+</para>
+</note>
+
+<para>
+Pointers to domain structures for the tuple the restriction handler was called for can be found in the <structname>tupleinfo</structname> structure. The <structfield>dom</structfield> structure field contains an array of pointers to domain structures, ordered by resource type ID. Because of this we must first obtain the resource type ID for our "dummy-type" resource type. Since we already have a pointer to that type, we can simply read the type ID from the <structfield>type</structfield> field. 
+</para>
+
+<note>
+<para>
+If you need to adjust resource domains outside of a tuple restriction handler, you should use the pointers to domain structures provided in the <varname>dat_tuplemap</varname> array.
+</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>
+Testing the module
+</title>
+
+<para>
+Again we can construct a simple test case to check if the module is working correctly:
+</para>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="row.so" weight="10" mandatory="yes"/&gt; 
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="dummy-type"&gt;
+                                &lt;matrix width="10" height="10"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="dummy-event" repeats="1"&gt;
+                        &lt;restriction type="row-dummy-type"&gt;3&lt;/restriction&gt;
+                &lt;/event&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+If you run Tablix on it and check one of the result files you will get a result similar to this one:
+</para>
+
+<programlisting>
+&lt;event name="dummy-event" repeats="1" tupleid="0"&gt;
+        &lt;restriction type="row-dummy-type"&gt;3&lt;/restriction&gt;
+        &lt;resource type="dummy-type" name="4 3"/&gt;
+&lt;/event&gt;
+</programlisting>
+
+<para>
+You can see that the row of the chosen resource (second number in the resource name) is equal to the requested row of resources. If you run Tablix a couple of times with this same configuration file and compare the results you will see that the column of the resource is chosen randomly while the row will always stay the same.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Discussion
+</title>
+
+<para>
+You should always use resource domains in your module if it is at all possible. Because this way you are limiting the search space Tablix will find the solution faster if there are more restrictions like this. On the other hand if there are more restrictions that are using fitness functions Tablix will need more time because it takes time to evaluate timetables with more fitness functions. 
+</para>
+
+<para>
+Also Tablix will detect if a domain does not contain any resources. This means that the user has applied an impossible combination of restrictions to an event and that a solution can not be found. This is one of the few cases where Tablix can predict that a solution to the problem described in the configuration file does not exist. On the other hand an impossible combination of restrictions that are using fitness functions is in most cases impossible to detect automatically.
+</para>
+</sect2>
+</sect1>
+
+<sect1>
+<title>
+Resource conflicts, slist, resource restriction
+</title>
+
+<sect2>
+<title>
+About slists
+</title>
+
+<para>
+Slist is a special representation of the timetable that can be requested by <function>module_init()</function> function. In that case it is calculated by the kernel and passed to that module's fitness function. 
+</para>
+
+<para>
+Often a fitness function must calculate a list of events that are using a certain resource of a certain resource type (the most common example is to check if two events are using the same resource). This check can be very time consuming if performed on a chromosome form of the timetable but can be performed an order of the magnitude faster if you first translate the timetable from a chromosome form to a slist form. Because it would be a waste CPU cycles and memory if each module would preform this translation by itself, the kernel calculates a slist only once and then passes a pointer to all modules that requested this slist.
+</para>
+
+<para>
+If you take a look at the API reference manual, you will see that a <structname>slist</structname> structure consists of <structfield>varnum</structfield> arrays, each array holding zero or more tuple IDs. <structfield>varnum</structfield> is equal to the number of resource in the chosen resource type (its ID is stored in <structfield>var_typeid</structfield>). The Nth array holds the tuple IDs of all events that are using the resource with resource ID equal to N and resource type ID equal to <structfield>var_typeid</structfield>.
+</para>
+
+<note>
+<para>
+As you can see, the number of possible slists that can be generated for a certain timetable is equal to the number of defined variable resource types in that timetabling problem. In practice only one or two slists need to be generated. Also note that it is possible to generate a slist for a constant resource type, however there are no practical uses for such slists.
+</para>
+</note>
+
+<para>
+Unlike chromosomes, slists take some time to generate. However once a slist is generated (for a certain resource type) then almost no additional processor time is required to pass the pointer to the generated slist to two or more modules. So, use a slist if you know that this same slist will be requested by another module used by the timetabling problem and that its use will result in a small speed-up of your fitness function. On the other hand if the use of the slist will result in a major speed-up (for example from O(n^2) to O(n) time) then use the slist in any case.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+About conflicts
+</title>
+
+<para>
+The use of conflicts somewhat depends on the agreement of authors of a certain group of modules. The kernel merely provides a mechanism of tagging which resource conflicts with which by exporting two functions: <function>res_set_conflict()</function> and <function>res_get_conflict()</function>. The only part of the Tablix kernel that uses this information is the generation of timetable extensions.
+</para>
+
+<note>
+<para>
+A resource always conflicts with itself. By default no resources conflict. Modules can then only set conflicts between resources and can not unset them.
+</para>
+</note>
+
+<para>
+For example in school scheduling conflicts are used with constant resource types (in this case groups of students and teachers). Two events that are attended by two conflicting groups of students can never be scheduled at two places at the same time. Same with two conflicting teachers.
+</para>
+
+<para>
+The kernel treats conflicts asymmetrically. This means that resource 1 can conflict with resource 2 while at the same time resource 2 does not conflict with resource 1. Most timetabling problems however need symmetrical conflicts (for example school scheduling). This means that when setting a conflict between two resources, you must call <function>res_set_conflict()</function> twice (second time with reversed order of the arguments).
+</para>
+
+<para>
+Conflicts are treated as not transitive in the kernel, which means that if resource 1 conflicts with resource 2 and resource 2 conflicts with resource 3, this does not mean that resource 1 conflicts with resource 3. Some modules 
+can however treat conflicts are transitive.
+</para>
+</sect2>
+
+<sect2>
+<title>
+sametime.so module source code
+</title>
+
+<para>
+Following is the important part of the <filename>sametime.so</filename> module source code (full source is available in the distribution). You should be familiar with most of of the function calls in it by now.
+</para>
+
+<para>
+If you are not familiar with the function of this module (it is one of the standard modules used in school scheduling) have a look at the Module reference documentation.
+</para>
+
+<programlisting>
+int getconflict(char *restriction, char *cont, resource *res1)
+{
+        resource *res2;
+
+        res2=res_find(res1-&gt;restype, cont);
+
+        if(res2==NULL) {
+                error(_("invalid resource in conflicts-with restriction"));
+                error(_("resource: %s resource type: %s"), cont, res1-&gt;restype);
+                return(-1);
+        }
+
+        res_set_conflict(res1, res2);
+        res_set_conflict(res2, res1);
+
+        return 0;
+}
+
+int module_fitness(chromo **c, ext **e, slist **s)
+{
+        int a,b,m;
+        int n;
+        int sum;
+        slist *list;
+        chromo *time, *room, *class, *teacher;
+        resourcetype *teacher_type, *class_type;
+
+        list=s[0];
+
+        room=c[0];
+        time=c[1];
+        class=c[2];
+        teacher=c[3];
+
+        teacher_type=teacher-&gt;restype;
+        class_type=class-&gt;restype;
+
+        sum=0;
+        for(m=0;m&lt;time-&gt;gennum;m++) {
+                a=time-&gt;gen[m];
+
+                for(n=0;n&lt;list-&gt;tuplenum[a];n++) if(list-&gt;tupleid[a][n]&lt;m) {
+                        b=list-&gt;tupleid[a][n];
+                        if (room-&gt;gen[m]!=room-&gt;gen[b]) {
+                                if(res_get_conflict(teacher_type, 
+                                                        teacher-&gt;gen[m], 
+                                                        teacher-&gt;gen[b])) {
+                                        sum++;
+                                }
+                                if(res_get_conflict(class_type, 
+                                                        class-&gt;gen[m], 
+                                                        class-&gt;gen[b])) {
+                                        sum++;
+                                }
+                        }
+                }
+        }
+
+        return(sum);
+}
+
+int module_precalc(moduleoption *opt)
+{
+        ...
+}
+
+int module_init(moduleoption *opt) 
+{
+        fitnessfunc *fitness;
+
+        handler_res_new("class", "conflicts-with", getconflict);
+        handler_res_new("teacher", "conflicts-with", getconflict);
+
+        precalc_new(module_precalc);
+
+        fitness=fitness_new("same time", 
+                        option_int(opt, "weight"), 
+                        option_int(opt, "mandatory"), 
+                        module_fitness);
+        if(fitness==NULL) return -1;
+
+        if(fitness_request_chromo(fitness, "room")) return -1;
+        if(fitness_request_chromo(fitness, "time")) return -1;
+        if(fitness_request_chromo(fitness, "class")) return -1;
+        if(fitness_request_chromo(fitness, "teacher")) return -1;
+
+        fitness_request_slist(fitness, "time");
+
+        return(0);
+}
+</programlisting>
+</sect2>
+
+<sect2>
+<title>
+Module initialization
+</title>
+
+<para>
+There are three function calls in the <function>module_init()</function> function that we haven't discussed yet. First one is the call to <function>handler_res_new()</function>, which registers a new resource restriction handler in the kernel. It can be used in much the same way as <function>handler_tup_new()</function>: first argument is the name of the resource type to which this restriction can be applied. Second argument is the name of the restriction and the third argument is a pointer to the handler function.
+</para>
+
+<note>
+<para>
+You can pass a NULL pointer instead of the resource type name in the first argument of the <function>handler_res_new()</function> function. In that case the restriction will be registered for all resource types.
+</para>
+</note>
+
+<para>
+The second new function call is <function>precalc_new()</function>. This simply registers a function in the module that will be called after all restriction handlers. This function can be used for example to perform a sanity check on any data structures used by the module and give a warning to the user if the problem looks unsolvable. It can also be used to precalculate any look-up tables that may be needed by the fitness function (since look-up tables are calculated only once, it often makes sense to move as much code from the fitness function to the precalculate function).
+</para>
+
+<note>
+<para>
+The prototype of the precalculate function is exactly the same as that of the <function>module_init()</function>. However the <structname>moduleoption</structname> *<parameter>opt</parameter> argument is always NULL. Pointer to the module options linked list is only passed to the <function>module_init()</function> function.
+</para>
+</note>
+
+<para>
+Precalculate functions obey the same rule as most other functions in Tablix: return 0 if successful, or -1 on error.
+</para>
+
+<para>
+Finally there is a call to <function>fitness_request_slist()</function> function that requests a slist. The first argument is a pointer to the fitness function structure and the second argument is the name of the variable resource type for which the slist should be generated. If you request more that one slist for a single fitness function then slists will be passed to it in the same order as the <function>fitness_request_slist()</function> functions were called.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Resource restriction handler
+</title>
+
+<para>
+The <function>getconflict()</function> function is quite simple. It gathers two resource IDs: ID of the resource it was called for (pointer <varname>res1</varname> points to its <structname>resource</structname> structure) and the ID of the resource whose name was passed to it as an argument. Then it uses the <function>res_set_conflict()</function> function two times to tag these two resources as conflicting.
+</para>
+</sect2>
+
+<sect2>
+<title>
+Fitness function
+</title>
+
+<para>
+This fitness function checks whether two conflicting teachers or two conflicting groups of students are scheduled to have a lecture (event) at the same time. Since a resource always conflicts with itself, this also means that the same fitness function checks whether a group or a teacher must be at the same time at two different lectures.
+</para>
+
+<para>
+First, we store all pointers to requested chromosomes and a slist to local variables. Since only one slist was requested the pointer to it is in the first place in the <varname>s</varname> array.
+</para>
+
+<para>
+The first loop goes through all defined events (current tuple ID is stored in <varname>m</varname>). For each event we get the time slot it is using and store its resource ID in <varname>a</varname>.
+</para>
+
+<para>
+The second loop iterates through the <varname>a</varname>th array in the slist. We requested a slist for the "time" resource type, so this means that this for-loop iterates through all tuple IDs of events that are using the same time slot as the event in <varname>m</varname>. The tuple ID of the second event is stored in <varname>b</varname>. The if conditional is required to skip those event comparisons that were already made (without it all events would be compared twice).
+</para>
+
+<para>
+The code in the inner loop then increments the error counter <varname>sum</varname> if two conflicting teachers or student groups are scheduled at different rooms at the same time.
+</para>
+
+<para>
+<function>res_get_conflict()</function> is a macro. The first argument must be a pointer to the resource type structure. The second and the third argument are resource IDs of resources that should be checked for a conflict. The macro evaluates to 1 if the first resource conflicts with the second or 0 otherwise.
+</para>
+</sect2>
+</sect1>
+
+<sect1>
+<title>
+Timetable extensions
+</title>
+
+<sect2>
+<title>
+About extensions
+</title>
+
+<para>
+Timetable extension is the third form of the timetable that can be passed to the fitness function. Its structure resembles a human-readable form of the timetable, like for example the output of the <filename>htmlcss</filename> export module. Because of that it is often the most convenient form to check for errors in timetables for human resources.
+</para>
+
+<para>
+If you take another look at the API reference manual you can see that a timetable extension is defined by one constant resource type and one variable resource type (stored in <structfield>con_typeid</structfield> and <structfield>var_typeid</structfield> respectively). In comparison, slist is defined by only one variable resource type. Timetable data is stored in a two dimensional array of tuple IDs in the <structfield>tupleid</structfield> field. The first dimension goes from 0 to N-1, where N is the number of defined resources of the variable resource type <structfield>var_typeid</structfield> and the second dimension goes from 0 to M-1, where M is the number of defined resources of the constant resource type <structfield>con_typeid</structfield>. 
+</para>
+
+<para>
+If an event is using a resource n of type <structfield>var_typeid</structfield> and a resource m of type <structfield>con_typeid</structfield> at the same time, then its tuple ID will be stored in the <varname>e->tupleid[n][m]</varname>, where <varname>e</varname> is a pointer to the extension struct. If no event is using this combination of resources, then the value stored in the array will be -1.
+</para>
+
+<para>
+To better visualize this array of tuple IDs consider the following example from school scheduling. Let's say that we choose teachers as the constant resource type and time slots as the variable resource type. Also, since we are looking at a school timetable, time slots are in a form of a matrix with five days and three time slots per day. 
+</para>
+
+<para>
+Tuple IDs stored in the array represent events (in this case lectures) that are scheduled for this teacher at the specified time. If no event is scheduled for a certain teacher at a certain time slot then the value in the array will be -1.
+</para>
+
+<figure>
+<title>
+Visualization of a timetable extension in school scheduling.
+</title>
+<mediaobject>
+    <imageobject><imagedata fileref="images/extension.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata fileref="images/extension.png" format="PNG"/></imageobject>
+ </mediaobject>
+</figure>
+
+<para>
+It should be obvious now that an extension only represents a whole timetable if there is a one-to-one mapping of events to constant-resource/variable-resource pairs (i.e. no two events are using the same combination of the constant resource and variable resource of the chosen types). If this is not true than some events lost when converting a timetable from the chromosome format to the extension since only one tuple ID can be stored at one position in the <structfield>tupleid</structfield> array. In this case a random event will be chosen from the group of conflicting events and its tuple ID will be stored in the array.
+</para>
+
+<note>
+<para>
+This means that you won't always find all defined events in an extension. Some events may be lost, because they are using the same pair of resource than some other events.
+</para>
+</note>
+
+<para>
+Because of this limitation almost all modules that are using timetable extensions only work correctly when they are used together with a module (set to mandatory) that prevents this loss of events from happening. In school scheduling this is the role of the <filename>sametime.so</filename> module.
+</para>
+
+<para>
+It was mentioned above that extensions are the only part of the kernel that is using the information about resource conflicts. Conflicting constant resources are handled as a single resource in this case. Conflicts in variable resources are ignored. This means that if a constant resource m1 conflicts with a constant resource m2 then events for both m1 and m2 will show in <varname>e->tupleid[x][m1]</varname>. On the other hand only events for m2 will show in <varname>tupleid[x][m2]</varname> (kernel treats conflicts asymmetrically, remember?).
+</para>
+
+</sect2>
+
+<sect2>
+<title>holes.so module source code</title>
+
+<para>
+<filename>holes.so</filename> fitness module is used in school scheduling and similar timetabling problems and searches for so called holes in the timetable. A hole in a timetable for a certain constant resource is defined as one or more free time slots in a day (time slots that aren't used by any event that uses this constant resource) surrounded on both sides (before and after on the same day) with non-free time slots.
+</para>
+
+<para>
+Example 1: Timetable with three lectures in the middle of the day is considered without holes. Example 2: Timetable with one lecture in the morning, then a pause for two time slots and then two lectures is considered to have one hole that is two time slots wide.
+</para>
+
+<para>
+Holes are in most cases annoying since they mean that for example a teacher or a group of students must wait for an hour between lectures. In some cases they are even forbidden by various regulations.
+</para>
+
+<para>
+Following is an excerpt of the <filename>holes.so</filename> module. Full source code is included in the distribution.
+</para>
+
+<programlisting>
+static int periods, days;
+
+int fitness(chromo **c, ext **e, slist **s)
+{
+        int first,last;
+        int free,nonfree;
+        int sum;
+
+        ext *timext;
+        int connum, con_resid;
+        int day, period, var_resid;
+
+        timext=e[0];
+
+        connum=timext-&gt;connum;
+
+        sum=0;
+
+        for(con_resid=0;con_resid&lt;connum;con_resid++) {
+                var_resid=0;
+                for(day=0;day&lt;days;day++) {
+                        first=-1;
+                        last=-1;
+                        free=0;
+                        nonfree=0;
+
+                        for(period=0;period&lt;periods;period++) {
+                                if(timext-&gt;tupleid[var_resid][con_resid]==-1) {
+                                        free++;
+                                } else {
+                                        nonfree++;
+                                        last=period;
+                                        if (first==-1) first=period;
+                                }
+                                var_resid++;
+                        }
+
+                        if (last!=-1) {
+                                sum=sum+(periods-nonfree-first-(periods-1-last));
+                        }
+                }
+        };
+        return(sum);
+}
+
+int module_init(moduleoption *opt)
+{
+        fitnessfunc *f;
+        moduleoption *result;
+
+        char *type;
+        char fitnessname[256];
+        int n;
+
+        resourcetype *time;
+
+        time=restype_find("time");
+        if(time==NULL) {
+                error(_("Resource type '%s' not found"), "time");
+                return -1;
+        }
+
+        n=res_get_matrix(time, &amp;days, &amp;periods);
+        if(n) {
+                error(_("Resource type %s is not a matrix"), "time");
+                return -1;
+        }
+
+        result=option_find(opt, "resourcetype");
+        if(result==NULL) {
+                error(_("module '%s' has been loaded, but not used"), "holes.so");
+        }
+        while(result!=NULL) {
+                type=result-&gt;content_s;
+
+                snprintf(fitnessname, 256, "holes-%s", type);
+
+                f=fitness_new(fitnessname,
+                        option_int(opt, "weight"),
+                        option_int(opt, "mandatory"),
+                        fitness);
+                
+                if(f==NULL) return -1;
+                
+                n=fitness_request_ext(f, type, "time");
+                if(n) return -1;
+                
+                result=option_find(result-&gt;next, "resourcetype");
+        }
+
+        return(0);
+}
+</programlisting>
+
+</sect2>
+
+<sect2>
+<title>Module initialization</title>
+
+<para>
+Since this module is intended for use in school scheduling, we expect the "time" resource type to be a matrix (width of the matrix is equal to the number of days in a week and height is equal to the number of time slots per day). We store the dimensions in <varname>days</varname> and <varname>periods</varname> global variables (we will use them later in the fitness function).
+</para>
+
+<para>
+The "while" loop that follows iterates through all module options with name "resourcetype". With this option user can specify constant resource types that will have their timetables checked for holes (for example teacher, classes, etc.)
+</para>
+
+<para>
+First we try to find the pointer to the first option by using the <function>option_find()</function> function (<function>option_str()</function> function can't be used if you expect more than one option with the same name - see API documentation). If we can't find even one option with this name (<function>option_find()</function> returns NULL), then this module isn't affecting the timetable solution and we can report a warning.
+</para>
+
+<para>
+From the standpoint of the kernel we define a new fitness function for each such option. In reality we define a single <function>fitness()</function> function multiple times. Each time with a new name that includes the name of the resource type and each time we request a different timetable extension with <function>fitness_request_ext()</function>. This means that for each timetable evaluation our <function>fitness()</function> function will get called one or more times, depending on the number of "resourcetype" options the user supplied.
+</para>
+
+<para>
+<function>fitness_request_ext()</function> is used in much the same way as <function>fitness_request_slist()</function> or <function>fitness_request_chromo()</function>. First argument must be a pointer to the fitness function structure, the second and the third argument are the names of the constant and the variable resource types respectively. Here, we request an extension with a constant resource type supplied by the user and "time" variable resource type.
+</para>
+</sect2>
+
+<sect2>
+<title>Fitness function</title>
+
+<para>
+Fitness function of this module is a bit more complicated than the previous ones. Our requested extension is stored in <varname>e</varname> and the number of defined resource of the chosen constant resource type is stored in <varname>connum</varname> (we obtain this number from the extension structure, since we don't know for which constant resource type this instance of <function>fitness()</function> was called for).
+</para>
+
+<para>
+The outer most loop iterates <varname>con_resid</varname> through IDs of all defined constant resources. Since holes in the timetable are determined on a day basis, we also have a second loop that iterates through all days. <varname>var_resid</varname> holds resource ID of the current time slot.
+</para>
+
+<para>
+The inner most loop iterates through all time slots in a day and determines: 1) period (y coordinate in the matrix) of the first non-free time slot <varname>first</varname> on this day, 2) period of the last non-free time slot <varname>last</varname> and 3) number of non-free time slots on this day.
+</para>
+
+<para>
+If there are no non-free time slots (<varname>last</varname> is equal to -1), then by definition there are also no holes in the timetable for this day. If there are non-free time slots then the number of holes can be calculated by a simple formula: number of time slots between the <varname>first</varname> and the <varname>last</varname> time slot minus the number of non-free time slots equals the number of holes. The calculated number of holes for the current day is added to the error sum <varname>sum</varname>
+</para>
+
+<note>
+<para>
+After the <varname>period</varname> loop finishes, the <varname>var_resid</varname> has advanced for exactly <varname>periods</varname> resource IDs. Because of the specific order of resources in a resource matrix this means that <varname>var_resid</varname> is then pointing to the first time slot on the next day. After the <varname>day</varname> loop finishes, the <varname>var_resid</varname> has advanced <varname>periods*days</varname> which is exactly the number of time slots available in the timetable.
+</para>
+</note>
+</sect2>
+
+<sect2>
+<title>Discussion</title>
+
+<para>
+Timetable extensions are very computationally expensive. In most cases they are more expensive than slists. The discussion about slists is therefore also applicable for extensions.
+</para>
+
+<para>
+The time required to calculate the extension depends on the number of defined constant and variable resources. It also depends on the use of conflicts in the specified constant resource type. If the timetable has non-trivial conflicts defined in the constant resource type (if any resource conflicts with a resource other than itself) then extensions take longer to compute. 
+</para>
+</sect2>
+</sect1>
+
+<sect1>
+<title>
+Dependent events
+</title>
+
+<sect2>
+<title>
+Some theory
+</title>
+
+<para>
+Most timetable constraints can be satisfied in more than one way. Imagine for a moment a timetabling problem that uses only the <filename>sametime.so</filename> module with the <parameter>mandatory</parameter> option set. This problem can have literally millions of solutions that all satisfy the constraint set by the <filename>sametime.so</filename> module. But on the other hand the number of all combinations of such a timetable (i.e. the space that must be searched to find one of those solutions) is million or billion times greater than the number of solutions. There is also no trivial way to find a solution short of checking all possible combinations.
+</para>
+
+<para>
+Timetabling problem described is a perfect example of a problem that is ideal for solving with a genetic algorithm. Most timetabling constrains fall into that category, however sometimes we come across a constraint that is an exact opposite: it has only one or at least very few solutions and the solution is trivial if we know the nature of the problem.
+</para>
+
+<para>
+It is very hard for a genetic algorithm to find a solution to such a problem since the only knowledge the algorithm has about the nature of the problem is the shape of the fitness function. This means that the fitness function must be very carefully chosen so that it "guides" the algorithm to the single solution. 
+</para>
+
+<para>
+However it would be wasteful to use the complicated genetic algorithm to solve a problem that has a trivial solution. Because of this Tablix supports <phrase>updater functions</phrase> since the 0.3.1 release. These functions basically enable the module author to mix her own algorithm with the genetic algorithm that is running in the background.
+</para>
+
+<warning>
+<para>
+Kernel API for updater functions has changed between releases 0.3.1 and 0.3.2 due to a design error. This makes any modules using the 0.3.1 version of the API incompatible with Tablix kernel 0.3.2 and later. See one of the later sections for more details on porting old modules to the new API).
+</para>
+</warning>
+
+</sect2>
+
+<sect2>
+<title>
+About updater functions
+</title>
+
+<para>
+As you know, the genetic algorithm in the kernel assigns variable resources to events while assignments of constant resources don't change and are set by the problem description file. By defining updater functions a module can take assignement of some or all variable resources for some events away from the kernel and under its own control.
+</para>
+
+<para>
+Each updater function basically has a source (independent) event and a destination (dependent). The variable resources of the source event are assigned either by the genetic algorithm or, as we will see later, by another updater function. The updater function then reads these assignments (from the appropriate chromosome structures) and assigns correct variable resources to the destination event.
+</para>
+
+<figure>
+<title>
+Updater functions in Tablix kernel.
+</title>
+<mediaobject>
+    <imageobject><imagedata fileref="images/updater.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata fileref="images/updater.png" format="PNG"/></imageobject>
+</mediaobject>
+</figure>
+
+<note>
+<para>
+As far as Tablix is concerned, the updater function can use whatever algorithm is needed to calculate the correct variable resources for the destination event, as long as this decision is only based on the assignment of the variable resources to the source event.
+</para>
+</note>
+
+<note>
+<para>
+A single event can be a source event for more than one function. A single event can also be both a destination event for one function and a source events for one or more functions. However an event can only be a destination event for one updater function.
+</para>
+</note>
+
+<note>
+<para>
+An updater function must be deterministic. This means that when called with the same inputs it must always return the same output value. In other words, its return value must not depend on any global variables.
+</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>
+Dependency solving
+</title>
+
+<para>
+As you can see a single updater function can only update a single event. Because of this a typical module will define a lot of functions. Also a single problem description can use more than one module that employs updater functions. This means that it is crucial that updater functions are called in the correct order. For example: first functions to be called must be those of which source events are handled by the genetic algorithm. Then those functions can be called that have source events which are also destination events of the first group of functions.
+</para>
+
+<para>
+Fortunately you don't need to bother with these details because the Tablix kernel automatically solves any dependency conflicts before starting the main algorithm loop. However you must keep in mind that you should not create any circular dependencies with your functions. Following is an example of a circular dependency:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Updater function 1: source event 1, destination event 2
+</para>
+</listitem>
+<listitem>
+<para>
+Updater function 2: source event 2, destination event 3
+</para>
+</listitem>
+<listitem>
+<para>
+Updater function 3: source event 3, destination event 1
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+The dependency solver in the kernel will detect this and report an error.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+<filename>consecutive.so</filename> module
+</title>
+
+<para>
+<filename>consecutive.so</filename> module is used to force scheduling of some events in groups of two or more. It requires that a "time" resource type is defined and that it is a matrix.
+</para>
+
+<para>
+Since it uses updater functions it contains no fitness functions and therefore also ignores <parameter>weight</parameter> and <parameter>mandatory</parameter> parameters.
+</para>
+
+<para>
+Following is the important part of the <filename>consecutive.so</filename> source code. Full source code is included in the distribution.
+</para>
+
+<programlisting>
+/* This structure describes a single consecutive block of events. */
+struct cons_t {
+        /* Array of tuple ids */
+        int *tupleid;
+        /* Number of tuple ids in the array */
+        int tupleidnum;
+
+        struct cons_t *next;
+};
+
+/* Linked list describing all consecutive blocks */
+static struct cons_t *cons=NULL;
+
+static int time;
+
+static int periods, days;
+
+/* This is the updater function. It makes sure that dependent event is 
+ * scheduled one period later than the independent event. */
+int updater(int src, int dst, int typeid, int resid)
+{
+	return(resid+1);
+}
+
+/* This is the precalculate function. It is called after all restriction
+ * handlers. We define updater functions here. */
+int module_precalc(moduleoption *opt) 
+{
+        int n, tupleid;
+        struct cons_t *cur;
+
+        int *residlist;
+        int residnum;
+
+        if(cons==NULL) {
+                /* The linked list is empty */
+                info(_("Module '%s' has been loaded, but not used"), 
+                                                        "consecutive.so");
+        }
+
+        /* We will use this buffer later for the domain_and() function */
+        residlist=malloc(sizeof(*residlist)*periods*days);
+        if(residlist==NULL) {
+                error(_("Can't allocate memory."));
+                return(-1);
+        }
+
+        /* We walk through all defined groups of event. */
+        cur=cons;
+        while(cur!=NULL) {
+
+                /* For each event except the first we define an updater
+                 * function. */
+
+                for(n=1;n&lt;cur-&gt;tupleidnum;n++) {
+                        tupleid=cur-&gt;tupleid[n];
+
+                        /* We have to check if this event is already dependent.
+                         * If it is, we report an error. */
+
+                        if(updater_check(tupleid, time)) {
+                                error(_("Event '%s' already depends on another"
+                                        " event"), dat_tuplemap[tupleid].name);
+                                free(residlist);
+                                return(-1);
+                        }
+
+                        /* First event in the group is truly independent 
+                         * (at least as far as this module is concerned). The
+                         * second event depends on the first. The third event
+                         * depends on the second and so on. */
+
+                        updater_new(cur-&gt;tupleid[n-1], tupleid, time, updater);
+                }
+
+                /* Now we have to make sure that the first event in the group
+                 * will be scheduled so early that the whole group will
+                 * always fit on the same day. */
+
+                /* This means that we have to eliminate the last tupleidnum
+                 * periods on each day from its time domain. */
+
+                residnum=0;
+                for(n=0;n&lt;days*periods;n++) {
+                        if(n%periods&lt;(periods-cur-&gt;tupleidnum)) {
+                                residlist[residnum]=n;
+                                residnum++;
+                        }
+                }
+
+                tupleid=cur-&gt;tupleid[0];
+                domain_and(dat_tuplemap[tupleid].dom[time],residlist,residnum);
+
+                cur=cur-&gt;next;
+        }
+
+        free(residlist);
+        return(0);
+}
+</programlisting>
+
+<para>
+The initialization function, restriction handler and some utility functions are missing from the code listing above. The initialization function merely initializes global variables and registers the restriction handler and precalculate function in the kernel in the usual way. The restriction handler creates a linked list of <structname>cons_t</structname> structures. Each such structure holds a list of tuple IDs (<structfield>tupleid</structfield> field) of the events that should be consecutive.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Registering updater functions
+</title>
+
+<para>
+Updater functions are registered in the Tablix kernel with the <function>updater_new</function> function. This function takes four arguments: first is the tuple ID of the source event, second is the tuple ID of the destination event, third is the resource type ID and fourth is the pointer to the actual updater function.
+</para>
+
+<note>
+<para>
+One updater function can only affect assignment of one variable resource (this differs from the 0.3.1 version of the API). The resource type of this variable resource is given as the third argument to <function>updater_new</function>.
+</para>
+</note>
+
+<para>
+Before registering an updater function you must check if the destination event is not a destination event of another updater function (from a different module for example). This can be done either with the <function>updater_check</function> or by checking the return value of <function>updater_new</function>. However the first method is recommended since the <function>updater_new</function> can also fail for other reasons (for example because of lack of memory) which can then lead to confusing error messages.
+</para>
+
+<note>
+<para>
+As you can see updater functions are registered in the precalculate function. They could also be registered in the restriction handler.
+</para>
+</note>
+
+<note>
+<para>
+Note that a single physical function is used here in multiple updater functions.
+</para>
+</note>
+</sect2>
+
+<sect2>
+<title>
+Updater function
+</title>
+
+<para>
+The updater function itself is very simple in this case. It is called with three arguments: the tuple ID of the source and destination event and the resource type ID as specified in the <function>updater_new</function> function and the resource ID assigned to the source event. It should return the resource ID that should be assigned to the destination event.
+</para>
+
+<para>
+Since the module was designed in such a way, the updater function in this case behaves in the same way for all dependent events (it ignores all arguments except <parameter>resid</parameter>): it assigns a resource to them that has the resource ID of the resource assigned to the source event plus one. Because we are dealing with the time resource type which is a matrix, this means that we are assigning the destination event a timeslot that is just after the timeslot assigned to the source event.
+</para>
+
+<note>
+<para>
+You can't get an assignment of a resource of one resource type to the source event and assign a resource of a different resource type to the destination event.
+</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>
+Updater functions and resource domains
+</title>
+
+<para>
+It is possible that when certain resources are assigned to the source event an updater function will try to assign a resource to the destination event that is not in that event's resource domain. Therefore the kernel evaluates each function just before the start of the genetic algorithm and determines for which input values can an updater function be called. Values for which an updater function returns invalid resource assignments are removed from the appropriate resource domains of the source events.
+</para>
+
+<para>
+This happens automatically as a part of the dependency solving. In other words the kernel will perform this check for you and you do not need to worry about resource domains when writting updater functions.
+</para>
+</sect2>
+
+<sect2>
+<title>
+Porting modules from 0.3.1 to 0.3.2
+</title>
+
+<para>
+In most cases this should be quite straightforward. The updater function in 0.3.2 no longer changes the <structname>table</structname> structure directly. It gets the assignment of the requested resource to the source event as an argument and returns the resource ID of the resource that should be assigned to the destination event.
+</para>
+
+<para>
+Because of this change, a single updater function can only affect assignments of resources of one resource type. <function>updater_check</function> and <function>updater_new</function> now have one more argument to deal with this change.
+</para>
+
+<para>
+Following are the relevant parts of the <filename>consecutive.so</filename> module before the change (compare them to the listing above):
+</para>
+
+<programlisting>
+void updater(int src, int dst, table *tab)
+{
+        int src_time;
+
+        src_time=tab-&gt;chr[time].gen[src];
+
+        /* This should always be true if we correctly set the time domain
+         * for the first event in each group. */
+
+        /* It means that the independent event is not on the last period
+         * of the day. */
+
+        assert(src_time%periods&lt;(periods-1))
+
+        /* Next event in the group is scheduled one period later. */
+
+        tab-&gt;chr[time].gen[dst]=src_time+1;
+}
+
+.
+.
+.
+
+int module_precalc(moduleoption *opt) 
+{
+                        .
+                        .
+                        .
+
+                        /* We have to check if this event is already dependent.
+                         * If it is, we report an error. */
+
+                        if(updater_check(tupleid)) {
+                                error(_("Event '%s' already depends on another"
+                                        " event"), dat_tuplemap[tupleid].name);
+                                free(residlist);
+                                return(-1);
+                        }
+
+                        /* First event in the group is truly independent 
+                         * (at least as far as this module is concerned). The
+                         * second event depends on the first. The third event
+                         * depends on the second and so on. */
+
+                        updater_new(cur-&gt;tupleid[n-1], tupleid, updater);
+
+                        .
+                        .
+                        .
+}
+</programlisting>
+</sect2>
+
+</sect1>
+
+<sect1>
+<title>
+Miscellaneous
+</title>
+
+<sect2>
+<title>
+Order of calling
+</title>
+
+<para>
+Various functions defined by fitness modules are called in the following order:
+</para>
+
+<orderedlist>
+<listitem>
+<para>
+After kernel initialization the XML configuration file is parsed by the <function>parser_main()</function> function. All defined resource types are stored in the <varname>dat_restypes</varname> array. All defined resources are stored in resource lists under appropriate <structname>resourcetype</structname> structures. All defined events are stored in <varname>dat_tuplemap</varname> array. <varname>dat_info</varname> is filled with values from the <parameter>&lt;info&gt;</parameter> tag.
+</para>
+</listitem>
+<listitem>
+<para>
+<parameter>&lt;modules&gt;</parameter> tag is parsed. Modules are loaded into memory and <function>module_init()</function> function is called in each module. By this time all arrays and structures mentioned above have been initialized and will not change anymore.
+</para>
+</listitem>
+<listitem>
+<para>
+<parameter>&lt;restriction&gt;</parameter> tags for resources are parsed. For each tag all corresponding handler functions are called.
+</para>
+</listitem>
+<listitem>
+<para>
+<parameter>&lt;restriction&gt;</parameter> tags for events are parsed. For each tag all corresponding handler functions are called.
+</para>
+</listitem>
+<listitem>
+<para>
+All registered precalculate functions are called. 
+</para>
+</listitem>
+<listitem>
+<para>
+The genetic algorithm starts. Any registered fitness functions may now be called by the algorithm with appropriate arguments.
+</para>
+</listitem>
+</orderedlist>
+
+</sect2>
+
+<sect2>
+<title>
+Multiple instances of a module in a single XML file
+</title>
+
+<para>
+Currently using multiple instances of a module in a single XML file isn't well supported by the kernel. Because of this most modules will not function properly when more than one <parameter>&lt;module&gt;</parameter> tag references them. However by following a number of guidelines it is possible to make a module that will work properly under these conditions.
+</para>
+
+<para>
+Consider the following example from an XML configuration file:
+</para>
+
+<programlisting>
+&lt;module name="freemorning" weight="3" mandatory="no"&gt;
+        &lt;option name="resourcetype"&gt;class&lt;/option&gt;
+&lt;/module&gt;
+&lt;module name="freemorning" weight="1" mandatory="no"&gt;
+        &lt;option name="resourcetype"&gt;teacher&lt;/option&gt;
+&lt;/module&gt;
+</programlisting>
+
+<para>
+Here the module <filename>freemorning</filename> will be loaded two times. Each time with a different value for the <parameter>resourcetype</parameter> option.
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Global variables are shared between instances, however they are only initialized once, after the first instance of the module has been loaded.
+</para>
+<para>
+For example, if the following module is used twice in a configuration file:
+</para>
+
+<programlisting>
+static int n = 1;
+
+int module_init(moduleoption *opt) 
+{
+        debug("n = %d", n);
+        n=2;
+        return(0);
+}
+</programlisting>
+
+<para>
+it will produce the following output:
+</para>
+
+<screen>
+n = 1        <emphasis>first load, n is initialized to 1 and changed to 2</emphasis>
+n = 2        <emphasis>second load, n is not re-initialized</emphasis>
+</screen>
+</listitem>
+<listitem>
+<para>
+The only other difference between instances of a module is the list of module options that is passed to the <function>module_init()</function> function. This list will contain options that are defined under each instance's own <parameter>&lt;module&gt;</parameter> tag.
+</para>
+</listitem>
+<listitem>
+<para>
+There is no simple way to tie a particular <parameter>&lt;restriction&gt;</parameter> tag to a particular module instance. This means that if a module registers an event or resource restriction, restriction handlers in all instances will be called with identical arguments.
+</para>
+<para>
+You can work around that by adjusting the name of the registered restriction according to a module option (which is unique to an instance). However if you require that it is usually better to refactor the module so that there is no longer a need for multiple instances.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+</chapter>
+<chapter>
+<title>
+Module documentation
+</title>
+
+<sect1>
+<title>Introduction</title>
+
+<para>
+Tablix distribution includes a specialized automatic documentation system similar to Doxygen. <filename>mod-doc2.pl</filename>, a Perl script in the <filename>doc</filename> directory, parses the source code of Tablix fitness modules and produces a module reference manual in HTML form. This script is smart enough to deduce the following information directly from the source code:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Registered resource and tuple restrictions,
+</para>
+</listitem>
+<listitem>
+<para>
+supported module options,
+</para>
+</listitem>
+<listitem>
+<para>
+resource types on which the module depends.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Information that cannot be gathered from the source code can be provided to the documentation system in a form of one or more specially formatted comment blocks. These blocks can include information on:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Module author,
+</para>
+</listitem>
+<listitem>
+<para>
+description of functionality provided by this module,
+</para>
+</listitem>
+<listitem>
+<para>
+description of registered restrictions and supported options,
+</para>
+</listitem>
+<listitem>
+<para>
+list of module groups this module belongs to.
+</para>
+</listitem>
+</itemizedlist>
+
+<note>
+<para>
+It is not mandatory to include this information in the module source code. The documentation system will always make a page in the reference manual for a module even if it doesn't contain any special comment blocks. However all modules that are to be included in the official Tablix distribution must include this information (documenting your module is a good idea in any case).
+</para>
+</note>
+
+</sect1>
+
+<sect1>
+<title>
+Comment block syntax
+</title>
+
+<para>
+Following is an example comment block. Each module source file can include one or more such comment blocks. Comment blocks can appear in any part of the source code.
+</para>
+
+<programlisting>
+/** @block-tag This text is associated with the block-tag tag.
+ *
+ * @keyword-tag There can be any number of keyword-tags in a comment block.
+ *
+ * @keyword-tag Text can appear in the same line as the keyword-tag...
+ * Or in any line bellow it. 
+ *
+ * Paragraphs are separated with a single blank line.
+ */
+</programlisting>
+
+<para>
+Each comment block must start with <literal>/**</literal> (note two asterisks) and end with <literal>*/</literal>. It can span multiple lines. Leading whitespace with an optional asterisk is ignored on lines within the comment block.
+</para>
+
+<para>
+Each comment block can include one or more tags. Tags are words prefixed with a <literal>@</literal> character. The first tag in a comment block is called <phrase>block tag</phrase> and marks the role of the current comment block. Any subsequent tags are called <phrase>keyword tags</phrase> and are used to delimit various parts of the comment block. Which keyword tags can appear in a comment block depends on the type of block (i.e. the block tag of this comment block).
+</para>
+
+<para>
+Text is associated with a block or keyword tag that appears in front of it. Text can start on the same line as the tag or in the following lines. Some tags can accept multiple paragraphs of text (for example the <literal>@brief</literal> tag). In that case paragraphs are separated with blank lines.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Module information block
+</title>
+
+<para>
+Following is an example module information block from the <filename>preferred.c</filename> module source code. Each module can include at most one module information block.
+</para>
+
+<programlisting>
+/** @module
+ *
+ * @author Tomaz Solc  
+ * @author-email tomaz.solc@tablix.org
+ *
+ * @credits 
+ * Ideas taken from a patch for Tablix 0.0.3 by 
+ * Jaume Obrador &lt;obrador@espaiweb.net&gt;
+ *
+ * Ported to version 0.2.0 and extended by Nick Robinson &lt;npr@bottlehall.co.uk&gt;
+ *
+ * @brief Adds a weight whenever an event is not scheduled at the specified 
+ * preferred day and/or time slot.
+ *
+ * @ingroup General
+ */
+</programlisting>
+
+<para>
+Module information block uses <literal>@module</literal> block tag. This block tag does not take any arguments, so no text needs to be entered between the block tag and the first keyword tag. Following keyword tags are supported in this block (No tags are mandatory. At most one tag of each type per comment block, unless stated otherwise): 
+</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<literal>@author</literal>
+</term>
+<listitem>
+<para>
+Name of the author or maintainer of this module.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@author-email</literal>
+</term>
+<listitem>
+<para>
+Email of the author or maintainer.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@credits</literal>
+</term>
+<listitem>
+<para>
+In case of multiple authors you can enter acknowledgments in this keyword tag. Supports multiple paragraphs of text.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@brief</literal>
+</term>
+<listitem>
+<para>
+Description of the module's functionality. Supports multiple paragraphs of text.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@ingroup</literal>
+</term>
+<listitem>
+<para>
+Defines groups of modules this module belongs to. Group names must be separated by commas.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1>
+<title>
+Restriction and module option information blocks
+</title>
+
+<para>
+Documentation for restrictions and module options can be entered in one or more comment blocks. Following is an example block documenting the <parameter>preferred-period</parameter> tuple restriction from the <filename>preferred.c</filename> module source code.
+</para>
+
+<programlisting>
+/** @tuple-restriction preferred-period
+ *
+ *  &lt;restriction type="preferred-period"&gt;period&lt;/restriction&gt;
+ *
+ * This restriction specifies the preferred period for an event.
+ */
+</programlisting>
+
+<para>
+Following block tags can be used to document restrictions and options:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<literal>@tuple-restriction</literal>
+</term>
+<listitem>
+<para>
+Used for tuple (event) restrictions. Must be followed by the name of the restriction, as defined by the <function>handler_tup_new()</function> function.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@resource-restriction</literal>
+</term>
+<listitem>
+<para>
+Used for resource restrictions. Must be followed by the name of the restriction, as defined by the <function>handler_res_new()</function> function.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<literal>@option</literal>
+</term>
+<listitem>
+<para>
+Used for module options. Must be followed by the name of the option, as used in <function>option_find()</function>, <function>option_int()</function> or <function>option_str()</function> functions.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+Restriction and module option information blocks do not accept any keyword tags. The entire content of the comment block is considered a description of the restriction or module option.
+</para>
+
+<para>
+Multiple paragraphs of text are supported in these comment blocks. XML configuration examples can be inserted in the text without any special keyword tags. Any paragraph where all lines begin with valid XML tags is considered an example and is printed in monospace font in the reference manual.
+</para>
+
+<note>
+<para>
+One restriction or module option is documented per comment block. The block tag differs depending on the type of the restriction.
+</para>
+</note>
+
+</sect1>
+
+</chapter>
+<chapter>
+<title>
+Tablix Testing Framework
+</title>
+
+<sect1>
+<title>Introduction</title>
+
+<para>
+Tablix testing framework provides a way to write simple automated tests that verify if a module and/or kernel is working as expected. Framework is composed of a special export module <filename>export_ttf.so</filename> and a utility program <filename>tablix2_test</filename>. You can find both in the <filename>ttf/</filename> subdirectory of the Tablix source tree.
+</para>
+
+<para>
+Each automated test case usually verifies a single function of a module and is stored in a single file with the standard Tablix XML configuration syntax and a special XML comment block. This block contains a short program written in Scheme. The program is then used to verify the timetable that is produced by Tablix.
+</para>
+
+<note>
+<para>
+Tests for all modules that are included in the Tablix distribution are stored in the <filename>ttf/tests/</filename> subdirectory. Most modules are complicated enough that they require more than one test case. Files with tests are named <filename><replaceable>modulename</replaceable>-1.xml</filename>, <filename><replaceable>modulename</replaceable>-2.xml</filename>, <filename><replaceable>modulename</replaceable>-3.xml</filename>, etc. (where <replaceable>modulename</replaceable> is the name of the module to test).
+</para>
+</note>
+
+<note>
+<para>
+Scheme code in the test case has a similar role to the fitness function in the module code. The main difference is that the fitness function returns an integer (higher value means more errors) and the scheme code returns only true (test passed) or false (test failed).
+</para>
+</note>
+
+<para>
+You may ask why an obscure language like Scheme was used for this purpose. There are two reasons for this decision: First, <ulink url="http://tinyscheme.sourceforge.net/">TinyScheme</ulink> interpreter is only 4500 lines long, is very easy to embed and extend, is safe if used as prescribed and is available under a BSD license. Second, the purpose of a test would be defeated if a programmer could copy and paste code from the module to the test. A programming language with a completely different syntax than C forces the author to reimplement the algorithm in a different way. This minimizes the chances that two implementations (the actual module and the test) would have the same errors.
+</para>
+
+</sect1>
+
+<sect1>
+<title>How a test is processed</title>
+
+<para>
+This section describes what happens when you run the <filename>tablix2_test</filename> utility.
+</para>
+
+<para>
+First, the test file is processed by Tablix as if it was a normal XML configuration file. Tablix finds a solution to the problem that is described in it and saves it in a result file.
+</para>
+
+<para>
+The result file is then parsed again. The constructed timetable is read from the XML result file into internal data structures. The Scheme code segment is found and interpreted. The scheme program checks the timetable data for errors returns either true or false (depending whether the test was passed or failed).
+</para>
+
+</sect1>
+
+<sect1>
+<title>A basic test</title>
+
+<para>
+Let's write a simple "Hello, world!" test. Open a file named <filename>hello-1.xml</filename> and enter the following lines:
+</para>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+
+&lt;!-- <userinput>BEGIN TTF BLOCK</userinput>
+(display "debug: Hello world!")
+(newline)
+(test-ttf
+    #f
+)
+<userinput>END TTF BLOCK</userinput> --&gt;
+
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="hello.so" weight="10" mandatory="yes"/&gt; 
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="dummy-type"&gt;
+                                &lt;linear name="#" from="1" to="50"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="dummy-event" repeats="1"&gt;
+                &lt;/event&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+You can see that most of this file is a normal Tablix XML configuration (using our "Hello world!" fitness module from the second chapter). If you would process this file with Tablix it would work without problems because the Scheme code is commented out and the XML parser will ignore it. You can also see that the scheme code segment is delimited with lines containing words <userinput>BEGIN TTF BLOCK</userinput> and <userinput>END TTF BLOCK</userinput>.
+</para>
+
+<tip>
+<para>
+If you are not familiar with scheme, I recommend reading the <ulink url="http://www.gnu.org/software/guile/docs/guile-ref/index.html">Guile Reference Manual</ulink>. Beware that TinyScheme does not implement everything that is described there.
+</para>
+<para>
+For the impatient: The general syntax is like the following
+</para>
+
+<screen>
+(<userinput>function argument1 argument2 ...</userinput>)
+</screen> 
+
+<para>
+Functions are defined like this
+</para>
+
+<screen>
+(define (<userinput>function arg1 arg2 ...</userinput>) <userinput>code ...</userinput>)
+</screen>
+
+<para>
+A typical "for" loop where <parameter>i</parameter> goes from 1 to 14 consists of a recursive function that calls itself 15 times (recursion is used a lot in Scheme):
+</para>
+
+<screen>
+(define (loop i) 
+    (if (&lt; i <userinput>14</userinput>) 
+        (begin
+            <userinput>code ...</userinput>
+            (loop (+ i 1))
+        )
+    )
+)
+(loop <userinput>1</userinput>)
+</screen>
+
+<para>
+Use a semicolon to make comments in the code, like this:
+</para>
+
+<screen>
+; This is a comment
+</screen>
+</tip>
+
+<para>
+If you look at the code you can see that we calling three functions in our test. First two functions are here for demonstration purposes only and aren't usually used in tests (unless you are debugging your Scheme code, in which case you will use them a lot): <function>(display)</function> function prints some text to the standard output. <function>(newline)</function> prints a newline character after the text. 
+</para>
+
+<para>
+<function>(test-ttf)</function> is a function which must be called in every test. It can have an arbitrary number of arguments and all of them must evaluate to #t (boolean "true" in Scheme) if the module passes this test. Since we pass #f (false) in this example, the test will obviously fail each time.
+</para>
+
+<para>
+You can now run this test using the following command line:
+</para>
+
+<note>
+<para>
+See the <filename>tablix2_test(1)</filename> man page for detailed description of <filename>tablix2_test</filename> command line arguments. For the moment only note that the second argument always contains a list of options to be passed to Tablix. If you don't need any options (which is true in most cases) then this argument must still be present, but empty. You can specify an empty argument in <filename>bash</filename> shell with <userinput>""</userinput>.
+</para>
+</note>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix2_test --file "" hello-1.xml</userinput>
+
+TABLIX testing framework 0.2.1, Copyright (C) 2002-2005 Tomaz Solc
+
+using binary : /home/avian/software/bin/tablix2
+using binary : /home/avian/software/bin/tablix2_output
+repeats      : 1
+parameters   :
+test file    : hello-1.xml
+
+             hello-1 : test-ttf: test number 1 failed
+debug: Hello world!
+*** FAILED (ttf test failed) ***
+</screen>
+
+<para>
+You can see that the test failed as expected, but the greeting was printed anyway. To keep the noise down, only lines that begin with "debug" are actually printed by the <filename>tablix2_test</filename> utility, and even these are only printed if the test failed.
+</para>
+
+</sect1>
+
+<sect1>
+<title>How to write scheme code</title>
+
+<para>
+As mentioned above, each test must include exactly one call to function <function>(test-ttf)</function>. Arguments to this function must all evaluate to true (or #t in scheme syntax) if the test is successful. If one or more arguments are false, the <filename>tablix2_test</filename> utility will say that the test was not successful and print out which argument was not true. 
+</para>
+
+<para>
+This means that each test can be composed of several sub tests. Each sub test can be in its own function that returns either #t if the test was successful or #f if it was not. The functions are then used as arguments to <function>test-ttf</function>.
+</para>
+
+<para>
+For each resource type defined in the Tablix XML configuration two Scheme functions are defined by default:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>
+(<function>get-<replaceable>resourcetype</replaceable></function> <parameter>tuple-id</parameter>)
+</term>
+<listitem>
+<para>
+This function returns an integer, equal to the resource ID of the resource of the resource type <replaceable>resourcetype</replaceable> that is used by event with tuple ID <parameter>tuple-id</parameter>. 
+</para>
+<para>
+Integer <parameter>tuple-id</parameter> can be replaced with a string holding a valid event name (as used in the <parameter>name</parameter> property in the XML configuration). If more than one event with that name is found (for example if <parameter>repeats</parameter> is greater than 1), resource ID of the resource used by the first matching event is returned.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+(<function><replaceable>resourcetype</replaceable></function> <parameter>tuple-id</parameter> <parameter>resource-id-1</parameter> [ <parameter>resource-id-2</parameter> ])
+</term>
+<listitem>
+<para>
+The third argument is optional. If this function is called with two arguments, then it returns #t (boolean true) if event with tuple ID <parameter>tuple-id</parameter> is using a resource with resource ID <parameter>resource-id-1</parameter> and resource type <replaceable>resourcetype</replaceable>. If the third argument is present then it return #t if this event is using any resource with resource ID between <parameter>resource-id-1</parameter> and <parameter>resource-id-2</parameter>. 
+</para>
+<para>
+Again, integer <parameter>tuple-id</parameter> can be replaced with a string holding a valid event name. If more than one matching event is found, only the first is checked. Integer arguments <parameter>resource-id-1</parameter> and <parameter>resource-id-2</parameter> can also be replaced with strings holding valid resource names.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+You can use these two functions either directly in arguments to the <function>test-ttf</function> function or in your own defined functions to check the result timetable produced by Tablix.
+</para>
+
+</sect1>
+<sect1>
+<title>A test case for the <filename>fixed.so</filename> module</title>
+
+<para>
+Let's write a TTF test case for the <filename>fixed.c</filename> module we wrote in chapter 2. First we have to write a valid XML configuration file that uses this module. In this case we can use our example configuration file <filename>fixed.xml</filename>. Copy it to a new file <filename>fixed-1.xml</filename>.
+</para>
+
+<para>
+Now we have to add the scheme code in the comment block. Since our module is very simple (it only forces some events to use a specific variable resource) we can check if the solution is correct just by calling the <function>dummy-type</function> function. In this case we have to check only if the first defined event is using the resource with the name "30".
+</para>
+
+<programlisting> 
+&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+
+&lt;!-- BEGIN TTF BLOCK
+(test-ttf
+        (dummy-type 0 29)
+)
+END TTF BLOCK --&gt;
+
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="fixed.so" weight="10" mandatory="yes"/&gt; 
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="dummy-type"&gt;
+                                &lt;linear name="#" from="1" to="50"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="dummy-event" repeats="1"&gt;
+                        &lt;restriction type="fixed-dummy-type"&gt;30&lt;/restriction&gt;
+                &lt;/event&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+The first argument to the <function>dummy-type</function> is the tuple ID of the only event defined in this configuration file. The second argument is the resource ID that this event should be using. Since resource IDs are numbered from 0 and we named the resources with numbers starting from 1, the resource ID is equal to the name of the resource minus 1.
+</para>
+
+<tip>
+<para>
+If you are unsure how the tuple IDs or resource IDs are numbered first pass your configuration file to Tablix and have a look at the result (<filename>result*.xml</filename>) file. All <parameter>&lt;resource&gt;</parameter> and <parameter>&lt;event&gt;</parameter> tags in this file will have <parameter>res-id</parameter> and <parameter>tupleid</parameter> properties assigned to them showing how Tablix allocated IDs to events and resources.
+</para>
+</tip>
+
+<para>
+Passing tuple IDs and resource IDs to functions can be useful if more than one tuple or resource is checked in a loop. Because we are only checking a single tuple for a single resource, we can make the Scheme code a bit more readable by replacing numerical IDs with tuple and resource names. The modified code would look like this:
+</para>
+
+<programlisting> 
+&lt;!-- BEGIN TTF BLOCK
+(test-ttf
+        (dummy-type "dummy-event" "30")
+)
+END TTF BLOCK --&gt;
+</programlisting>
+
+</sect1>
+
+<sect1>
+<title>A test case for the <filename>consecutive.so</filename> module</title>
+
+<para>
+This is an example if a module that requires a bit more Scheme code to test (the <filename>consecutive.so</filename> module forces Tablix to schedule some events in consecutive time slots on the same day - see the Module reference manual for details)
+</para>
+
+<para>
+Following are the contents of the test case <filename>consecutive-1.xml</filename> (you can find it in the <filename>ttf/tests/</filename> subdirectory). 
+</para>
+
+<programlisting>
+&lt;!--
+BEGIN TTF BLOCK
+(define (tuple-loop i j ok)
+        (if (&lt; i j)
+                (tuple-loop (+ i 1) j 
+                        (and 
+                                ok 
+                                (time i (+ (get-time (- i 1)) 1))
+                                (= 
+                                        (quotient (get-time i) 10) 
+                                        (quotient (get-time (- i 1)) 10)
+                                )
+                        )
+                )
+                ok
+        )
+        
+)
+(test-ttf
+        (tuple-loop 2 6 #t)
+)
+END TTF BLOCK
+--&gt;
+&lt;ttm version="0.2.0"&gt;
+        &lt;modules&gt;
+                &lt;module name="sametime.so" weight="60" mandatory="yes"/&gt; 
+                &lt;module name="timeplace.so" weight="60" mandatory="yes"/&gt;
+                &lt;module name="consecutive.so" weight="60" mandatory="yes"/&gt;
+        &lt;/modules&gt;
+
+        &lt;resources&gt;
+                &lt;constant&gt;
+                        &lt;resourcetype type="teacher"&gt;
+                                &lt;resource name="a"/&gt;
+                        &lt;/resourcetype&gt;
+                        &lt;resourcetype type="class"&gt;
+                                &lt;linear name="#" from="1" to="3"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/constant&gt;
+                &lt;variable&gt;
+                        &lt;resourcetype type="room"&gt;
+                                &lt;linear name="#" from="1" to="40"/&gt;
+                        &lt;/resourcetype&gt;
+                        &lt;resourcetype type="time"&gt;
+                                &lt;matrix width="10" height="10"/&gt;
+                        &lt;/resourcetype&gt;
+                &lt;/variable&gt;
+        &lt;/resources&gt;
+
+        &lt;events&gt;
+                &lt;event name="test" repeats="1"&gt;
+                        &lt;resource type="teacher" name="a"/&gt;
+                        &lt;resource type="class" name="1"/&gt;
+                &lt;/event&gt;
+                &lt;event name="test" repeats="5"&gt;
+                        &lt;resource type="teacher" name="a"/&gt;
+                        &lt;resource type="class" name="2"/&gt;
+                        &lt;restriction type="consecutive"/&gt;
+                &lt;/event&gt;
+                &lt;event name="test" repeats="1"&gt;
+                        &lt;resource type="teacher" name="a"/&gt;
+                        &lt;resource type="class" name="3"/&gt;
+                &lt;/event&gt;
+        &lt;/events&gt;
+&lt;/ttm&gt;
+</programlisting>
+
+<para>
+<filename>consecutive.so</filename> module uses a timetable extension in its fitness function. Because of that we have to use the <filename>sametime.so</filename> and <filename>timeplace.so</filename> modules in the test case or the <filename>consecutive.so</filename> module will not work correctly.
+</para>
+
+<para>
+If you take a look at the XML configuration you will see that the middle five events must be scheduled in consecutive time slots. These events have tuple IDs from 1 to 5. 
+</para>
+
+<para>
+Scheme code consists of a recursive loop function <function>tuple-loop</function>. <parameter>i</parameter> holds the tuple ID we are currently checking, <parameter>j</parameter> holds the last tuple ID to check + 1 and <parameter>ok</parameter> holds the final return value (#t if the tuples so far have been consecutive or #f if not).
+</para>
+
+<para>
+If we look at the <function>tuple-loop</function> in detail we can see that first we have an if conditional to stop the recursion once we check all tuple IDs. If that is true, we return the return value in <varname>ok</varname>. If not, we check the current tuple <varname>i</varname> and call <function>tuple-loop</function> with incremented tuple ID <varname>i</varname> and an updated return value <varname>ok</varname>.
+</para>
+
+<para>
+The new return value <varname>ok</varname> is #t if all the previous tuples were consecutive (old <varname>ok</varname> is #t), if the current tuple is scheduled one time slot later than the previous tuple and the current and previous tuples are scheduled on the same day (see section on matrices).
+</para>
+</sect1>
+
+</chapter>
+</book>

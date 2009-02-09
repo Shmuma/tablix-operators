@@ -1,0 +1,106 @@
+<!--
+BEGIN TTF BLOCK
+(define days 5)
+(define periods 7)
+(define maxperday 2)
+
+(define perday (make-vector days 0))
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-period tupleid) (modulo (get-time tupleid) periods))
+
+; Increments a value with index "i" in vector "v"
+(define (vector-inc! v i)
+	(vector-set! v i (+ (vector-ref v i) 1))
+)
+
+; Fills vector "v" with constant value "e"
+(define (vector-fill! v e)
+     (let ((n (vector-length v)))
+          (let loop ((i 0))
+               (if (= i n)
+                    v
+                    (begin (vector-set! v i e) (loop (+ i 1)))))))
+
+; Counts how many tuples with ids between "from" and "to" are scheduled in 
+; each day. Results are stored in "perday" vector.
+(define (tuple-collect from to)
+	(let loop ((i from))
+		(if (< i to)
+			(begin
+				(vector-inc! perday (get-day i))
+				(loop (+ i 1))))))
+
+; Checks if there are less than "maxperday" tuples each day.
+(define (check-days)
+	(let loop ((i 0) (result #t))
+		(if (< i days)
+			(loop (+ i 1) (and result 
+				(<= (vector-ref perday i) maxperday)))
+			result)))
+
+(define (check-tuples start stop)
+	(vector-fill! perday 0)
+	(tuple-collect start stop)
+	(check-days))
+
+(test-ttf
+	(check-tuples 0 4)
+	(check-tuples 5 14)
+	(check-tuples 15 21))
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime" weight="60" mandatory="yes"/> 
+		<module name="timeplace" weight="60" mandatory="yes"/>
+		<module name="maxperday" weight="60" mandatory="yes">
+			<option name="resourcetype">teacher</option>
+			<option name="maxperday">2</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+				<resource name="b"/>
+				<resource name="c"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+				<resource name="2"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<!-- tuples from 0 to 4 -->
+		<event name="test-1-a" repeats="5">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<!-- tuples from 5 to 14 -->
+		<event name="test-1-b" repeats="5">
+			<resource type="teacher" name="b"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test-1-b" repeats="5">
+			<resource type="teacher" name="b"/>
+			<resource type="class" name="2"/>
+		</event>
+		<!-- tuples from 15 to 21 -->
+		<event name="test-1-c" repeats="7">
+			<resource type="teacher" name="c"/>
+			<resource type="class" name="1"/>
+		</event>
+	</events>
+</ttm>

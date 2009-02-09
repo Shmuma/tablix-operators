@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<!-- ======================================================================
+
+     Example XML data file for Tablix 0.3.2                               
+     Copyright (C) 2002-2006 Tomaz Solc                        
+
+     File multi-week.xml
+
+     $Id: multi-week.xml,v 1.4 2006-05-15 12:42:18 avian Exp $
+
+     ======================================================================
+
+     This file demonstrates the use of Tablix for multi-week scheduling.
+
+     It describes a small 10 week course that includes mathematics, physics
+     and engineering.
+
+     Please see comments below for descriptions of various parts of the 
+     file.
+
+     ====================================================================== -->
+
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="recurrence.so" weight="60" mandatory="yes"/> 
+		<module name="freemorning.so" weight="60" mandatory="yes">
+			<option name="resourcetype">class</option>
+			<option name="resourcetype">teacher</option>
+		</module>
+		<module name="walk.so" weight="60" mandatory="yes">
+			<option name="resourcetype">class</option>
+			<option name="resourcetype">teacher</option>
+		</module>
+		<!--		
+		<module name="perday.so" weight="2" mandatory="no">
+			<option name="resourcetype">class</option>
+			<option name="resourcetype">teacher</option>
+		</module> 
+		-->
+ 		<module name="consecutive.so" weight="60" mandatory="yes"/>
+		<module name="placecapability.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<!-- 
+				
+				This course is held by 3 professors
+				
+				-->
+				<resource name="Anne"/>
+				<resource name="Boris"/>
+				<resource name="Greg"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<!-- 
+				
+				There are three groups of students.
+
+				Each group has its own set of lectures. 
+				Students from all groups also visit one 
+				lecture in the big auditorium.
+
+				-->
+
+				<linear name="#" from="1" to="3"/>
+				<resource name="All">
+					<restriction type="conflicts-with">1</restriction>
+					<restriction type="conflicts-with">2</restriction>
+					<restriction type="conflicts-with">3</restriction>
+				</resource>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<!-- 
+				
+				We can use three rooms in the building:
+
+				The big auditorium, a small classroom and
+				a laboratory.
+
+				-->
+				<resource name="Big classroom">
+					<restriction type="capability">big</restriction>
+					<restriction type="capability">classroom</restriction>
+				</resource>
+				<resource name="Small classroom">
+					<restriction type="capability">classroom</restriction>
+				</resource>
+				<resource name="Lab">
+					<restriction type="capability">lab</restriction>
+				</resource>
+			</resourcetype>
+			<resourcetype type="time">
+				<!--
+
+				The course takes 10 weeks. Each week has 
+				5 days (Monday - Friday).
+
+				There are a maximum of 3 timeslots per day.
+
+				(use weeksize=5 option with htmlcss2 export
+				module)
+
+				-->
+				<matrix width="50" height="3"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<!-- 
+
+		Each group of students visits its own lecture of mathematics.
+
+		The first group of students starts visiting this lecture on 
+		the first week. It has 4 timeslots of mathematics (2 blocks of
+		2 timeslots) per week. 20 timeslots of mathematics all together.
+
+		The second group starts visiting this lecture on the 6th week.
+
+		The third group start on the 4th week.
+
+		-->
+		<event name="Mathematics" repeats="20">
+			<resource type="teacher" name="Boris"/>
+			<resource type="class" name="1"/>
+			<restriction type="recurrence">0 4</restriction>
+			<restriction type="periods-per-block">2</restriction>
+			<restriction type="capability">classroom</restriction>
+		</event>
+		<event name="Mathematics" repeats="20">
+			<resource type="teacher" name="Boris"/>
+			<resource type="class" name="2"/>
+			<restriction type="recurrence">5 4</restriction>
+			<restriction type="periods-per-block">2</restriction>
+			<restriction type="capability">classroom</restriction>
+		</event>
+		<event name="Mathematics" repeats="20">
+			<resource type="teacher" name="Boris"/>
+			<resource type="class" name="3"/>
+			<restriction type="recurrence">3 4</restriction>
+			<restriction type="periods-per-block">2</restriction>
+			<restriction type="capability">classroom</restriction>
+		</event>
+
+		<!-- 
+
+		First and third group of students visits a lecture of 
+		physics.
+
+		The first group of students starts visiting this lecture on 
+		the 7th week. It has 6 timeslots (2 blocks of 3 timeslots) 
+		per week. 24 timeslots of mathematics all together.
+
+		The second group starts visiting this lecture on the 1st week.
+
+		-->
+		<event name="Physics Lecture" repeats="24">
+			<resource type="teacher" name="Anne"/>
+			<resource type="class" name="1"/>
+			<restriction type="recurrence">6 6</restriction>
+			<restriction type="periods-per-block">3</restriction>
+			<restriction type="capability">classroom</restriction>
+		</event>
+		<event name="Physics Lecture" repeats="24">
+			<resource type="teacher" name="Anne"/>
+			<resource type="class" name="3"/>
+			<restriction type="recurrence">0 6</restriction>
+			<restriction type="periods-per-block">3</restriction>
+			<restriction type="capability">classroom</restriction>
+		</event>
+
+		<!-- 
+
+		These two groups also have lab practice.
+
+		-->
+
+		<event name="Physics Lab" repeats="6">
+			<resource type="teacher" name="Anne"/>
+			<resource type="class" name="1"/>
+			<restriction type="recurrence">7 2</restriction>
+			<restriction type="periods-per-block">2</restriction>
+			<restriction type="capability">lab</restriction>
+		</event>
+		<event name="Physics Lab" repeats="6">
+			<resource type="teacher" name="Anne"/>
+			<resource type="class" name="3"/>
+			<restriction type="recurrence">1 2</restriction>
+			<restriction type="periods-per-block">2</restriction>
+			<restriction type="capability">lab</restriction>
+		</event>
+
+		<!--
+
+		All three groups also visit a common lecture on engineering.
+
+		This lecture must be scheduled in the big auditorium (the
+		small classroom does not have enough seats).
+
+		-->
+
+		<event name="Mechanical Engineering" repeats="12">
+			<resource type="teacher" name="Greg"/>
+			<resource type="class" name="All"/>
+			<restriction type="recurrence">4 3</restriction>
+			<restriction type="periods-per-block">3</restriction>
+			<restriction type="capability">big</restriction>
+		</event>
+	</events>
+</ttm>

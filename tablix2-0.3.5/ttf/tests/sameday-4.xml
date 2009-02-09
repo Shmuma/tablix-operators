@@ -1,0 +1,92 @@
+<!--
+BEGIN TTF BLOCK
+(define days 5)
+(define periods 7)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-period tupleid) (modulo (get-time tupleid) periods))
+
+(test-ttf
+	; First block of 3 events (0, 1, 2)
+	(= (get-day 0) (get-day 1))
+	(= (get-day 1) (get-day 2))
+	(= (get-period 1) (+ (get-period 0) 1))
+	(= (get-period 2) (+ (get-period 1) 1))
+
+	(not (= (get-day 0) (get-day 3)))
+	(not (= (get-day 0) (get-day 5)))
+	(not (= (get-day 0) (get-day 7)))
+	(not (= (get-day 0) (get-day 8)))
+
+	; First block of 2 events (3, 4)
+	(= (get-day 3) (get-day 4))
+	(= (get-period 4) (+ (get-period 3) 1))
+
+	(not (= (get-day 3) (get-day 5)))
+	(not (= (get-day 3) (get-day 7)))
+	(not (= (get-day 3) (get-day 8)))
+
+	; Second block of 2 events (5, 6)
+	(= (get-day 5) (get-day 6))
+	(= (get-period 6) (+ (get-period 5) 1))
+
+	(not (= (get-day 5) (get-day 7)))
+	(not (= (get-day 5) (get-day 8)))
+
+	; First block of 1 event (7)
+	(not (= (get-day 7) (get-day 8)))
+
+	; Second block of 1 event (8)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="consecutive.so" weight="60" mandatory="yes"/>
+		<module name="sameday.so" weight="60" mandatory="yes">
+			<option name="resourcetype">class</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<resource name="x"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test-1-a" repeats="3">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+			<restriction type="periods-per-block">3</restriction>
+		</event>
+		<event name="test-1-a" repeats="4">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+			<restriction type="periods-per-block">2</restriction>
+		</event>
+		<event name="test-1-a" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test-1-a" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+	</events>
+</ttm>

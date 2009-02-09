@@ -1,0 +1,64 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(example1 0 0)
+	(example1 1 0)
+
+	(example1 2 2)
+	(example1 3 2)
+
+	(example2 4 1)
+	(example2 5 1)
+
+	(example2 6 3)
+	(example2 7 3)
+
+	(example1 8 2)
+	(example2 8 3)
+
+	(example1 9 2)
+	(example2 9 3)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="fixed.so" weight="60" mandatory="yes"/> 
+	</modules>
+
+	<resources>
+		<variable>
+			<resourcetype type="example1">
+				<resource name="a"/>
+				<resource name="b"/>
+				<resource name="c"/>
+				<resource name="d"/>
+			</resourcetype>
+			<resourcetype type="example2">
+				<resource name="a"/>
+				<resource name="b"/>
+				<resource name="c"/>
+				<resource name="d"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test1" repeats="2">
+			<restriction type="fixed-example1">a</restriction>
+		</event>
+		<event name="test2" repeats="2">
+			<restriction type="fixed-example1">c</restriction>
+		</event>
+		<event name="test3" repeats="2">
+			<restriction type="fixed-example2">b</restriction>
+		</event>
+		<event name="test4" repeats="2">
+			<restriction type="fixed-example2">d</restriction>
+		</event>
+		<event name="test5" repeats="2">
+			<restriction type="fixed-example1">c</restriction>
+			<restriction type="fixed-example2">d</restriction>
+		</event>
+	</events>
+</ttm>

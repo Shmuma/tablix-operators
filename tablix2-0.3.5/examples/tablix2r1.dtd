@@ -1,0 +1,79 @@
+<!-- ======================================================================
+
+     Tablix Timetabling Model XML DTD, version 0.2.0R1
+     File tablix2r1.dtd
+
+     Copyright (C) 2002-2006 Tomaz Solc
+
+     This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program; if not, write to the Free Software
+     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+     $Id: tablix2r1.dtd,v 1.1 2006-03-27 16:04:20 avian Exp $
+     
+     ====================================================================== 
+     
+     This is an XML document type definition (DTD) file for files describing
+     timetabling problems according to the Tablix timetabling model version
+     0.2.0.
+     
+     Please use the following DOCTYPE declaration to identify this file:
+     
+	<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" 
+			"http://www.tablix.org/releases/dtd/tablix2r1.dtd"> 
+	
+     ====================================================================== -->
+
+<!ELEMENT ttm (info?,modules,resources,events)>
+	<!ATTLIST ttm version CDATA #REQUIRED
+	              fitness CDATA #IMPLIED>
+        <!ELEMENT info (title?,address?,author?)>
+                <!ELEMENT title (#PCDATA)>
+                <!ELEMENT address (#PCDATA)>
+                <!ELEMENT author (#PCDATA)>
+        <!ELEMENT modules (module+)>
+                <!ELEMENT module (option*)>
+		<!ATTLIST module name CDATA #REQUIRED
+				 weight CDATA #REQUIRED
+				 mandatory (yes|no) #REQUIRED>
+			<!ELEMENT option (#PCDATA)>
+			<!ATTLIST option name CDATA #REQUIRED>
+        <!ELEMENT resources (constant?,variable?)>
+                <!ELEMENT constant (resourcetype+)>
+		<!ELEMENT variable (resourcetype+)>
+			<!ELEMENT resourcetype ((resource|linear|matrix)+)>
+                	<!ATTLIST resourcetype type CDATA #REQUIRED
+			                       typeid CDATA #IMPLIED>
+				<!ELEMENT resource (restriction*)>
+				<!ATTLIST resource name CDATA #REQUIRED
+				                   type CDATA #IMPLIED
+						   resid CDATA #IMPLIED>
+				<!ELEMENT linear (restriction*)>
+				<!ATTLIST linear name CDATA #REQUIRED
+				                 from CDATA #REQUIRED
+						 to CDATA #REQUIRED
+						 resid-from CDATA #IMPLIED
+						 resid-to CDATA #IMPLIED>
+				<!ELEMENT matrix (restriction*)>
+				<!ATTLIST matrix width CDATA #REQUIRED
+				                 height CDATA #REQUIRED
+						 resid-from CDATA #IMPLIED
+						 resid-to CDATA #IMPLIED>
+        <!ELEMENT events (event+)>
+		<!ELEMENT event (resource|restriction)*>
+		<!ATTLIST event name CDATA #REQUIRED
+		                repeats CDATA #REQUIRED
+				tupleid CDATA #IMPLIED>
+
+        <!ELEMENT restriction (#PCDATA)>
+        <!ATTLIST restriction type CDATA #REQUIRED>

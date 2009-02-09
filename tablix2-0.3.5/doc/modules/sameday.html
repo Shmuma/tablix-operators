@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>sameday.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>sameday.so module reference</h1>
+
+		<h2>Description</h2>
+<p>
+Adds a weight if a class or a teacher (as specified by the "resourcetype"
+module option) has the same subject more than N 
+times in a day.</p>
+<p>Default for N is 1. Default value can be changed with the module option 
+"default". Default value for N can also be overridden for individual 
+teachers, classes and events with various restrictions.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+<h3>ignore-sameday (all resource types)</h3><pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="example-class"&gt;
+		&lt;restriction type="ignore-sameday"/&gt;
+	&lt;/resource&gt;
+&lt;/resourcetype&gt;</pre>
+<p>Set this restriction to a class or a teacher that you don't want to be 
+checked for multiple occurrences of the same subject in a day.</p>
+<p>This module then ignores classes that have this restriction, however this
+setting can be overridden for individual events if "set-sameday" restriction 
+is used on an event for this class or teacher.</p>
+<h3>set-sameday (all resource types)</h3><pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="example-class"&gt;
+		&lt;restriction type="set-sameday"&gt;2&lt;/restriction&gt;
+	&lt;/resource&gt;
+&lt;/resourcetype&gt;</pre>
+<p>With this restriction you can set a maximum number of equal events a class
+or a teacher can have in a day. This setting can be overridden for 
+individual events if "set-sameday" event restriction is used on an event 
+for this class or teacher.</p>
+		<h2>Defined tuple restrictions</h2>
+<h3>consecutive</h3>
+<p>This is an alias for "ignore-sameday" restriction. It is defined for 
+convenience when this module is used together with <a href="consecutive.html">consecutive.so</a> module.</p>
+<h3>ignore-sameday</h3>
+<p>Set this restriction to all events that you do not want to be checked for
+multiple occurences per day.</p>
+<p>This retriction overrides the default setting and settings made by 
+any resource restrictions.</p>
+<h3>periods-per-block</h3>
+<p>This is an alias for "set-sameday-blocksize" restriction. It is defined for 
+convenience when this module is used together with <a href="consecutive.html">consecutive.so</a> module.</p>
+<h3>set-sameday</h3>
+<pre>&lt;event name="example" repeats="5"&gt;
+		...
+		&lt;restriction type="set-sameday"&gt;2&lt;/restriction&gt;
+&lt;/resourcetype&gt;</pre>
+<p>With this restriction you can set a maximum number of events of type type
+that a class or a teacher can have in a day.</p>
+<p>This retriction overrides the default setting and settings made by 
+any resource restrictions.</p>
+<h3>set-sameday-blocksize</h3>
+<p>With this restriction you can tell this module that the current event 
+will be scheduled in blocks of this number of equal consecutive events.</p>
+<p>Module will then consider a block of events as a single event when checking 
+for multiple occurences per day.</p>
+<p>Default block size is 1.</p>
+		<h2>Supported module options</h2>
+<h3>default</h3>
+<p>Use this option to set the default number of equal events classes or 
+teachers can have in day.</p>
+<h3>resourcetype</h3>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+<p>Use option</p>
+<pre>&lt;option name="resourcetype"&gt;class&lt;/option&gt;</pre>
+<p>to get the same behaviour as this module had before Tablix version 0.3.1.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p><h2>Credits</h2><p><p>
+Ideas taken from a patch for Tablix 0.0.3 by 
+Jaume Obrador &lt;obrador@espaiweb.net&gt;</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

@@ -1,0 +1,57 @@
+#!/usr/bin/make -f
+
+PRINT_STYLESHEET = tablix-print.dsl
+HTML_STYLESHEET = tablix-html.dsl
+
+DOCS = modules.pdf modules2.pdf morphix.pdf manual.pdf modules doxygen
+
+EXTRA_DIST = changelog.ps tablix.ps tablix_output.ps tablix_modinfo.ps tablix_benchmark.ps tablix2_plot.ps
+
+all: $(DOCS)
+
+dist: $(DOCS) $(EXTRA_DIST)
+	tar -czf ../tablix-docs-ps.tar.gz $(DOCS) $(EXTRA_DIST)
+
+modules:
+	./mod-doc2.pl ../modules/*.c
+
+doxygen:
+	doxygen
+
+%.pdf: %.db $(PRINT_STYLESHEET)
+	db2pdf -d $(PRINT_STYLESHEET) $<
+
+%.html: %.db $(HTML_STYLESHEET)
+	db2html -o $@ -d $(HTML_STYLESHEET) $<
+	mkdir $@/images
+	cp -a images/*.png $@/images
+	cp tablix.css $@
+
+clean: 
+	rm -rf *.html
+	rm -rf doxygen
+	rm -rf modules
+	rm -f *.ps *.pdf
+	rm -f modulesref.xml
+
+# special documents
+
+changelog.ps:
+	a2ps --highlight-level=none -o changelog.ps ../ChangeLog
+
+tablix.ps: tablix.1
+	man -Tps -l tablix.1 > tablix.ps
+
+tablix_output.ps: tablix_output.1
+	man -Tps -l tablix_output.1 > tablix_output.ps
+
+tablix_modinfo.ps: tablix_modinfo.1
+	man -Tps -l tablix_modinfo.1 > tablix_modinfo.ps
+
+tablix2_plot.ps: tablix2_plot.1
+	man -Tps -l tablix2_plot.1 > tablix2_plot.ps
+
+tablix_benchmark.ps: tablix_benchmark.1
+	man -Tps -l tablix_benchmark.1 > tablix_benchmark.ps
+
+.PHONY: all dist clean

@@ -1,0 +1,155 @@
+.\" These macros were copied from MPlayer manpage, written by Gabucino, 
+.\" Diego Biurrun and Jonas Jermann. 
+..
+.\" default indentation is 7, don't change!
+.nr IN 7
+.\" define indentation for suboptions
+.nr SS 5
+.\" add new suboption
+.de IPs
+.IP "\\$1" \n(SS
+..
+.\" begin of first level suboptions, end with .RE
+.de RSs
+.RS \n(IN+3
+..
+.TH TABLIX 1 2006-02-04 "Tomaz Solc" "Tablix User's Manual"
+.SH NAME
+tablix2_output \- Tablix data export utility
+.SH SYNOPSIS
+.B tablix2_output [ -o 
+.I file
+.B ] [ 
+.I options
+.B ]
+.I format
+.I file
+.SH DESCRIPTION
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+.P
+.B tablix2_output
+reads a timetable description in a XML format produced by Tablix from
+.I file
+and converts it into a number of human or machine readable file formats. Alternatively, it can also read timetable information from a saved Tablix session.
+.SH OPTIONS
+.TP
+.B \-o FILE
+Write output to file
+.B FILE
+instead of the standard output. 
+.TP
+.B \-s OPTIONS
+Set export module options. 
+.B OPTIONS
+is a comma separated string of 
+.I option=value 
+pairs. Some options can only be enabled and do not accept a value. You can ommit the 
+.I =value
+part with those (specifying the option alone will enable it). Supported options depend on the export format used.  
+.TP
+.B \-d LEVEL
+Set the verbosity level, where LEVEL is one of the following:
+.RSs
+.IPs 0
+(only fatal error messages are shown),
+.IPs 1
+(fatal and non-fatal errors),
+.IPs 2
+(all errors),
+.IPs 3
+(all of the above plus some informational messages) or
+.IPs 4
+(all of the above plus debug messages).
+.RE
+.TP
+.B \-r FILE
+Use timetable information from a saved Tablix session in
+.B FILE
+(usually named save?.txt). Timetable with the lowest fitness value in the saved population is exported instead of any result stored in the XML file. If this option is used, the XML file does not need to contain a solution (i.e. the problem description file can be used).
+.TP
+.B \-h
+Shows a brief help message.
+.TP
+.B \-v
+Shows compile time options and copyright information.
+.TP
+.B \-i PATH
+Sets the path to export modules. By default the module path is set to the location where export modules were installed by 
+.B make install
+command.
+.SH FORMATS
+.TP
+.B htmlcss
+XHTML 1.1 output using CSS stylesheets and UTF-8 encoding for school scheduling. Creates one giant HTML file with all timetables (not recommended for large timetabling problems).
+
+Use the
+.B css
+option to specify an alternative stylesheet (if no stylesheet is specified, a default stylesheet is used). 
+
+Use the 
+.B namedays
+option (without a value) to enable day names. 
+.TP
+.B htmlcss2
+XHTML 1.1 output using CSS stylesheets and UTF-8 encoding for school scheduling. Creates a directory containing one HTML file per timetable. Also supports timetables that span multiple weeks. With this module you have to specify the name of the directory where files are to be saved (you can not use standard output).
+
+Use the
+.B css
+option to specify an alternative stylesheet (if no stylesheet is specified, a default stylesheet is used). 
+
+Use the 
+.B namedays
+option (without a value) to enable day names. 
+
+The 
+.B footnotes
+option (without a value) changes the way events from conflicting resources are displayed. Without this option time slots occupied by events from conflicting resources are only marked. With this option some more information is displayed in the timetable (this is similar to timetables produced by the
+.B htmlcss
+module).
+
+With the
+.B weeksize
+option you can specify the number of days in a week. This can be used to produce timetables that span multiple weeks. For example: If the timetable has 15 days (the width of the "time" matrix and weeksize is set to 5, timetable will be displayed as 3 separate weeks. Default week size is 5 days.
+
+.TP
+.B csv
+General "comma separated values" format in UTF-8 encoding suitable for import into spreadsheet programs and further processing.
+.TP
+.B vcal
+vCalendar 2.0 (also known as iCal or iCalendar) compatible output. Use this format to generate a list of events for one class or one teacher that is suitable for import into cell phones, calendaring applications, etc.
+
+You have to specify all of the following options for this export module to work correctly:
+.RSs
+.IPs starttime
+Time and date of the first time slot in the timetable (a suitable time and date would for example be Monday, 4 September 2006, at 8:00 AM) written in basic ISO 8601 format (previous example in this format would be "20060904T080000").
+.IPs length
+Length of each event in the timetable in minutes (for example "40")
+.IPs restype
+Type of resource for which to export the timetable. Use "teacher" for teachers and "class" for student classes.
+.IPs resource
+Name of the resource for which to export the timetable.
+.RE
+
+.TP
+.B gnutu
+XML format suitable for import into Gnutu Student's Schedule (see http://gnutu.org).
+
+This module can create a timetable for a single class of students or a directory with timetables for all defined classes. In the first case, specify the name of the class with the 
+.B class
+option. If you do not specify this option all timetables will be generated. In this case you have to specify a name for the directory into which the timetables will be saved (use the 
+.B -o
+option).
+
+By default the first timeslot begins at 8:00, the second at 9:00 and so on. If you would like to change that, make a file with one time slot time per line. Then specify this file with the 
+.B hours
+option.
+
+.SH BUGS
+None currently known.
+.SH AUTHOR
+Tomaz Solc (tomaz.solc@tablix.org)
+.SH SEE ALSO
+.BR tablix2 (1),
+Tablix User's Manual,
+Tablix modules HOWTO,
+Tablix on Morphix HOWTO

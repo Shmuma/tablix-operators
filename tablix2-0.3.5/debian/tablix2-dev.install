@@ -1,0 +1,9 @@
+src/chromo.h	usr/include/tablix2
+src/data.h	usr/include/tablix2
+src/error.h	usr/include/tablix2
+src/modsup.h	usr/include/tablix2
+src/assert.h	usr/include/tablix2
+src/depend.h	usr/include/tablix2
+src/gettext.h	usr/include/tablix2
+src/module.h	usr/include/tablix2
+src/export.h	usr/include/tablix2

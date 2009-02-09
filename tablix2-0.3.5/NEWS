@@ -1,0 +1,30 @@
+Tablix 0.3.5 release announcement
+
+Tue Jul  3 13:06:47 CEST 2007
+
+Tablix 0.3.5 is a stable release based on the 0.2 development
+branch. Source code distribution can be downloaded from the following
+URL:
+
+http://www.tablix.org/releases/stable/tablix2-0.3.5.tar.gz
+
+This release mostly fixes bugs in the kernel. Following issues were fixed:
+
+	Segmentation fault in the XML parser when no constant resource
+	types were defined.
+
+	Erroneous messages about failed assertions when resource type with
+	id 0 was a variable resource type.
+
+        Build error on GCC 4.1.
+
+Four fitness modules (firstlastequal, firstorlast, maxconsecutive and
+maxperday) were also added to the distribution (development sponsored by
+The Media Shoppe Berhad).
+
+This release splits the distribution into three Debian packages:
+tablix2, tablix2-doc and tablix2-dev.
+
+See ChangeLog file included in the distribution for more details.
+
+Tomaz Solc

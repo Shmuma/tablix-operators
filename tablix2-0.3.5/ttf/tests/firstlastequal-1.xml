@@ -1,0 +1,76 @@
+<!--
+BEGIN TTF BLOCK
+(define days 5)
+(define periods 7)
+
+; number of defined events
+(define tuplenum 24)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-period tupleid) (modulo (get-time tupleid) periods))
+
+(define (check)
+	(let loop ((i 0) (first-num 0) (last-num 0))
+		(if (< i tuplenum) 
+			(begin
+				(if (= (get-period i) 0) 
+					(define first-num (+ first-num 1)))
+				(if (= (get-period i) (- periods 1))
+					(define last-num (+ last-num 1)))
+				(loop (+ i 1) first-num last-num))
+			(= first-num last-num))))
+
+(test-ttf 
+	(check))
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime" weight="60" mandatory="yes"/> 
+		<module name="timeplace" weight="60" mandatory="yes"/>
+		<module name="firstlastequal" weight="60" mandatory="yes">
+			<option name="resourcetype">teacher</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+				<resource name="2"/>
+				<resource name="3"/>
+				<resource name="4"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test-1-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test-2-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+		</event>
+		<event name="test-3-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="3"/>
+		</event>
+		<event name="test-4-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="4"/>
+		</event>
+	</events>
+</ttm>

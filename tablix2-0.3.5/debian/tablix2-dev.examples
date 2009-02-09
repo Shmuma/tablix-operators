@@ -1,0 +1,3 @@
+examples/modules/*.c
+examples/modules/*.xml
+examples/modules/Makefile

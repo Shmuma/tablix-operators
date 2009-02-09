@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+<!--
+BEGIN TTF BLOCK
+(define periods 10)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+
+(define (tuple-loop i j ok)
+	(if (< i j)
+		(tuple-loop (+ i 1) j 
+			(and 
+				ok 
+				(time i (+ (get-time (- i 1)) 1))
+				(= 
+					(quotient (get-time i) 10) 
+					(quotient (get-time (- i 1)) 10)
+				)
+			)
+		)
+		ok
+	)
+	
+)
+(test-ttf
+	(tuple-loop 2 7 #t)
+	(= (get-day 6) 0)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="consecutive.so" weight="60" mandatory="yes"/>
+		<module name="fixedtime.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<linear name="#" from="1" to="3"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="10" height="10"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<!-- 0 -->
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<!-- 1,2,3,4,5 -->
+		<event name="test" repeats="5">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+			<restriction type="consecutive"/>
+		</event>
+		<!-- 6 -->
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+			<restriction type="consecutive"/>
+			<restriction type="fixed-day">0</restriction>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="3"/>
+		</event>
+	</events>
+</ttm>

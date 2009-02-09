@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>fixed.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>fixed.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Specifies that a particular event must use a specified resource.</p>
+<p>This module allows you to make a fixed assignement of a certain variable 
+resource to a certain event.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+<p>This module works with any combination of defined resource types. For each
+resource type a "fixed-xxx" event restriction is defined, where xxx is 
+replaced with the name of a variable resource type.</p>
+<p>Consider the following example:</p>
+<pre>&lt;event name="example" repeats="2"&gt;
+	...
+	&lt;restriction type="fixed-room"&gt;10&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This will force both repeats of the event "example" to be scheduled in the 
+room 10. Of course the room resource type must be defined somewhere in the
+rest of the XML file.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>General</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ttm version="0.2.0">
+        <modules>
+                <module name="sametime.so" weight="10" mandatory="yes"/> 
+                <module name="timeplace.so" weight="10" mandatory="yes"/> 
+                <module name="holes.so" weight="10" mandatory="yes"> 
+			<option name="resourcetype">class</option>
+		</module>
+        </modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="dummy-teacher"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="dummy-class"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="5" height="10"/>
+			</resourcetype>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="5"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+                <event name="dummy-event" repeats="10">
+			<resource type="class" name="dummy-class"/>
+			<resource type="teacher" name="dummy-teacher"/>
+		</event>
+	</events>
+</ttm>

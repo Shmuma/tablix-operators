@@ -16,16 +16,16 @@
 <!--       <option name="maxperday">1</option> -->
 <!--     </module> -->
     <module name="walk" weight="5" mandatory="no">
-      <option name="resourcetype">teacher</option>
+      <option name="resourcetype">operator</option>
     </module>
 
-    <module name="preferredroom" weight="100" mandatory="yes"/>
+    <module name="preferredroom" weight="100" mandatory="no"/>
     <module name="room_available" weight="500" mandatory="yes"/>
   </modules>
 
   <resources>
     <constant>
-      <resourcetype type="teacher">
+      <resourcetype type="operator">
         <resource name="airdog"></resource>
         <resource name="alex27j">
           <restriction type="preferred-room">Stanislav</restriction>
@@ -108,73 +108,73 @@
 
   <events>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="airdog"/>
+        <resource type="operator" name="airdog"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="alex27j"/>
+        <resource type="operator" name="alex27j"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="astronom"/>
+        <resource type="operator" name="astronom"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="bander"/>
+        <resource type="operator" name="bander"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="dukeartem"/>
+        <resource type="operator" name="dukeartem"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="erokhin"/>
+        <resource type="operator" name="erokhin"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="ezhichek"/>
+        <resource type="operator" name="ezhichek"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="gcat"/>
+        <resource type="operator" name="gcat"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="ironhulk"/>
+        <resource type="operator" name="ironhulk"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="kent"/>
+        <resource type="operator" name="kent"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="korrus"/>
+        <resource type="operator" name="korrus"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="lacitis"/>
+        <resource type="operator" name="lacitis"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="mixas"/>
+        <resource type="operator" name="mixas"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="mixermsk"/>
+        <resource type="operator" name="mixermsk"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="newins"/>
+        <resource type="operator" name="newins"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="nixx"/>
+        <resource type="operator" name="nixx"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="nstd"/>
+        <resource type="operator" name="nstd"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="porfel"/>
+        <resource type="operator" name="porfel"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="renew"/>
+        <resource type="operator" name="renew"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="romashkin"/>
+        <resource type="operator" name="romashkin"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="sbalandin"/>
+        <resource type="operator" name="sbalandin"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="shpin"/>
+        <resource type="operator" name="shpin"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="teran"/>
+        <resource type="operator" name="teran"/>
     </event>
   </events>
 </ttm>

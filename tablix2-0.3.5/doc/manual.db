@@ -1,0 +1,1957 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+	<!ENTITY GPL SYSTEM "gpl.dbk">
+]>
+
+<book>
+<bookinfo>
+<title>Tablix User's Manual</title>
+<author>
+<firstname>Toma&zcaron;</firstname>
+<surname>&Scaron;olc</surname>
+<authorblurb>
+<para><email>tomaz.solc@tablix.org</email></para>
+</authorblurb>
+</author>
+<pubdate>
+$Id: manual.db,v 1.30 2007-03-28 20:03:14 avian Exp $
+</pubdate>
+<abstract>
+<para>
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3. This document tries to introduce Tablix to a regular user. It includes instructions for installation, usage and a section on troubleshooting.
+</para>
+</abstract>
+<legalnotice>
+<para>
+Copyright (C) 2005-2006 by Toma&zcaron; &Scaron;olc.
+</para>
+</legalnotice>
+
+<mediaobject>
+    <imageobject><imagedata align="center" fileref="images/lines2.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata align="center" fileref="images/lines2.png" format="PNG"/></imageobject>
+</mediaobject>
+
+</bookinfo>
+
+<chapter>
+<title>
+Introduction
+</title>
+<sect1>
+<title>
+What is Tablix?
+</title>
+
+<para>
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+</para>
+
+<para>
+Tablix kernel supports a very wide range of timetabling problems, from high school timetabling to barge scheduling. A number of timetable constraints are already implemented in the default installation. Because of kernel's modular design it is easy to add custom timetable constraints and/or modify existing ones. Kernel modules are written in C. Extensive API documentation is available on the internet and in the source distribution.
+</para>
+
+<para>
+The use of the Parallel Virtual Machine enables Tablix to use the combined power of any group of computers connected by a network. It can run for example on a cluster of old machines that are no longer used or on workstations in the computer science labs that aren't used during the night. Cluster can be composed of machines of different architectures and/or running different operating systems. Bandwidth requirements are low (a 10 Mbps LAN is sufficient). Tablix will also run on a number of bootable CDs that support clustering. A specialized GNU/Linux bootable CD distribution called <ulink url="http://www.kiberpipa.org/~tomaz/tom">Tablix on Morphix</ulink> is also freely available on the internet.
+</para>
+
+<para>
+The default installation will export finished timetables into XHTML 1.1 format ready for publishing on the internet or into a "comma separated values" format (CSV) that is suitable for import into a spreadsheet application and further processing. New export formats can be added by writing custom export modules.
+</para>
+
+<para>
+Tablix kernel is developed according to the rule of separation of interfaces and engines. The kernel can be used standalone with a command line interface. Because it uses XML formatted files for input and output files it is very simple to incorporate into other software packages that provide either customized user interfaces or various forms of pre- and post-processing. A separately developed friendly graphics user interface to Tablix kernel called <ulink url="http://gtablix.homelinux.org/wordpress">G-Tablix</ulink> is freely available on the internet. Problem description files can also be edited with general-purpose XML editing software like <ulink url="http://www.freespiders.org/projects/gmlview">MlView</ulink> or <ulink url="http://kxmleditor.sourceforge.net/">KXML Editor</ulink>.
+</para>
+
+<para>
+Tablix is free software and is available under the terms of GNU General Public License.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Supported platforms
+</title>
+
+<para>
+Tablix is written with portability in mind. It should compile without problems on most UNIX-like operating systems that support <ulink url="http://www.csm.ornl.gov/pvm/pvm_home.html">PVM3</ulink> and <ulink url="http://xmlsoft.org/">libxml</ulink>.
+</para>
+
+<para>
+Following is a list of operating systems that are known to work with Tablix:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Debian GNU/Linux i386 (2.1, 2.2, 3.0)
+</para>
+</listitem>
+<listitem>
+<para>
+NetBSD/i386 (1.5.2, 1.6.1, 1.6.2)
+</para>
+</listitem>
+<listitem>
+<para>
+FreeBSD (4.7)
+</para>
+</listitem>
+<listitem>
+<para>
+Mac OS X (10.3.9)
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Tested with following versions of PVM3: 3.4.5
+</para>
+
+<para>
+Tablix will work with any version of libxml later than 2.4.3. However using versions later than 2.4.11 is recommended because it supports printing line numbers with parser error messages.
+</para>
+
+<note>
+<para>
+Utilities in the <filename>utils</filename> subdirectory also need <ulink url="http://www.gnuplot.info">GNU plot</ulink>, bash shell and various Unix utilities like grep, sed, awk, etc. to run.
+</para>
+</note>
+
+</sect1>
+</chapter>
+
+<chapter>
+<title>
+Installation
+</title>
+
+<note>
+<para>
+You will need root privileges on your system, unless you install from source.
+</para>
+</note>
+
+<sect1>
+<title>
+Tablix packages
+</title>
+
+<para>
+At the time of writing <ulink url="http://www.ubuntulinux.org/">Ubuntu GNU/Linux</ulink> and <ulink url="http://www.gentoo.org/">Gentoo GNU/Linux</ulink> include Tablix package in their package managing systems. Packages should also be soon be available for Debian GNU/Linux.
+</para>
+
+<para>
+Before compiling and installing Tablix from source you should check if your operating system distribution already includes Tablix packages. If it does, then the easiest way to install Tablix on your machine is to use the package manager your distribution supplies. Note however that the included Tablix package may be outdated and that you may want to install from source anyway to get the latest version of Tablix (specifically Gentoo package is terribly outdated at the time of writing). The newest Tablix releases can always be downloaded from <ulink url="http://www.tablix.org">tablix.org</ulink>.
+</para>
+
+<note>
+<para>
+Even if you can't or do not want to install Tablix from a package for your distribution you may want to consider using libxml and/or PVM3 packages and then compiling Tablix using libraries from these packages. Note however that in this case your have to install packages that include development versions of libraries (such packages usually have <filename>-dev</filename> in their names).
+</para>
+</note>
+
+</sect1>
+
+<sect1>
+<title>
+Installation for Debian users
+</title>
+
+<sect2>
+<title>
+Using apt-get
+</title>
+
+<para>
+Debian packages of the stable releases of Tablix are available from an unofficial <ulink url="http://www.kiberpipa.org/~tomaz/tablix/stable">Debian repository</ulink>. To use this repository with <filename>apt-get</filename> add the following line to your <filename>/etc/apt/sources.list</filename> file:
+</para>
+
+<programlisting>
+deb http://www.kiberpipa.org/~tomaz/tablix/stable ./
+</programlisting>
+
+<para>
+Then you can install the latest Tablix release by running the following commands as root:
+</para>
+
+<screen>
+<prompt>#</prompt> <userinput>apt-get update</userinput>
+<prompt>#</prompt> <userinput>apt-get install tablix2</userinput>
+</screen>
+
+<note>
+<para>
+Please note that Tablix packages may soon be included in the official Debian package repositories so it may no longer be necessary to change your <filename>sources.list</filename> file.
+</para>
+</note>
+
+<note>
+<para>
+If you are running an older Debian distribution or a current distribution on an architecture other than i386 you may have to compile your own Debian package. Packages available on the internet will only install on the latest Debian GNU/Linux distribution on i386 architecture. See the following section for more details..
+</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>
+Compiling Debian package from source
+</title>
+
+<para>
+Following section describes how to make your own Debian package out of the Tablix source distribution. 
+</para>
+
+<orderedlist>
+<listitem>
+<para>
+Install libxml2 and pvm3 development packages.
+</para>
+
+<screen>
+<prompt>#</prompt> <userinput>apt-get install libxml2-dev pvm-dev</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+Download and untar Tablix source distribution.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>wget http://www.tablix.org/releases/stable/tablix2-0.2.2.tar.gz</userinput>
+<prompt>$</prompt> <userinput>tar -xzf tablix2-0.2.2.tar.gz</userinput>
+<prompt>$</prompt> <userinput>cd tablix2-0.2.2</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+Build Debian package.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>fakeroot debian/rules binary</userinput>
+<prompt>$</prompt> <userinput>cd ..</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+Install the Debian package.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>su</userinput>
+<prompt>#</prompt> <userinput>dpkg --install tablix2_0.2.2-1_i386.deb</userinput>
+</screen>
+</listitem>
+
+</orderedlist>
+
+</sect2>
+</sect1>
+
+<sect1>
+<title>
+Installation from source
+</title>
+
+<orderedlist>
+<listitem>
+<para>
+Build and install supported versions of libxml2 and PVM3. If you don't have root access to your machine, you can install them in your home directory.  Be  sure  to  set <parameter>PVM_ROOT</parameter> and <parameter>PVM_ARCH</parameter> correctly in the latter case. See installation instructions included with libxml2 and PVM3 distributions for more information.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Download and untar Tablix distribution into your home directory.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>wget http://www.tablix.org/releases/stable/tablix2-0.2.2.tar.gz</userinput>
+<prompt>$</prompt> <userinput>tar -xzf tablix2-0.2.2.tar.gz</userinput>
+<prompt>$</prompt> <userinput>cd tablix2-0.2.2</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+Configure distribution. Check <userinput>./configure --help</userinput> for available options. Defaults should work in most cases.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>./configure</userinput>
+</screen>
+
+<para>
+If you don't have root privileges, you can specify <parameter>--prefix</parameter> to install Tablix into a subdirectory in your home directory.
+</para>
+
+<warning>
+<para>
+If the configure script can't find your PVM3 installation or the <parameter>--without-pvm3</parameter> flag was used, Tablix will be compiled in debug mode and a warning will be printed at the end of the configure process. 
+</para>
+<para>
+Tablix compiled in debug mode uses a linear genetic algorithm instead of a coarse grained parallel genetic algorithm. This makes debugging easier but also severely decreases the probability that Tablix will find an optimal solution to the given timetabling problem. Solving even moderately complex problems is impossible in this mode.
+</para>
+<para>
+Unless you are debugging the kernel or one of the modules you should always use PVM3 (even if you are going to use Tablix on a single machine).
+</para>
+</warning>
+
+</listitem>
+<listitem>
+
+<para>
+Compile. You can add some optimization flags by setting <parameter>CFLAGS</parameter> environment variable. Defining you CPU architecture with a parameter like <parameter>-march=athlon</parameter> can improve performance. See documentation for the version of C compiler you are using for more information. 
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>make CFLAGS=-march=pentium</userinput>
+</screen>
+
+</listitem>
+<listitem>
+<para>
+Install compiled binaries. If you specified a proper <parameter>--prefix</parameter> option above, you may not need to use root privileges.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>su</userinput>
+<prompt>#</prompt> <userinput>make install</userinput>
+</screen>
+
+</listitem>
+</orderedlist>
+</sect1>
+
+<sect1>
+<title>
+Clusters
+</title>
+
+<para>
+The same version of Tablix must be installed on all machines in the cluster. The <filename>tablix2_kernel</filename> executable must be located somewhere where the <filename>pvmd</filename> daemon will find it. This in most cases means that it must be in the default <varname>PATH</varname> for the user under which <filename>pvmd</filename> is running and / or the <varname>ep</varname> option in the PVM's <filename>hostfile</filename> must be set correctly. See PVM3 documentation for more details.
+</para>
+
+<para>
+The most straight forward way to install Tablix on a cluster is to repeat the installation steps described above on every machine. If all machines are identical, you can simplify this task by using a utility like <ulink url="http://clusterssh.sourceforge.net/">clusterssh</ulink>.
+</para>
+
+<para>
+A less boring way is to set up network booting for machines in the cluster (using a setup like the <ulink url="http://www.ltsp.org">Linux terminal server project</ulink>). You can also just use NFS exported directories to store the Tablix installation in. Install PVM, libxml2 and Tablix all in a NFS exported directory on a master computer. Then mount this directory on every computer in the cluster.
+</para>
+
+<para>
+Another way to do this is with bootable CDs. You can use <ulink url="http://www.kiberpipa.org/~tomaz/tom">Tablix on Morphix</ulink>, a modified version of Morphix that has Tablix already installed, together with  automatic cluster configuration tool. Any other bootable CD that supports PVM3 clusters can also be used.
+</para>
+
+<para>
+If you want to make your own bootable CD, you can find step by step instructions in Tablix on Morphix HOW-TO. 
+</para>
+
+</sect1>
+
+</chapter>
+<chapter>
+<title>
+Getting started
+</title>
+
+<para>
+After Tablix has been installed on your workstation follow these steps to test your installation. These are the basic steps required to obtain a solution to a timetabling problem. You will repeat them every time you will use Tablix (unless you will be using some front-end other than the default command line interface, in which case the front-end will do these steps for you).
+</para>
+
+<para>
+If you are running Tablix on a cluster, choose one machine to be the master node. You will control Tablix from that machine. Do the following steps only on that computer.
+</para>
+
+<orderedlist>
+<listitem>
+<para>
+First you have to describe your timetabling problem in the format that Tablix understands. Tablix uses an unified XML format to describe problem definitions and solutions to these problems.
+</para>
+
+<para>
+You can find some example configuration files in the <filename>examples/</filename> subdirectory. These steps presume that you are using the <filename>examples/sample2.xml</filename> configuration. See sections later in this document for instructions on how to write your own problem definitions. 
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>cd examples</userinput>
+</screen>
+
+</listitem>
+
+<listitem>
+<para>
+If you are running Tablix on a single machine and you have installed Tablix system-wide (e.g. you didn't supply any <parameter>--prefix</parameter> options to the <filename>./configure</filename> script) you probably do not need a PVM hostfile and you can skip this step. If you have problems starting Tablix later on one of the reasons can be that you need a hostfile with a correct <parameter>ep</parameter> parameter.
+</para>
+
+<para>
+If you are running Tablix on a cluster a hostfile is usually unavoidable. See PVM3 documentation for details. Following is an example hostfile for a cluster composed of three different machines.
+</para>
+
+<programlisting>
+orion   ep=/home/avian/tablix/src \
+        sp=7000
+dolphin ep=/home/avian/tablix/src \
+        sp=1600
+europa  ep=/home/avian/tablix-0.0.1/src \
+        sp=800 \
+        dx=/home/avian/src/pvm3/lib/pvmd
+</programlisting>
+
+<note>
+<para>
+The <parameter>sp</parameter> field is important. Try to match relative speeds of your machines as accurately as possible. This will help Tablix balance the load more evenly and will increase performance.
+</para>
+</note>
+</listitem>
+
+<listitem>
+<para>
+Start pvm. If you don't need a hostfile, you can omit it on the command line.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>pvm hostfile</userinput>
+</screen>
+
+<note>
+<para>
+Tablix does not automatically detect if new nodes have been added to the cluster while it is running. All nodes must be properly configured before Tablix starts.
+</para>
+</note>
+
+</listitem>
+
+<listitem>
+
+<para>
+Start Tablix. See <userinput>tablix2 -h</userinput> or the man page for a list of the available command line arguments.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix2 -n 10 -o test1_ sample2.xml</userinput>
+</screen>
+
+<para>
+The <parameter>-n</parameter> specifies the number of computational nodes Tablix will start on the cluster. For a single machine the default number (4) will usually be sufficient for simple problems. On a cluster of machines a good guess is N*4, where N is the number of machines.
+</para>
+
+<para>
+The <parameter>-o</parameter> option instructs Tablix to prefix all output files with <filename>test1_</filename>.
+</para>
+
+</listitem>
+
+<listitem>
+<para>
+Now you have to wait for Tablix to find a solution. Time depends on your configuration file, number of nodes, speed and architecture of nodes, etc. See below  for  the  explanation  of  numbers that show up the screen. On a reasonably fast machine (e.g. single Athlon XP 2500+) the example problem <filename>sample2.xml</filename> will take around 30 minutes to solve.
+</para>
+
+<para>
+You can track the progress of a running Tablix process by running <filename>tablix2_plot</filename> utility. It can draw a number of different graphs that show how successful is the algorithm at finding the solution to the problem. You have to run it from a terminal emulator running on X Window System.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix2_plot --conv-fitness test1_</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+If Tablix found the solution, it has written the solution to a number of files with names <filename>test1_result0.xml</filename>, <filename>test1_result1.xml</filename> and so on. The number of files should match the number of computational nodes specified with the <parameter>-n</parameter>. Each computational node will return its own result. These results will usually be very similar of even identical.
+</para>
+
+<para>
+XML files can be read directly, but in most cases you will want to convert them into a format that is easier to read by humans. One available option is to convert it to a web page (XHTML format) and open it in a browser.
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>tablix2_output -o my_timetable.html htmlcss test1_result1.xml</userinput>
+</screen>
+</listitem>
+
+<listitem>
+<para>
+You can now open the resulting timetable in you favorite browser and check the results:
+</para>
+
+<screen>
+<prompt>$</prompt> <userinput>firefox file://`pwd`/my_timetable.html</userinput>
+</screen>
+
+</listitem>
+</orderedlist>
+
+<figure>
+<title>Graphical representation of a typical Tablix session</title>
+<mediaobject>
+    <imageobject><imagedata fileref="images/files.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata fileref="images/files.png" format="PNG"/></imageobject>
+ </mediaobject>
+</figure>
+
+</chapter>
+<chapter>
+<title>
+Using Tablix
+</title>
+
+<sect1>
+<title>
+Introduction to genetic algorithms
+</title>
+
+<para>
+Tablix uses a modified genetic algorithm to solve timetabling problems. Genetic algorithm works by first evaluating a large number of random timetables (this group of timetables is called a <phrase>population</phrase>). It assigns a <phrase>fitness value</phrase> to each timetable. This fitness value indicates how well the timetable satisfies the restrictions given in the definition of the timetabling problem. Lower fitness values mean a better solution and fitness value 0 indicates a perfect solution. The type of genetic algorithm Tablix uses maintains a separate population on each computing node.
+</para>
+
+<note>
+<para>
+Fitness value 0 indicates a perfect solution, but solutions with fitness values greater than 0 may also be acceptable, depending on the problem description).
+</para>
+</note>
+
+<para>
+Genetic algorithm leaves the part of the population with lower fitness values unmodified and replaces the part of the population with higher fitness values with new timetables that are based on the first part. One such step of the algorithm (evaluation and replacement of the worse part of the population) is a called a <phrase>generation</phrase>.
+</para>
+
+<para>
+When an acceptable solution is found in the population, Tablix writes it into a file and exits.
+</para>
+
+<para>
+There are several important points you should keep in mind when using Tablix:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+The genetic algorithm isn't deterministic. Because it starts with a random population, the results will differ each time you run Tablix, even if you use exactly the same configuration file.
+</para>
+<para>
+Most users run Tablix several times and then choose the best solution.
+</para>
+</listitem>
+<listitem>
+<para>
+There is no way for Tablix to determine if a solution exists for given the timetabling problem. Tablix will do its best to find out any obvious flaws in the problem definition, but if it doesn't find any doesn't mean that the solution exists.
+</para>
+
+<para>
+If the solution doesn't exist then the genetic algorithm will never finish.
+</para>
+</listitem>
+
+<listitem>
+<para>
+The total size of the population determines how exhaustive search for the solution will be. The size of the population can be increased by increasing the number of computing nodes (the <parameter>-n</parameter> parameter) or by increasing the population of one node (the <parameter>popsize</parameter> algorithm parameter).
+</para>
+
+<para>
+Problems that are harder to solve require larger populations for Tablix to reliably find a solution.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1>
+<title>
+Tablix master process
+</title>
+
+
+<para>
+When you run <userinput>tablix2</userinput>, you actually start the master  process that will start the requested number (<parameter>-n</parameter> option) of slave processes (Tablix kernels) on the virtual machine. It will then multicast the configuration file to all the computing nodes and start listening for their reports.
+</para>
+
+<para>
+Tablix isn't very verbose by default. You can enable additional informative and debug messages with the <parameter>-d N</parameter>option, where <parameter>N</parameter> is an integer from 0 (only fatal error messages are shown) to 4 (display debug messages). Default is 2.
+</para>
+
+<para>
+Following is an explanation of the progress indicator that is shown at verbosity settings greater than 1:
+</para>
+
+<screen>
+[4000b] reports 87271 (0) at 1, 480.0 GPM, 00:00:05 elapsed, 4/4 running
+^               ^      ^     ^  ^          ^                 ^
+|               |      |     |  |          |    _____________|
+|               |      |     |  |          |   |             
+|               |      |     |  |          |   |_ Number of running  
+|               |      |     |  |          |      nodes / number of 
+|               |      |     |  |          |      nodes in the cluster.
+|               |      |     |  |          |
+|               |      |     |  |          |      Node stops when it finds
+|               |      |     |  |          |      an acceptable solution.
+|               |      |     |  |          |
+|               |      |     |  |          |_ Elapsed time since Tablix
+|               |      |     |  |             was started.
+|               |      |     |  |
+|               |      |     |  |_ Total generations per minute count for
+|               |      |     |      the cluster.
+|               |      |     |      
+|               |      |     |_ Population serial number
+|               |      |
+|               |      |_ 0 means that an acceptable solution was not found
+|               |         in the population. 1 means the population contains
+|               |         an acceptable solution.
+|               |
+|               |         This must be one for at least 300
+|               |         generations for Tablix to stop.
+|               |
+|               |_ Weighted sum of all errors
+|
+|_ PVM Task ID of the node that sent the last report.
+</screen>                         
+
+<para>
+You can press Ctrl-C (or send  SIGINT) to stop the process. Tablix will save its state in a number of files called <filename>save0.txt</filename>, <filename>save1.txt</filename>, etc. (it will prepend your prefix, if given). You can later resume the process by running Tablix with the <parameter>-r</parameter> parameter. You should not change the XML configuration file in any way between stopping and restoring a Tablix computation. You may however change the number of computing nodes.
+</para>
+
+<para>
+When all the criteria for an acceptable solution are satisfied, Tablix will output one XML file for each node (file name will be prefix + <filename>result0.xml</filename>, <filename>result1.xml</filename>, etc.). These files can then be processed with <filename>tablix2_output</filename> to produce a timetable in a format suitable for further processing or display.
+</para>
+
+<para>
+During the computation, Tablix saves the progress of the computation in files named <filename>conv0.txt</filename>, <filename>conv1.txt</filename>, etc. (unless you compiled Tablix with convergence information saving disable (<parameter>--disable-conv</parameter> <filename>./configure</filename> parameter). You can plot this data using <filename>tablix2_plot</filename> script. See the man page for more information.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Tablix timetabling model
+</title>
+
+<note>
+<para>
+See <ulink url="http://www.tablix.org/~avian/ttm2.pdf">Tablix timetabling model formal description</ulink> for more detailed description.
+</para>
+</note>
+
+<sect2>
+<title>
+Timetable information
+</title>
+
+<para>
+Timetable in Tablix is defined as a group of <phrase>events</phrase>. Each event (sometimes also called a <phrase>tuple</phrase>) uses a fixed number of resources. <phrase>Resources</phrase> are grouped into several <phrase>resource types</phrase>.
+</para>
+
+<para>
+In school scheduling, examples of resource types would be: teachers, groups of students, classrooms and timeslots. Each resource in the "teachers" resource type would represent on teacher. Each resource in the "groups of students" resource type would represent on group of students. Each resource in the "timeslots" resource type would represent on timeslot.
+</para>
+
+<para>
+Resource types are divided into two groups: <phrase>constant resource types</phrase> are assigned to events by the user. Tablix will never change these assignments. <phrase>variable resource types</phrase> on the other hand are usually not assigned to events by the user. Tablix will change this assignments in order to find a solution to the timetabling problem. The solution therefore consists of proper assignments of variable resources to the events.
+</para>
+
+<note>
+<para>
+Each event uses one resource of each defined resource type.
+</para>
+</note>
+
+<note>
+<para>
+It is possible to also assign variable resource to events. These assignments are called <phrase>hints</phrase>. Tablix will try to use them when finding the solution.
+</para>
+</note>
+
+<para>
+In the above example, teachers and groups of students would be constant resources and classrooms and timeslots would be variable resources. The user would assign teachers and groups of students to events (events would represent lectures in this case). Tablix will then try to find suitable time and place for lectures to take place.
+</para>
+
+<para>
+Resources can be defined one by one, as a single row of resources or as a two dimensional matrix of resources. A resource matrix for example is usually used for the time resource. Each column in the matrix then represents one day in the week.
+</para>
+
+<note>
+<para>
+It may seem that the fact that all events use exactly the same number of resources makes it impossible to apply this model to timetables where an event may use more than one event of a single resource type. In reality various timetable constraints (for example resource conflicts) allow this model to be very flexible and to also be applied to that kind of timetables.
+</para>
+</note>
+
+</sect2>
+<sect2>
+<title>
+Timetable constraints
+</title>
+
+<para>
+Each timetable constraint is defined by a Tablix kernel module (called a <phrase>fitness module</phrase>. For example, the <filename>sametime.so</filename> module in school scheduling ensures that no teacher and no student has two lectures scheduled at the same time.
+</para>
+
+<para>
+Different modules are intended for different purposes and make different assumptions at what resource types are defined in the configuration file. This means that to use a certain module, the timetabling problem must include certain resource types and sometimes even that some resource types must include for example a matrix of resources. At the time of writing, most modules are intended for school scheduling.
+</para>
+
+<para>
+You must assign a weight value to each module. Weights are used when calculating the fitness value of a timetable and define how much computational effort is used for reducing a certain type of errors. Each module can also be defined as either <phrase>mandatory</phrase> or <phrase>non-mandatory</phrase>. All fitness functions defined by mandatory must return zero errors in order for a timetable to be considered an acceptable solution. An example of a module that is always defined as mandatory is the <filename>sametime.so</filename> module mentioned above. A non-mandatory module would be a module that detects timetable features that are not wanted, but does not make a timetable impossible.
+</para>
+
+<note>
+<para>
+Mandatory modules should have larger weight values than non-mandatory modules in order for Tablix to reliably find a solution.
+</para>
+</note>
+
+<note>
+<para>
+Some modules do not define fitness functions. These modules ignore the weight and mandatory settings given to them.
+</para>
+</note>
+
+<para>
+You can find the descriptions of all modules included in the Tablix distribution in the Tablix modules reference manual. It is available <ulink url="http://www.tablix.org/releases/doc/modules">on-line</ulink> or in the <filename>doc</filename> subdirectory in the source tree.
+</para>
+
+<para>
+Each fitness module can define one or more <phrase>restrictions</phrase> and can accept several <phrase>module options</phrase>. Two types of restrictions exist: <phrase>event restrictions</phrase> that are applied to events and <phrase>resource restrictions</phrase> that are applied to resources. A resource restriction that is defined by a module can sometimes only be applied to resources of a certain resource type and can sometimes be applied to any defined resource.
+</para>
+</sect2>
+</sect1>
+
+<sect1>
+<title>
+Setting weights
+</title>
+
+<para>
+Weight values tell Tablix how exactly to shape the timetable. Setting weights can be tricky because wrong combinations usually lead to either sub-optimal timetables or Tablix working in an endless loop.
+</para>
+
+<para>
+There is currently no way to  check  weights values for sanity. You will have to experiment and  see  which  values  fit best. 
+</para>
+
+<para>
+The best way to start is to set all weights for non-mandatory modules to a very low value (for example 1) and all weight for mandatory modules to a very high value (for example 500). This ensures that Tablix will direct most effort to reducing the number of errors that are keeping the solution from being acceptable.
+</para>
+
+<para>
+If Tablix does not finish after a reasonable time (hard problems can take a long time to solve), then use the <filename>tablix2_plot</filename> utility with <parameter>--functions</parameter> parameter to see which mandatory fitness functions are keeping Tablix from finding a solution.
+</para>
+
+<para>
+Look at the far right end of the graph. Return values of mandatory fitness functions are plotted with thicker lines. If Tablix did not finish even after a large number of populations, one or more of the mandatory functions will probably have a flat line at the end at some value higher than zero. These mandatory functions are keeping Tablix from finding a solution. You should increase the weight values for these functions and try again. Use this procedure until you find the combination of weights that will work. If you can't find the combination (it shouldn't take more than a one or two tries), then either the problem is too hard for the size of the population you are using (increase the <parameter>-n</parameter> parameter and add more hardware into the cluster). 
+</para>
+
+<para>
+When you have the combination of the weights for the mandatory modules, you can try to adjust the weights for non-mandatory modules. Take a look at the produced timetables and/or the convergence graph and see which non-mandatory errors are the most outstanding. Increase the weight value for the module that is responsible for that type of errors and try again. When you increase non-mandatory weights to the point just before Tablix will no longer find a solution because it is putting to much effort towards the non-mandatory errors, you have found the optimal setting.
+</para>
+
+<note>
+<para>
+The gain in timetable quality achieved by this slow tweaking of the non-mandatory values is usually low.
+</para>
+</note>
+
+</sect1>
+
+<sect1>
+<title>
+Configuration file format
+</title>
+
+
+<para>
+Tablix uses a XML formatted file to store timetable information. XML consists of tags, nested in each other. Each tag can have one or more properties and some tags can have text content in them. The top level tag, which should include all other tags, is called the root tag.
+</para>
+
+<note>
+<para>
+The XML Document Type Definition document for the Tablix configuration format can be found <ulink url="http://www.tablix.org/releases/dtd/">on-line</ulink>.
+</para>
+</note>
+
+<tip>
+<para>
+The most common mistake new users make is to put <parameter>&lt;restriction&gt;</parameter> tags in wrong places in the XML file. Tablix will in most cases silently ignore unknown extra tags in the XML file and will therefore also ignore any <parameter>&lt;restriction&gt;</parameter> tags that are not in the right places. 
+</para>
+<para>
+If you are not sure if your XML syntax is correct or if Tablix seems to be ignoring some of your <parameter>&lt;restriction&gt;</parameter> tags, you can use the <filename>xmllint</filename> utility that comes with libxml2 to check your XML file against the Document Type Definition. Type <userinput>xmllint --valid --noout your-config-file.xml</userinput> at the command line. If it returns no error messages then the XML is most likely syntactically correct.
+</para>
+</tip>
+
+<para>
+Tablix configuration consists of several parts. They are delimited by top 
+level tags. The root tag should be named <parameter>&lt;ttm&gt;</parameter>. The top level tag must also contain the <parameter>version</parameter> property that contains version number of the format. This version number should be "0.2.0"
+for use with Tablix kernels versions 0.2.1 and later.</para>
+
+<note>
+<para>
+All strings (resource names, restriction types, etc.) that appear in the XML file are case sensitive. You can have for example three different resources in the configuration file with names "ALPHA", "Alpha" and "alpha".
+</para>
+</note>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd"&gt;
+
+&lt;ttm version="0.2.0"&gt;
+        .
+        .
+        .
+&lt;/ttm&gt;
+</programlisting>
+
+<sect2>
+<title>
+Title, address, author
+</title>
+
+<para>
+First part of the configuration is optional. You can include the information about the author of the timetable, the address of the institution and the title of the timetable under the <parameter>&lt;info&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;info&gt;
+        &lt;title&gt;Example high school&lt;/title&gt;
+        &lt;address&gt;Somewhere&lt;/address&gt;
+        &lt;author&gt;Someone&lt;/author&gt;
+&lt;/info&gt;
+</programlisting>
+
+<para>
+This information will be printed on the top of the timetable when exported into the HTML format.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Modules
+</title>
+
+<para>
+Next part of the configuration defines the modules that will be used by Tablix. This part and all subsequent parts of the configuration are mandatory. 
+</para>
+
+<para>
+Modules are listed with <parameter>&lt;module&gt;</parameter> tags inside the <parameter>&lt;modules&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;modules&gt;
+        &lt;module name="sametime.so" weight="200" mandatory="yes"/&gt; 
+        .
+        .
+        .
+&lt;modules&gt;
+</programlisting>
+
+<para>
+Some modules may accept module options. They can be specified with  <parameter>&lt;option&gt;</parameter> tags. Each module option has a name (specified with the <parameter>name</parameter> property) and a value.
+ </para>
+
+<programlisting>
+&lt;modules&gt;
+        &lt;module name="holes.so" weight="6" mandatory="no"&gt;
+                &lt;option name="resourcetype"&gt;class&lt;/option&gt;
+        &lt;/module&gt;
+        .
+        .
+        .
+&lt;/modules&gt;
+</programlisting>
+
+<note>
+<para>
+With the selection of modules you choose the group of errors for which Tablix will try to optimize your timetable. With weight values you can tell Tablix which errors are more important than others.
+</para>
+</note>
+
+<note>
+<para>
+Each module can define one or more restriction types. See the Modules reference manual for more information on which module defines which restrictions. Tablix will ignore any unknown restriction types in the configuration file. A warning is printed for each unknown restriction encountered if the verbosity level is set to 3 or higher (default is 2).
+</para>
+</note>
+
+<tip>
+<para>
+You can find working examples for all modules in the <filename>ttf/tests/</filename> subdirectory. Each module included in the distribution has one or more test cases stored there. These test cases are used by the Tablix Testing Framework to automatically check if modules are working correctly. For now, you can treat these files as normal problem descriptions and ignore the extra Scheme code at the beginning.
+</para>
+</tip>
+
+</sect2>
+
+<sect2>
+<title>
+Resources
+</title>
+
+<para>
+All resources types that will be used in your timetable should be defined under the <parameter>&lt;resources&gt;</parameter> tag. 
+</para>
+
+<programlisting>
+&lt;resources&gt;
+        &lt;constant&gt;
+        .
+        .
+        .
+        &lt;/constant&gt;
+        &lt;variable&gt;
+        .
+        .
+        .
+        &lt;/variable&gt;
+&lt;/resources&gt;
+</programlisting>
+
+<para>
+Constant resource types should be defined under the <parameter>&lt;constant&gt;</parameter> tag and variable resource types under the <parameter>&lt;variable&gt;</parameter> tag.
+</para>
+
+<para>
+A resource type is defined with a <parameter>&lt;resourcetype&gt;</parameter> tag. Name of the type is specified inside a <parameter>type</parameter> property.
+</para>
+
+
+<programlisting>
+&lt;constant&gt;
+        &lt;resourcetype type="teacher"&gt;
+                .
+                .
+                .
+        &lt;/resourcetype&gt;
+        .
+        .
+        .
+&lt;/constant&gt;
+</programlisting>
+
+
+<para>
+Each resource type can contain one or more resources. A single resource is defined with a <parameter>&lt;resource&gt;</parameter> tag inside <parameter>&lt;resourcetype&gt;</parameter>. Each resource must have its name defined with a <parameter>name</parameter> property.
+</para>
+
+<note>
+<para>
+Two resources of the same resource type can not have identical names.
+</para>
+</note>
+
+<programlisting>
+&lt;resourcetype type="teacher"&gt;
+        &lt;resource name="Prof. SJK 1"/&gt;
+        .
+        .
+        .
+&lt;/resourcetype&gt;
+</programlisting>
+
+<para>
+If some modules have defined resource restrictions for the defined resource types, then you can apply a resource restriction to a resource with a <parameter>&lt;restriction&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;resourcetype type="class"&gt;
+        &lt;resource name="3 B"&gt;
+                &lt;restriction type="conflicts-with"&gt;3 MA-FIZ&lt;/restriction&gt;
+        &lt;/resource&gt;
+        .
+        .
+        .
+&lt;/resourcetype&gt;
+</programlisting>
+
+<para>
+Each restriction has a type (specified with the <parameter>type</parameter> property) and a value.
+</para>
+
+<para>
+A row of resources can be defined with a <parameter>&lt;linear&gt;</parameter> tag. This is a simple way to defined a larger number of identical resources.
+</para>
+
+<programlisting>
+&lt;resourcetype type="room"&gt;
+        &lt;linear name="K#" from="1" to="5"&gt;
+                &lt;restriction type="capability"&gt;Kemija&lt;/restriction&gt;
+        &lt;/linear&gt;
+        .
+        .
+        .
+&lt;/resourcetype&gt;
+</programlisting>
+
+<para>
+You must assign a name to the row of resources with the <parameter>name</parameter> property. The character "#" in the name will be replaced by an integer ranging from the number in the <parameter>from</parameter> property to the number in the <parameter>to</parameter> property.
+</para>
+
+<para>
+Resource restrictions can be applied in the same way as with the <parameter>&lt;resource&gt;</parameter> tag.
+</para>
+
+<para>
+The example above will define 5 resources with names from K1 to K5. All resources will have restriction "capability" applied.
+</para>
+
+<para>
+A matrix of resources is defined in a similar way with the <parameter>&lt;matrix&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;resourcetype type="time"&gt;
+        &lt;matrix width="5" height="8"/&gt;
+&lt;/resourcetype&gt;
+</programlisting>
+
+<para>
+The <parameter>width</parameter> and <parameter>height</parameter> properties define the dimensions of the matrix. You can not define a name for the resources in the matrix. All resources will be named "X Y", where X is the X coordinate of the resource in the matrix and Y is the Y coordinate.
+</para>
+
+<para>
+Resource restrictions can be applied to a resource matrix in the same way as with the <parameter>&lt;resource&gt;</parameter> tag.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Events
+</title>
+
+<para>
+Events must be defined with <parameter>&lt;event&gt;</parameter> tags under the <parameter>&lt;events&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;events&gt;
+        &lt;event name="SJK" repeats="4"&gt;
+                .
+                .
+                .
+        &lt;/event&gt;
+        .
+        .
+        .
+&lt;/events&gt;
+</programlisting>
+
+<para>
+Each event has a name defined with the <parameter>name</parameter>. Two different events can share the same name, however this practice is not recommended since it may confuse some modules.
+</para>
+
+<para>
+The <parameter>repeats</parameter> property defines how many times this event is repeated. For example if an event has <parameter>repeats</parameter> equal to 4, this has the same effect as if the the <parameter>&lt;event&gt;</parameter> tag defining this event would be copied four times in the configuration file.
+</para>
+
+<note>
+<para>
+The <parameter>repeats</parameter> has no other hidden effects. It exists only for convenience when writing XML files by hand. This means that the following two examples are identical as far as Tablix is concerned. In fact if you look at the XML file with the problem solution you will see that all <parameter>&lt;event&gt;</parameter> tags are expanded so that none have <parameter>repeats</parameter> greater than 1.
+</para>
+
+<para>
+This example...
+</para>
+
+<programlisting>
+&lt;event name="SJK" repeats="3"&gt;
+        .
+        .
+        .
+&lt;/event&gt;
+</programlisting>
+
+<para>
+...is identical to this one:
+</para>
+
+<programlisting>
+&lt;event name="SJK" repeats="1"&gt;
+        .
+        .
+        .
+&lt;/event&gt;
+&lt;event name="SJK" repeats="1"&gt;
+        .
+        .
+        .
+&lt;/event&gt;
+&lt;event name="SJK" repeats="1"&gt;
+        .
+        .
+        .
+&lt;/event&gt;
+</programlisting>
+</note>
+
+<para>
+Resources that are used by an event are defined with the <parameter>&lt;resource&gt;</parameter> tags inside the <parameter>&lt;event&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;event name="SJK" repeats="4"&gt;
+        &lt;resource type="teacher" name="Prof. SJK 1"/&gt;
+        &lt;resource type="class" name="1 A"/&gt;
+&lt;/event&gt;
+</programlisting>
+
+<para>
+<parameter>&lt;resource&gt;</parameter> tags must have <parameter>type</parameter> and <parameter>name</parameter> properties, defining resource type and name of the resource. It is mandatory to assign one resource of each constant resource type to each event. Optionally, you can also assign one resource of some or all variable resource types to some or all events. Such assignments will be used as hints by Tablix kernel. They may be used in the final solution if they will help to reduce the fitness value of the timetables.
+</para>
+
+<note>
+<para>
+Please note that these hints are not equal to the "fixed tuples" in 0.1 branch. If you would like to permanently assign some variable resources to an event, you have to use a module that defines a restriction that implements this. 
+</para>
+<para>
+For example, to schedule an event at a fixed time, you can use the module <filename>fixedtime.so</filename>.
+</para>
+</note>
+
+<para>
+If some modules have defined event restrictions, then you can apply an event restriction to an event with a <parameter>&lt;restriction&gt;</parameter> tag inside the <parameter>&lt;event&gt;</parameter> tag.
+</para>
+
+<programlisting>
+&lt;event name="KEM" repeats="2"&gt;
+        &lt;resource type="teacher" name="Prof. KEM 2"/&gt;
+        &lt;resource type="class" name="1 B"/&gt;
+        &lt;restriction type="capability"&gt;Kemija&lt;/restriction&gt;
+&lt;/event&gt;
+</programlisting>
+
+<para>
+As with resource restrictions each event restriction has a type (specified with the <parameter>type</parameter> property) and a value.
+</para>
+
+</sect2>
+</sect1>
+</chapter>
+<chapter>
+<title>
+Native language support
+</title>
+
+<sect1>
+<title>
+User interface translation
+</title>
+
+<para>
+Tablix uses GNU gettext  to  provide  translated  run-time  messages  and predefined text in XHTML output. Translation  will  occur automatically if your environment is set  correctly, Tablix wasn't compiled with <parameter>--disable-nls</parameter> option and there is a .po file for your language available in Tablix distribution. On some systems locale(1) man page holds some details on setting up localization.
+</para>
+
+<para>
+Run-time message translation involves some CPU overhead. This  should  not be noticeable on recent machines, but if you will be running Tablix  on  older hardware I recommend you compile Tablix with the <parameter>--disable-nls</parameter> option.
+</para>
+
+<para>
+Messages from all nodes in the cluster will be translated to the  language of the master process. It is possible however to run a cluster where  a  part of machines are running Tablix with NLS disabled. In that case messages  from those machines will be displayed in English by the master process.
+</para>
+
+<note>
+<para>
+Please note that this section covers only the default command-line interface to the kernel. Any graphical user interfaces may have different levels of support for native languages.
+</para>
+</note>
+
+<para>
+New Tablix translations are always welcome at <email>tomaz.solc@tablix.org</email>. See <filename>ABOUT-NLS</filename> file for more information about gettext and translations.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Text encoding support
+</title>
+
+<para>
+Tablix stores internally all strings in the UTF-8 encoding.  You  can  use any encoding for the XML configuration file, as long as it can  be  converted to UTF-8 by your libxml2 library. Remember  to  declare  the encoding of your file in the XML prolog. For example:
+</para>
+
+<programlisting>
+&lt;?xml version="1.0" encoding="iso-8859-2" ?&gt;
+</programlisting>
+
+<para>
+The XHTML output always uses UTF-8 encoding and is in  strict  compliance with XHTML 1.1 standard. It should preserve all non-English characters  that 
+ are used in the XML configuration.
+</para>
+
+</sect1>
+</chapter>
+
+
+<chapter>
+<title>
+Compatibility with older versions
+</title>
+
+<sect1>
+<title>
+Changes between releases 0.3.3 and 0.3.4
+</title>
+
+<para>
+Some changes have been made to the module loading code to make Tablix portable to systems that do not use <filename>.so</filename> extension for dynamic libraries.
+</para>
+<para>
+Since release 0.3.4 module names in <parameter>&lt;module&gt;</parameter> tags can be written without the <filename>.so</filename> extension. Tablix kernel will automatically add the proper extension at runtime. To remain backward compatible with problem descriptions written for earlier versions Tablix also still accepts module names written with the <filename>.so</filename> extension. In that case the <filename>.so</filename> part will be automaticaly replaced on systems that use a different extension.
+</para>
+
+<para>
+It is recommended that new problem descriptions do not use the <filename>.so</filename> extension with module names.
+</para>
+</sect1>
+
+<sect1>
+<title>
+Changes between releases 0.3.1 and 0.3.2
+</title>
+
+<para>
+A design error has been discovered in the dependent tuples functionality of Tablix 0.3.1. To deal with this problem the part of the kernel API that provides support for updater functions has been redesigned in Tablix 0.3.2.
+</para>
+
+<para>
+Any fitness modules using updater functions in Tablix 0.3.1 will not work with with Tablix 0.3.2. These modules have to be rewritten to use the new API if you wish to use them with Tablix 0.3.2 and later. This is recommended in all cases since the design error mentioned above can introduce subtle errors in the timetables produced from problem descriptions using these modules (see <ulink url="http://www.tablix.org/archives/2006-04-07T16_00_44.html">Design error in Tablix 0.3.1</ulink> for more information).
+</para>
+
+<note>
+<para>
+The new API is designed to be as similar to the old one as possible and is in some cases even easier to use. In most cases only minor modifications are necessary. See Tablix modules HOW-TO, part 1, for more information.
+</para>
+</note>
+
+<para>
+Modules written for Tablix 0.3.1 that do not use updater functions will work on Tablix 0.3.2 without modifications. Tablix 0.3.2 also remains source and binary compatible with modules written for the 0.3.0 release.
+</para>
+</sect1>
+
+<sect1>
+<title>
+Changes between branches 0.1 and 0.3
+</title>
+
+<para>
+Tablix kernel has been completely rewritten between these two stable branches. Because of the large difference in features there is no straightforward way of migrating configuration files and modules. 
+</para>
+
+<para>
+Care has been taken to rename all installed files (executables from the branch 0.3 are prefixed with <filename>tablix2</filename> compared with <filename>tablix</filename> in branch 0.1). Therefore one version of Tablix from each branch can be installed on the same machine or cluster without interference.
+</para>
+
+<para>
+Some modules have been renamed during the 0.2 development branch and sometimes multiple modules have been merged together into a more general module. Following is a list of modules that were available during the 0.1 branch together with the names of modules that are available in the 0.3 branch that provide identical or similar functionality. Please note that this list reflects the situation at the time of writing of this manual. You can always find an up-to-date list of modules in the 0.3 branch at <ulink url="http://www.tablix.org">tablix.org</ulink>.
+</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<filename>
+class_freeperiod.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality. <filename>freeperiod.so</filename> module provides similar functionality for teachers.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+double_period.c
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>consecutive.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+forcesametime.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>sametimeas.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+more_teachers.so
+</filename>
+</term>
+<listitem>
+<para>
+The same functionality can be achieved by using the <parameter>conflicts-with</parameter> restrictions defined by the <filename>sametime.so</filename> module.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+placecapability.so
+</filename>
+</term>
+<listitem>
+<para>
+Identical functionality provided by a module with the same name.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+preferred.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality. A mandatory restriction of this type can be achieved by using the <filename>fixedtime.so</filename> module.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+sametime.so
+</filename>
+</term>
+<listitem>
+<para>
+Identical functionality provided by a module with the same name.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+student_afternoon.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+student_freemorning.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>freemorning.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+student_holes.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>holes.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+student_perday.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>perday.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+student_walk.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>walk.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_dispersion.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_morning.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_notsameday.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_preferred.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality. A mandatory restriction of this type can be achieved by using the <filename>fixedtime.so</filename> module.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_sameperiod.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+subject_sameroom.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_afternoon.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_dayoff.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>freeperiod.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_first_last.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_freemorning.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>freemorning.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_holes.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>holes.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_maxperday.so
+</filename>
+</term>
+<listitem>
+<para>
+No module is currently available with this functionality.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+teacher_perday.so
+</filename>
+</term>
+<listitem>
+<para>
+Replaced by <filename>perday.so</filename>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<filename>
+timeplace.so
+</filename>
+</term>
+<listitem>
+<para>
+Identical functionality provided by a module with the same name.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2>
+<title>
+Converting configuration files
+</title>
+
+<para>
+One way to convert configuration files from one format to the other is to use <ulink url="http://gtablix.homelinux.org/wordpress">G-Tablix</ulink>. At the time of writing it supports reading and writing to both formats, so it is possible to read a file in the old format and write the file in the new format. 
+</para>
+
+<para>
+Be warned though that code for writing files in the new format currently contains bugs. It is recommended that you check the converted files by hand before using them.
+</para>
+
+<para>
+Arief M Utama also made a specialized utility for converting problem descriptions from the old format to the new one. More information about his program is available in the <ulink url="http://www.tablix.org/wiki/wiki.pl?TabConv">Tablix Wiki</ulink>.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Porting modules
+</title>
+
+<para>
+Because of the major changes in the kernel API there is currently no automatic way to convert module source code to fit the new API. Modules need to be manually ported to the new kernel.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+<chapter>
+<title>
+Troubleshooting
+</title>
+
+<sect1>
+<title>
+Frequently asked questions
+</title>
+
+<sect2>
+<title>
+General
+</title>
+
+<variablelist>
+<varlistentry>
+<term>
+Q: Is there a graphical front end for Tablix?
+</term>
+<listitem>
+<para>
+Yes. Bo&scaron;tjan &Scaron;peti&ccaron; released the first version of G-Tablix in August 2004. G-Tablix is a GTK front end for Tablix written in Perl. See <ulink url="http://gtablix.homelinux.org/wordpress">G-Tablix home page</ulink> for more information.
+</para>
+
+<para>
+You can also use one of the free general-purpose graphical XML editors available (you can find a document type definition file in the <filename>examples/</filename> subdirectory).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Is there a Microsoft Windows version?
+</term>
+<listitem>
+<para>
+Maybe. It is theoretically possible to compile Tablix under a UNIX-emulation layer like <ulink url="http://www.cygwin.com/">Cygwin</ulink>. I know it is supported by both PVM3 and libxml. However as far as I know, nobody actually tried to compile Tablix on that platform. If you are brave enough to be the first to try, please send a mail to the mailing list (or even better, make a page on the Wiki about how you did it).
+</para>
+
+<para>
+You can still  run  Tablix  on  a  machine that has Microsoft Windows installed by using a bootable CD or by booting from network. 
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: I have to add a certain constraint to my timetabling problem. How do I do that in Tablix?
+</term>
+<listitem>
+<para>
+Tablix distribution comes with a number of modules that implement the most common used restrictions. See the Modules reference manual for details on which module implements which restriction and how to use it in your timetabling problem.
+</para>
+<para>
+Some more complicated restrictions can be implemented by using a combination of simpler restrictions from different modules. There are to many of these combinations to document them all. Use some imagination.
+</para>
+<para>
+If you really can't find any way specifying the constraint you want with the existing set of modules, you will probably have to write a new module. Sometimes only some minor modifications to existing modules are needed, so look into that first! See Modules HOW-TO, part 1 for more information on how to write fitness modules.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Will you write the fitness module I need for me?
+</term>
+<listitem>
+<para>
+A: Not likely. Tablix has a modular design exactly because the author does not have time to implement every single requirement needed by every user. The best I can do is to answer occasional questions on the mailing list.
+</para>
+<para>
+You are of course welcome to contribute your modules to the distribution and make life easier for other users that may need the same functionality.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Tablix won't stop even after a long time. All the lines scrolling up in my terminal show the same fitness. Progress indicator shows that no acceptable solutions have been found. Convergence (plotted with <filename>tablix2_plot</filename>) graph  shows  a  long  horizontal line at the end. *
+</term>
+<listitem>
+<para>
+A1: The number one reason for this is that you have given Tablix a problem that is impossible to solve. Tablix has only a limited ability to check problem descriptions for errors. A typical example of an error that prevents Tablix from finding a solution is that one restriction forces an event to be using a specific resource and another restriction forbids the same event from using the same resource (and both restrictions are mandatory).
+ </para>
+
+<para>
+A2: The population of the genetic  algorithm  has  converged  to  a  local minimum. This can always happen. Try running Tablix again. You can reduce the probability of premature convergence by increasing the number of nodes in the  cluster  (see the <parameter>-n</parameter> parameter). Alternatively you can increase the weights  assigned  to mandatory errors. Note that more complex a  timetable  is  a  bigger  cluster you need to solve it with Tablix.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Tablix won't stop even after a long time. Progress indicator in  my terminal shows different fitness values. Convergence  graph  shows  a  chopped horizontal line (line jumping up and down) at the end. This can sometimes  be seen as a thick line at the end of the graph if the graph is very compressed.
+</term>
+<listitem>
+<para>
+A: Good question. This happens occasionally with  no  apparent  reason.  I have two theories, first one a bit more interesting then the  other.  If  you notice Tablix behaving like that please send  me  a  mail  and  describe  the circumstances. It will help a lot.
+</para>
+<para>
+Theory 1: Genetic algorithm may become unstable with  certain  parameters. 
+I  think  this  can  happen  when  the  fitness  function  begins  to  behave 
+chaotically. This behavior can be the effect of some  parts  of  the  fitness 
+function strongly opposing each other  (meaning  that  solving  a  number  of 
+problems A spawns approximately the same  number  of  problems  B,  and  vice 
+versa). This would explain why removing some restrictions  usually  helps  in 
+this case.
+</para>
+
+<para>
+Theory 2: This is a very long-lived and hard-to-spot bug in Tablix.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Timetables created with Tablix aren't as good as they could be. **
+</term>
+<listitem>
+<para>
+A: Tablix, as is the case with any program using a genetic algorithm,  isn't  perfect.  It will find a different solution each time you run it. Try  running Tablix multiple times and then choose the best solution.
+</para>
+<para>
+You can try to identify which errors are the most common in the generated timetable (see saved  convergence info or use the <filename>tablix2_plot</filename> utility). Increase the weights for those errors.
+</para>
+<para>
+You can get better results by increasing the total size of the population. This can be done either by increasing the number of computing nodes (the <parameter>-n</parameter> parameter) or by increasing the population of one node (the <parameter>popsize</parameter> algorithm parameter). This will of course result in fewer generations per minute and it will take Tablix longer to find a result unless you increase the computing power of the cluster (e.g. add more machines) at the same time.
+</para>
+<para>
+You can also try changing some algorithm parameters. tablix2(1) man page lists all available parameters together with their descriptions. For example, increasing the <parameter>localstep</parameter> parameter will usually result in better results and slower computation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: I have been to question *, then to question **, then to * and back again. Now I'm at question *. What else can I do.
+</term>
+<listitem>
+<para>
+A: You have probably reached the optimal timetable  Tablix  can  make  for you out of the configuration you gave it. Only thing you can do is to  either change your data or hack the  Tablix's  genetic  algorithm.  If  you  do  the latter, send me a mail. I would love to hear from you.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+Q: Some nodes won't send in their population  when  I  press  Ctrl-C.
+</term>
+<listitem>
+<para>
+A: This is a bug in some older versions of PVM3.
+</para>
+</listitem>
+</varlistentry>
+
+    <varlistentry>
+    <term>
+    Q: All nodes will send in the population when I press Ctrl-C,  but  Tablix 
+ will still wait as if some nodes haven't sent it.
+    </term>
+    <listitem>
+    <para>
+    A: This is a bug in some older versions of PVM3.
+    </para>
+    </listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term>
+    Q: I still don't understand.
+    </term>
+    <listitem>
+    <para>
+A: Read this file again. Then read everything under <filename>doc</filename> subdirectory. Go through example files in the <filename>example</filename> subdirectory. Try experimenting first. If you still don't know where to start, send an email to the mailing list and somebody will help you.
+    </para>
+    </listitem>
+    </varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>
+Error messages
+</title>
+
+<variablelist>
+    <varlistentry>
+    <term>
+    Q: I get the following error: <computeroutput>libpvm [t40002]: tablix: Not Found</computeroutput>
+    </term>
+    <listitem>
+    <para>
+    A: <filename>pvmd</filename> can't find <filename>tablix2_kernel</filename> executable. Check the <parameter>ep</parameter> option in your <filename>hostfile</filename> (<userinput>man pvmd</userinput>), check <parameter>PATH</parameter> environment variable. For some unknown reason this also happens if you are using IP addresses instead of hostnames in your <filename>hostfile</filename>.
+    </para>
+    </listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term>
+    Q: I get the following error when compiling on NetBSD: <computeroutput>`master.c:262: `LC_ALL' undeclared (first use in this function)</computeroutput>
+    </term>
+    <listitem>
+    <para>
+    A: Use <userinput>./configure --with-included-gettext</userinput>.
+    </para>
+    </listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term>
+    Q: When I run PVM3 it just waits for a few minutes without displaying the command prompt, then prints <computeroutput>Terminated</computeroutput> and exits without any other explanation. No additional error messages can be found in the logs.
+    </term>
+    <listitem>
+    <para>
+    A: This seems to be a weird feature / bug in PVM3. The usual cause of this behavior is that the contents of <filename>/etc/hostname</filename> on one of the machines in the cluster is not equal to the DNS hostname of that machine. For example: If you can ping a machine in the cluster using the hostname <userinput>node4.cluster.lan</userinput>, then the contents of the <filename>/etc/hostname</filename> on that machine should be <userinput>node4</userinput> and nothing else.
+    </para>
+    </listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term>
+    Q: What do <computeroutput>Domain '12' for resource type 'room' is empty</computeroutput> and similar errors mean?
+    </term>
+    <listitem>
+    <para>
+    A: The direct meaning of this error message is that Tablix detected an inconsistency in the problem description. Your timetabling problem does not have a solution because one or more events can not be assigned to any defined room. This error should be followed with some more error messages that should give you some pointers on where to look for the cause.
+    </para>
+
+    <para>
+    In practice this error often means that you have made a mistake in one of the restrictions. For example a typographical error in a <parameter>capability</parameter> restriction can cause this.
+    </para>
+    </listitem>
+    </varlistentry>
+</variablelist>
+</sect2>
+
+    </sect1>
+
+</chapter>
+
+<chapter>
+<title>
+Legal
+</title>
+
+<sect1>
+<title>
+Contact
+</title>
+
+<para>
+Please direct any questions, suggestions and bug reports to the <phrase>tablix-list</phrase> mailing list. Instructions on how to subscribe and unsubscribe are available are available from the <ulink url="http://www.tablix.org/articles/list.html">Tablix home page</ulink>.
+</para>
+
+<para>
+Author can be contacted at <email>tomaz.solc@tablix.org</email>.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Copyright
+</title>
+
+<para>
+<emphasis>
+TABLIX, PGA general timetable solver. Copyright (c) 2002-2006 Toma&zcaron; &Scaron;olc.
+</emphasis>
+</para>
+
+<para>
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. 
+</para>
+
+<para>
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+</para>
+
+<para>
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
+</para>
+
+<para>
+<emphasis>
+TinyScheme, Copyright (c) 2000, Dimitrios Souflis. All rights reserved.
+</emphasis>
+</para>
+
+<para>
+Exact distribution terms can be found in the appendix.
+</para>
+
+</sect1>
+</chapter>
+
+&GPL;
+
+<appendix>
+<title>
+TinyScheme license terms
+</title>
+
+<para>
+Copyright (c) 2000, Dimitrios Souflis.
+All rights reserved.
+</para>
+
+<para>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Neither the name of Dimitrios Souflis nor the names of the
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR 
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</para>
+</appendix>
+</book>

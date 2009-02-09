@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>consecutive.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>consecutive.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds support for events that must be scheduled adjacent to one
+another. This module uses updater functions, so the weight and mandatory
+values are ignored.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+<h3>consecutive</h3>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled consecutively.</p>
+<p>Please note that this module distinguishes events by the 
+assignments of constant resources and event names. The way events are 
+defined in the XML file has no effect. The following two examples will 
+therefore both result in one block of four consecutive "Lecture" events.</p>
+<p>Example 1:</p>
+<pre>&lt;event name ="Lecture" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+<p>Example 2:</p>
+<pre>&lt;event name ="Lecture" repeats="4"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+<p>If you would like to have two blocks of two consecutive "Lecture" events, 
+you must either change the names of two events like in the following example 
+or use the periods-per-block restriction.</p>
+<pre>&lt;event name ="Lecture 1" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture 2" repeats="2"&gt;
+	&lt;resource type="teacher"  name="A"/&gt;
+	&lt;resource type="class"  name="B"/&gt;
+	&lt;restriction type="consecutive"/&gt;
+&lt;/event&gt;</pre>
+<h3>periods-per-block</h3>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled blocks of N consecutive events. If the number of repeats is
+not divisible by N, then one block will have less than N events.</p>
+<p>Events in the following example will be scheduled in two blocks of three
+consecutive events, two blocks of two consecutive events and one single
+event.</p>
+<pre>&lt;event name ="Lecture" repeats="6"&gt;
+	&lt;resource type="teacher" name="A"/&gt;
+	&lt;resource type="class" name="B"/&gt;
+	&lt;restriction type="periods-per-block"&gt;3&lt;/restriction&gt;
+&lt;/event&gt;
+&lt;event name ="Lecture" repeats="5"&gt;
+	&lt;resource type="teacher" name="A"/&gt;
+	&lt;resource type="class" name="B"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+<li>Multiweek scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p><h2>Credits</h2><p><p>
+Original idea for this module by Nick Robinson (npr@bottlehall.co.uk).
+Module was later rewritten to serve as an example for the new updater 
+function feature in 0.3.1 by Tomaz Solc.</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

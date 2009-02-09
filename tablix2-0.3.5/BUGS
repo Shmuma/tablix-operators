@@ -1,0 +1,10 @@
+
+ Known bugs
+ ----------
+
+    - Random  number  generation  can  be  a  problem  on  some  architectures 
+ according to rand(3) man page.
+
+    - tmpnam() function is used.
+
+ $Id: BUGS,v 1.1 2002/05/05 14:05:06 avian Exp $

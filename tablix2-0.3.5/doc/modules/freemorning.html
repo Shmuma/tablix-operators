@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>freemorning.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>freemorning.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds a weight if a constant resource of the specified type 
+has the first event of a day later than the specified first period.</p>
+<p>This module is commonly used in school scheduling when it is desired that
+all teachers and/or all students start their day before or at a specified 
+hour.</p>
+<p>For example, if you do not want students to have free periods in the
+morning:</p>
+<pre>&lt;module name="<a href="freemorning.html">freemorning.so</a>" weight="50" mandatory="yes"&gt; 
+	&lt;option name="resourcetype"&gt;class&lt;/option&gt;
+	&lt;option name="first-period"&gt;0&lt;/option&gt;
+&lt;/module&gt;</pre>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+<h3>first-period</h3>
+<p>Use this option to specify the first period. Resource types specified with
+the "resourcetype" option will have events scheduled so, that the first 
+event each day will be at or before this period.</p>
+<p>If you don't specify this option, the default value of 0 is used.</p>
+<h3>resourcetype</h3>
+<p>Use this option to specify one or more constant resource types. Specified
+resource types will have their timetables checked by this module.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+<li>Multiweek scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

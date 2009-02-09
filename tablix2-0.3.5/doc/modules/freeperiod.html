@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>freeperiod.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>freeperiod.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Specifies that some time slots should never be used by any lessons.</p>
+<p>There is no fitness function, so the "weight" and "mandatory" module 
+options are ignored (restrictions set by this module are always mandatory).</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>teacher</li>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+<h3>day-off (resource types teacher)</h3><pre>&lt;restriction type="day-off"&gt;day&lt;/restriction&gt;</pre>
+<p>Synonym for 'free-day'</p>
+<h3>free-day (resource types teacher)</h3><pre>&lt;restriction type="free-day"&gt;day&lt;/restriction&gt;</pre>
+<p>This option specifies that no slots on "day" should ever 
+be used to schedule lessons for a teacher.</p>
+<h3>free-period (resource types teacher)</h3><pre>&lt;restriction type="free-period"&gt;day period&lt;/restriction&gt;</pre>
+<p>This option specifies that the time slot at "day period" should never 
+be used to schedule lessons for a teacher.</p>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+<h3>free-period</h3>
+<pre>&lt;option name="free-period"&gt;day period&lt;/option&gt;</pre>
+<p>This option specifies that the time slot at "day period" should never 
+be used to schedule lessons.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Nick Robinson, <a href="mailto:npr@bottlehall.co.uk">npr@bottlehall.co.uk</a></p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

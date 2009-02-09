@@ -1,0 +1,121 @@
+.\" These macros were copied from MPlayer manpage, written by Gabucino, 
+.\" Diego Biurrun and Jonas Jermann. 
+..
+.\" default indentation is 7, don't change!
+.nr IN 7
+.\" define indentation for suboptions
+.nr SS 5
+.\" add new suboption
+.de IPs
+.IP "\\$1" \n(SS
+..
+.\" begin of first level suboptions, end with .RE
+.de RSs
+.RS \n(IN+3
+..
+.TH TABLIX 1 2005-09-03 "Tomaz Solc" "Tablix User's Manual"
+.SH NAME
+tablix2_benchmark \- Tablix benchmark utility
+.SH SYNOPSIS
+.B tablix2_benchmark  
+.I benchmark 
+.B [
+.I options 
+.B ] 
+\(dq
+.I Tablix options
+\(dq
+.I file
+.SH DESCRIPTION
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+.P
+.B tablix2_benchmark
+is used to test the effect of different Tablix command line options on the final result. In most tests Tablix is started multiple times with the same input file to provide more reliable results. Each time Tablix is started, three variables are measured: the fitness value of the resulting timetable, serial number of the last generation and elapsed time (in seconds). When a test is finished, the average for each variable, as well as the maximum and minimum values are printed on standard output. The exact format depends on each test.
+.P
+The actual timetables that are generated during these tests are stored under a temporary file names in the current directory and are deleted after
+.B tablix2_benchmark
+exits.
+.P
+In some cases tests can take several days to complete. Because the genetic algorithm can in some cases go into an endless loop, it is always advisable to limit Tablix execution time with the 
+.B -t
+option. This way at least the maximum execution time for a test can be calculated. 
+.B tablix2_benchmark
+will detect when the time limit set by the 
+.B -t 
+option was reached. This information will be included in the final statistics.
+.SH OPTIONS
+The following tests are supported:
+.TP
+.B tablix2_benchmark --single \(dqOPTIONS\(dq file
+Execute a single Tablix run using and print the results. 
+.B OPTIONS
+parameter is mandatory and contains options that will be passed to the 
+.B tablix2
+process.
+.TP
+.B tablix2_benchmark --multiple N \(dqOPTIONS\(dq FILE
+Execute N Tablix runs and print the statistics.
+.B OPTIONS
+parameter is mandatory and contains options that will be passed to the 
+.B tablix2
+process.
+.TP
+.B tablix2_benchmark --graph START STEP STOP \(dqOPTIONS\(dq FILE
+Execute multiple Tablix runs. The character \(dq
+.B N 
+\(dq in 
+.B OPTIONS 
+is substituted for an integer that is changed from 
+.B START 
+to 
+.B STOP 
+by 
+.B STEP
+\&. Output is gnuplot friendly.
+.TP
+.B tablix2_benchmark --multi-graph M START STEP STOP \(dqOPTIONS\(dq FILE
+Execute multiple Tablix runs. The character \(dq
+.B N 
+\(dq in 
+.B OPTIONS 
+is substituted for an integer that is changed from 
+.B START 
+to 
+.B STOP 
+by 
+.B STEP
+\&. 
+.B M 
+Tablix runs are executed for each value of 
+.B N
+\&. Output is gnuplot friendly (use errorbars).
+.SH EXAMPLES
+The following test can be for example used to see the minimum grade, that can be reached with this configuration file:
+.P
+	tablix2_benchmark --multiple 5 \(dq-t 90 -n 5\(dq sample.xml
+.P
+Tablix will be started five times. Each time with five computing nodes and with 90 minute time limit.
+.P
+.B
+tablix2_benchmark
+can also provide useful data for developers. Following test can be used to check the effect of the number of computing nodes on the total time required to obtain the result:
+.P
+	tablix2_benchmark --multi-graph 5 1 1 10 \(dq-t 90 -n N\(dq sample.xml > stats.txt
+.P
+Tablix will be started 50 times. 5 times for each value of N (which in this case means the number of nodes). Ten values of N will be probed: from 1 to 10 with steps of 1. The output will be redirected to 
+.B stats.txt
+\&. A graph of average computing time versus number of nodes can then be produced in
+.B gnuplot
+with the following command:
+.P
+	plot \(dqtest.txt\(dq using ($1):($8):($9):($10) with yerrorbars
+.SH BUGS
+.B tablix2_benchmark
+utility depends on a number of common UNIX programs (mktemp, grep, sed, awk, ...) that may not be available on all systems. The script is not currently capable of properly detecting if any required programs are missing.
+.SH AUTHOR
+Tomaz Solc (tomaz.solc@tablix.org)
+.SH SEE ALSO
+.BR tablix2 (1),
+Tablix User's Manual,
+Tablix modules HOWTO,
+Tablix on Morphix HOWTO

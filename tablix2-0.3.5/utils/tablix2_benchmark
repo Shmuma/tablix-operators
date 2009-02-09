@@ -1,0 +1,242 @@
+#!/bin/bash
+
+VERSION="0.3.5"
+
+TABLIX="tablix2"
+IDID='$Id: tablix2_benchmark,v 1.8 2007-07-03 11:22:25 avian Exp $'
+
+CMD=`basename $0`
+COMMANDLINE="$0 $@"
+
+cat >&2 <<END
+TABLIX benchmark $VERSION, Copyright (C) 2002-2006 Tomaz Solc
+$IDID
+
+END
+
+function syntax {
+	cat <<END
+Following tests are supported:
+
+$CMD --single "OPTIONS" FILE
+
+	Execute a single Tablix run using OPTIONS and print the results.
+
+$CMD --multiple N "OPTIONS" FILE
+
+	Execute N Tablix runs using OPTIONS and print the statistics.
+
+$CMD --graph START STEP STOP "OPTIONS" FILE
+
+	Execute multiple Tablix runs. N in OPTIONS is changed from START
+	to STOP by STEP. Output is gnuplot friendly.
+
+$CMD --multi-graph M START STEP STOP "OPTIONS" FILE
+
+	Execute multiple Tablix runs. N in OPTIONS is changed from START
+	to STOP by STEP. M Tablix runs are executed for each value of N.
+	Output is gnuplot friendly (use errorbars)
+END
+}
+
+function test_pvm {
+	if ! ps aux | grep -v grep | grep pvmd > /dev/null; then
+		echo "PVM not running" >&2
+		exit 1
+	fi
+}
+
+function show_config {
+	echo "using binary : `which $TABLIX`" >&2
+	echo "parameters   : $PARAMETERS" >&2
+	echo "test config  : $TESTFILE" >&2
+	echo "repeats      : $RUNS" >&2
+
+	echo "*** RUNNING TABLIX ***" >&2
+
+	if echo $PARAMETERS | grep -- -o; then
+		echo "Do not add your own \"-o\" parameter in OPTIONS"
+		exit 1
+	fi
+}
+
+function test_run {
+	LOGFILE=`mktemp _bench__XXXXXX`
+
+	$TABLIX -o _bench__ $PARAMETERS -d 3 $TESTFILE &> $LOGFILE || return 1
+#	echo $TABLIX $PARAMETERS -d 3 $TESTFILE 
+
+	GRADE=`grep fitness _bench__result0.xml | sed 's/.*fitness="\([0-9]*\)".*/\1/'`
+	GENS=`tail -1 _bench__conv0.txt | awk '{ print($1) }'`
+	TIME=`grep 'total time' $LOGFILE | perl -e '$a=<STDIN>;@b=split(/:/,$a); print $b[1]*3600+$b[2]*60+$b[3];'`
+
+	rm -f _bench__result*.xml
+	rm -f _bench__conv*.txt
+	rm -f _bench__save*.txt
+	rm -f $LOGFILE
+}
+
+function repeated_test {
+	FAILED=0
+
+	AV_GRADE=0
+	AV_GENS=0
+	AV_TIME=0
+
+	MAX_GRADE=-1
+	MAX_GENS=-1
+	MAX_TIME=-1
+
+	MIN_GRADE=500000
+	MIN_GENS=500000
+	MIN_TIME=500000
+
+	N=1
+	while [ $N -le $RUNS ]; do
+		if test_run; then 
+			AV_GRADE=$(($AV_GRADE+$GRADE))
+			AV_GENS=$(($AV_GENS+$GENS))
+			AV_TIME=$(($AV_TIME+$TIME))
+
+			if [ $GRADE -gt $MAX_GRADE ]; then
+				MAX_GRADE=$GRADE
+			fi
+			if [ $GENS -gt $MAX_GENS ]; then
+				MAX_GENS=$GENS
+			fi
+			if [ $TIME -gt $MAX_TIME ]; then
+				MAX_TIME=$TIME
+			fi
+
+			if [ $GRADE -lt $MIN_GRADE ]; then
+				MIN_GRADE=$GRADE
+			fi
+			if [ $GENS -lt $MIN_GENS ]; then
+				MIN_GENS=$GENS
+			fi
+			if [ $TIME -lt $MIN_TIME ]; then
+				MIN_TIME=$TIME
+			fi
+			echo -n "." >&2
+		else
+			FAILED=$(($FAILED+1))
+			echo -n "+" >&2
+		fi
+		N=$(($N+1))
+	done
+
+	echo " finished" >&2
+
+	if [ $FAILED -eq $RUNS ]; then
+		AV_GRADE=0
+		AV_GENS=0
+		AV_TIME=0
+
+		MAX_GRADE=0
+		MAX_GENS=0
+		MAX_TIME=0
+
+		MIN_GRADE=0
+		MIN_GENS=0
+		MIN_TIME=0
+	else 
+		AV_GRADE=$(($AV_GRADE/($RUNS-$FAILED)))
+		AV_GENS=$(($AV_GENS/($RUNS-$FAILED)))
+		AV_TIME=$(($AV_TIME/($RUNS-$FAILED)))
+	fi
+}
+
+function graph_test {
+	echo -e "#command line: $COMMANDLINE"
+	echo -e "#N\tFITNESS\tGENS\tTIME"
+	M="$START"
+	ORIGPARAMS="$PARAMETERS"
+	while [ "$M" -le "$STOP" ]; do
+		PARAMETERS=`echo "$ORIGPARAMS" | sed "s/N/$M/g"`
+		if test_run; then
+			echo -e "$M\t$GRADE\t$GENS\t$TIME"
+		else
+			echo -e "$M\t0\t0\t0"
+		fi
+		M=$(($M+$STEP))
+	done
+}
+
+function multi_graph_test {
+	echo -e "#command line: $COMMANDLINE"
+	echo -e "#N\tFITNESS\tMIN\tMAX\tGENS\tMIN\tMAX\tTIME\tMIN\tMAX\tFAILED"
+	M="$START"
+	ORIGPARAMS="$PARAMETERS"
+	while [ "$M" -le "$STOP" ]; do
+		PARAMETERS=`echo "$ORIGPARAMS" | sed "s/N/$M/g"`
+		repeated_test
+
+		echo -ne "$M\t"
+		echo -ne "$AV_GRADE\t$MIN_GRADE\t$MAX_GRADE\t"
+		echo -ne "$AV_GENS\t$MIN_GENS\t$MAX_GENS\t"
+		echo -ne "$AV_TIME\t$MIN_TIME\t$MAX_TIME\t"
+		echo -ne "$FAILED\n"
+		M=$(($M+$STEP))
+	done
+}
+
+if [ $# -lt 1 ]; then 
+	syntax
+	exit 1
+fi
+
+test_pvm
+
+case "$1" in
+	--single)
+		RUNS="1"
+		PARAMETERS="$2"
+		TESTFILE="$3"
+		show_config
+		if test_run; then
+			echo "fitness     : $GRADE"
+			echo "generations : $GENS"
+			echo "time (sec)  : $TIME" 
+		else
+			echo "did not finish in time (or ctrl-c pressed)"
+		fi
+		;;
+	--multiple)
+		RUNS="$2"
+		PARAMETERS="$3"
+		TESTFILE="$4"
+		show_config
+
+		repeated_test
+		echo "$FAILED failed runs of total $RUNS"
+
+		echo "fitness (min/avg/max) : $MIN_GRADE/$AV_GRADE/$MAX_GRADE"
+		echo "generations           : $MIN_GENS/$AV_GENS/$MAX_GENS"
+		echo "time (sec)            : $MIN_TIME/$AV_TIME/$MAX_TIME"
+		;;
+	--graph)
+		RUNS="1"
+		START="$2"
+		STEP="$3"
+		STOP="$4"
+		PARAMETERS="$5"
+		TESTFILE="$6"
+		show_config
+
+		graph_test
+		;;
+	--multi-graph)
+		RUNS="$2"
+		START="$3"
+		STEP="$4"
+		STOP="$5"
+		PARAMETERS="$6"
+		TESTFILE="$7"
+		show_config
+
+		multi_graph_test
+		;;
+	*)
+		syntax
+		exit 1
+esac

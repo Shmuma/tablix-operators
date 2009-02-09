@@ -1,0 +1,75 @@
+AC_INIT(src/main.c)
+AM_INIT_AUTOMAKE(tablix2, 0.3.5)
+
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_CC()
+AC_GNU_SOURCE
+
+AM_PATH_XML2(2.4.3)
+
+AC_ARG_ENABLE([conv],
+AC_HELP_STRING([--enable-conv], [Save convergence info (default is YES)]), 
+if [[[ $enableval != no ]]]; then request_conv=yes; fi, request_conv=yes)
+
+if test "$request_conv" = "yes"; then 
+	AC_DEFINE(HAVE_CONV, 1, [Define if convergence info saving is requested])
+fi
+
+AC_ARG_ENABLE(debug,
+AC_HELP_STRING([--enable-debug], [Include error checking code (causes slowdown, default is NO)]),
+if [[[ $enableval != no ]]]; then 
+AC_DEFINE(DEBUG, 1, [Define if error checking code is requested]) fi)
+
+
+AC_ARG_WITH(pvm3,
+AC_HELP_STRING([--with-pvm3], [Use PVM3 for parallel processing (default is YES)])
+, enable_pvm=$withval, enable_pvm=yes)
+
+AM_PATH_PVM3(detected_pvm=yes, detected_pvm=no)
+
+if test "x$enable_pvm" = "xyes" -a "x$detected_pvm" = "xyes"; then
+	AC_DEFINE(HAVE_LIBPVM3, 1, [Define if PVM3 is available and enabled])
+	no_pvm=no
+else
+        PVM_LIBS=""
+        PVM_CFLAGS=""
+	no_pvm=yes
+fi
+
+AM_CONDITIONAL(HAVE_LIBPVM3, [ test ! "x$PVM_LIBS" = "x" ] )
+
+AC_CHECK_LIB(dl, dlopen)
+
+#ALL_LINGUAS="sl"
+AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.16.1])
+localedir='${prefix}/${DATADIRNAME}/locale'
+AC_SUBST(localedir)
+AM_ICONV
+
+
+AC_DISABLE_STATIC
+AM_PROG_LIBTOOL
+AC_SHLIB_EXT
+
+AC_OUTPUT(Makefile src/Makefile doc/Makefile utils/Makefile ttf/Makefile ttf/tests/Makefile examples/Makefile modules/Makefile intl/Makefile po/Makefile.in debian/Makefile export/Makefile )
+
+if test "$no_pvm" = "yes" ; then
+	AC_MSG_RESULT([
+*** WARNING ***
+PVM3 was not found or was disabled. Tablix will be compiled in debug mode.
+You almost certainly do not want to run Tablix in this mode, unless you are
+debugging the kernel or one of the modules.
+])
+
+fi
+
+if test "$no_xml" = "yes" ; then
+	AC_MSG_RESULT([
+*** WARNING ***
+The correct version of libxml was not found (see any error messages above for
+more details). Tablix will not compile.
+])
+
+fi

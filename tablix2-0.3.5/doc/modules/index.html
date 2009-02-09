@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Tablix modules reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Modules reference</h1>
+
+		<p>This is the Modules reference manual for the stable 0.3 branch of the Tablix distribution.</p>
+
+		<p>Following groups of modules are defined:</p>
+		<h2>General</h2>
+<p>This group contains modules that can be used in many contexts. The only
+requirement is that the problem description contains a matrix resource
+type called 'time'.</p>
+		<ul>
+			<li><a href="available.html">available.so</a></li>
+			<li><a href="events_sameday.html">events_sameday.so</a></li>
+			<li><a href="fixed.html">fixed.so</a></li>
+			<li><a href="preferredtime.html">preferredtime.so</a></li>
+		</ul>
+		<h2>Multiweek scheduling</h2>
+<p>This group of modules can be used to construct timetables
+for longer periods of time in cases where weekly or bi-weekly recurring
+schedules are not suitable. Such an example would be an university where
+different classes start and finish at different times in the semester.</p>
+<p>This group is similar to the School scheduling group and shares many of
+the same modules. It also shares the requirement for the four basic
+resource types: 'class', 'teacher', 'room' and 'time'.</p>
+		<ul>
+			<li><a href="available.html">available.so</a></li>
+			<li><a href="consecutive.html">consecutive.so</a></li>
+			<li><a href="freemorning.html">freemorning.so</a></li>
+			<li><a href="placecapability.html">placecapability.so</a></li>
+			<li><a href="recurrence.html">recurrence.so</a></li>
+			<li><a href="sametime.html">sametime.so</a></li>
+			<li><a href="timeplace.html">timeplace.so</a></li>
+			<li><a href="walk.html">walk.so</a></li>
+		</ul>
+		<h2>School scheduling</h2>
+<p>This group of modules can be used to construct weekly or bi-weekly
+schedules, such as those used in elementary and high schools and also some
+universities.</p>
+<p>Most of them require at least the following resource types to be
+defined in the problem description file: 'class', 'teacher', 'room' and 'time'.</p>
+		<ul>
+			<li><a href="available.html">available.so</a></li>
+			<li><a href="consecutive.html">consecutive.so</a></li>
+			<li><a href="events_sameday.html">events_sameday.so</a></li>
+			<li><a href="firstlastequal.html">firstlastequal.so</a></li>
+			<li><a href="firstorlast.html">firstorlast.so</a></li>
+			<li><a href="fixedtime.html">fixedtime.so</a></li>
+			<li><a href="freemorning.html">freemorning.so</a></li>
+			<li><a href="freeperiod.html">freeperiod.so</a></li>
+			<li><a href="holes.html">holes.so</a></li>
+			<li><a href="maxconsecutive.html">maxconsecutive.so</a></li>
+			<li><a href="maxperday.html">maxperday.so</a></li>
+			<li><a href="perday.html">perday.so</a></li>
+			<li><a href="placecapability.html">placecapability.so</a></li>
+			<li><a href="preferredroom.html">preferredroom.so</a></li>
+			<li><a href="sameday.html">sameday.so</a></li>
+			<li><a href="sametime.html">sametime.so</a></li>
+			<li><a href="sametimeas.html">sametimeas.so</a></li>
+			<li><a href="timeblocks.html">timeblocks.so</a></li>
+			<li><a href="timeblocks_sameday.html">timeblocks_sameday.so</a></li>
+			<li><a href="timeplace.html">timeplace.so</a></li>
+			<li><a href="walk.html">walk.so</a></li>
+		</ul>
+		<h2>Simple meeting scheduling</h2>
+		<ul>
+			<li><a href="minrooms.html">minrooms.so</a></li>
+			<li><a href="simplesametime.html">simplesametime.so</a></li>
+		</ul>
+	</body>
+</html>

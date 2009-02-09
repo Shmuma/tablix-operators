@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>simplesametime.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>simplesametime.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds a weight whenever a local or visiting company is required to 
+have two meetings at the same time.</p>
+<p>This module is similar to <a href="sametime.html">sametime.so</a> except that it does not require
+"room" resoure type to be defined. Use it instead of <a href="sametime.html">sametime.so</a> / i
+<a href="timeplace.html">timeplace.so</a> combination when you do not need to assign rooms to 
+meetings.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>local</li>
+<li>time</li>
+<li>visitor</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+<h3>conflicts-with (resource types local, visitor)</h3><p>Example use:</p>
+<pre>&lt;restriction type="conflicts-with"&gt;name&lt;/restriction&gt;</pre>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+<h3>recursive-conflicts</h3>
+<p>If this module option is present (any option value is ignored), then all
+"conflicts-with" restrictions become recursive.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>Simple meeting scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Seppe vanden Broucke, <a href="mailto:"></a></p><h2>Credits</h2><p><p>Based on <a href="sametime.html">sametime.so</a> module by Tomaz Solc</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

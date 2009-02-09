@@ -1,0 +1,119 @@
+.\" These macros were copied from MPlayer manpage, written by Gabucino, 
+.\" Diego Biurrun and Jonas Jermann. 
+..
+.\" default indentation is 7, don't change!
+.nr IN 7
+.\" define indentation for suboptions
+.nr SS 5
+.\" add new suboption
+.de IPs
+.IP "\\$1" \n(SS
+..
+.\" begin of first level suboptions, end with .RE
+.de RSs
+.RS \n(IN+3
+..
+.TH TABLIX 1 2005-09-03 "Tomaz Solc" "Tablix User's Manual"
+.SH NAME
+tablix2_plot \- Tablix data plotter
+.SH SYNOPSIS
+.B tablix2_plot  
+.I command 
+.B [ 
+.I options
+.B ]
+.SH DESCRIPTION
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+.P
+.B tablix2_plot
+can be used to plot various types of population convergence graphs using data in files usually named
+.I conv0.txt
+,
+.I conv1.txt
+, ...
+Tablix will save convergence data into these files if it was compiled with the 
+.B --enable-conv 
+option.
+.P
+These graphs can be useful for example to get a rough estimate of time required to solve a particular problem (note that 
+.B tablix2_plot
+can be safely used with files that are still written to by a running Tablix session).
+.P
+Graphs are plotted with
+.B gnuplot
+using the default output terminal (which is in most cases a X11 display). Encapsulated postscript files can be obtained by setting
+.B EPSOUTPUT
+environment variable. Scalable vector graphics files can be obtained by setting 
+.B SVGOUTPUT
+environment variable. The contents of these variables are used by 
+.B tablix2_plot
+as a file name to write to.
+.SH OPTIONS
+.TP
+.B tablix2_plot --conv-fitness [ --scale SCALE ] [ PREFIX ] ...
+Plot population convergence graph using convergence data in files 
+.I conv*.txt 
+in the current directory. One line is drawn for each computing node. It shows the fitness value of the best timetable versus generation count. 
+
+Use the 
+.B PREFIX
+option, if you used the 
+.B -o 
+option with Tablix. You can use more than one 
+.B PREFIX 
+option to plot multiple convergence graphs in one window.
+
+Use the 
+.B SCALE 
+option to adjust the vertical scale. 
+.TP
+.B tablix2_plot --fit-fitness [ --scale SCALE ] [ PREFIX ] ...
+Same as 
+.B --conv-fitness
+above, except that an exponential function is also drawn on the graph using least squares fitting. This can be used to get a rough estimate of the time required to find a solution. 
+
+The 
+.B SCALE 
+parameter is used to adjust the horizontal scale in this case.
+.TP
+.B tablix2_plot --functions [ --scale SCALE ] CONVFILE
+Plot the return value of each fitness function versus generation count. Return values of mandatory fitness functions are plotted with thicker lines. 
+
+.B CONVFILE 
+must be a file with Tablix population convergence data (usually named 
+.I conv*.txt
+). 
+
+Use the 
+.B SCALE 
+option to adjust the vertical scale.
+.SH EXAMPLES
+If Tablix was started with the following command:
+.P
+	tablix2 -o u1_ sample.xml
+.P
+then the following command plots the population convergence graph:
+.P
+	tablix2_plot --conv-fitness u1_
+.P 
+Encapsulated postscript version of the same graph can be obtained with the following command in 
+.B bash
+shell:
+.P
+	EPSOUTPUT=\(dqgraph.eps\(dq tablix2_plot --conv-fitness u1_
+.P
+To see which mandatory restriction is preventing Tablix from finding the solution, use the per module plot, possibly with a small vertical scale:
+.P
+	tablix2_plot --functions --scale 100 u1_conv0.txt
+.P
+.SH BUGS
+In addition to gnuplot
+.B tablix2_plot
+utility depends on a number of common UNIX programs (mktemp, grep, sed, awk, ...) that may not be available on all systems. The script is not currently capable of properly detecting if any required programs are missing.
+.SH AUTHOR
+Tomaz Solc (tomaz.solc@tablix.org)
+.SH SEE ALSO
+.BR tablix2 (1),
+Tablix User's Manual,
+Tablix modules HOWTO,
+Tablix on Morphix HOWTO

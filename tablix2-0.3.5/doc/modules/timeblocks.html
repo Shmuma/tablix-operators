@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>timeblocks.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>timeblocks.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds a weight whenever events are not scheduled in blocks of 
+consecutive periods.</p>
+<p>Use this module to schedule multiple repetitions of an event in one or more 
+blocks.</p>
+<p>This module is deprecated. <a href="consecutive.html">consecutive.so</a> module provides the same 
+functionality with better performance.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+<h3>periods-per-block</h3>
+<pre>&lt;restriction type="periods-per-block"&gt;periods&lt;/restriction&gt;</pre>
+<p>This restriction specifies that the repeats of the current event need to 
+be scheduled in blocks of 'periods' consecutive periods.</p>
+<p>For example:</p>
+<pre>&lt;event name="test" repeats="6"&gt;
+	&lt;resource type="teacher" name="a"/&gt;
+	&lt;resource type="class" name="2"/&gt;
+	&lt;restriction type="periods-per-block"&gt;2&lt;/restriction&gt;
+&lt;/event&gt;</pre>
+<p>This restriction tells Tablix to schedule 6 events "test" in three blocks
+of two consecutive "test" events.</p>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Antonio Duran, <a href="mailto:antonio.duran.terres@gmail.com">antonio.duran.terres@gmail.com</a></p><h2>Credits</h2><p><p>
+This module is a minor modification of consecutive2 module by Tomaz Solc 
+Original consecutive module by Nick Robinson</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

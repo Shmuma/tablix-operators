@@ -1,0 +1,85 @@
+<!--
+BEGIN TTF BLOCK
+; This test case must result in a pattern like this in the time-ext vector
+
+; A . A . A . A A . A . A . A A . A . A . A  and so on...
+;              ^-new day starts
+
+(define days 5)
+(define periods 7)
+
+; number of defined events
+(define tuplenum 20)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-period tupleid) (modulo (get-time tupleid) periods))
+
+; vector similar to time extension
+(define time-ext (make-vector (* days periods) -1))
+
+(define (<> n1 n2) (not (= n1 n2)))
+
+; fill in time-ext vector
+(define (update-ext)
+	(let loop ((i 0))
+		(if (< i tuplenum) 
+			(begin
+				(vector-set! time-ext (get-time i) i)
+				(loop (+ i 1)))
+			#t)))
+
+(define (check-block start num)
+	(let loop ((i 0) (result #t))
+		(if (< i num) (begin
+			(if (= (modulo i 2) 0)
+				(if (= (vector-ref time-ext (+ i start)) -1)
+					(define result #f))
+				(if (<> (vector-ref time-ext (+ i start)) -1)
+					(define result #f)))
+			(loop (+ i 1) result))
+			result)))
+
+(test-ttf 
+	(update-ext)
+	(check-block 0 periods)
+	(check-block 7 periods)
+	(check-block 14 periods)
+	(check-block 21 periods)
+	(check-block 28 periods))
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime" weight="60" mandatory="yes"/> 
+		<module name="timeplace" weight="60" mandatory="yes"/>
+		<module name="maxconsecutive" weight="60" mandatory="yes">
+			<option name="max-consecutive">1</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test-1-a" repeats="20">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+	</events>
+</ttm>

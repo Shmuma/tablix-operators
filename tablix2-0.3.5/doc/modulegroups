@@ -1,0 +1,39 @@
+/**
+@group Unknown
+
+These modules don't include any information on which group they belong
+to. The most probable reason is that they haven't been ported to the
+0.2.x kernel yet or they lack proper comment blocks.
+*/
+
+/**
+@group School scheduling
+
+This group of modules can be used to construct weekly or bi-weekly
+schedules, such as those used in elementary and high schools and also some
+universities.
+
+Most of them require at least the following resource types to be
+defined in the problem description file: 'class', 'teacher', 'room' and 'time'.
+*/
+
+/**
+@group Multiweek scheduling
+
+This group of modules can be used to construct timetables
+for longer periods of time in cases where weekly or bi-weekly recurring
+schedules are not suitable. Such an example would be an university where
+different classes start and finish at different times in the semester.
+
+This group is similar to the School scheduling group and shares many of
+the same modules. It also shares the requirement for the four basic
+resource types: 'class', 'teacher', 'room' and 'time'.
+*/
+
+/**
+@group General
+
+This group contains modules that can be used in many contexts. The only
+requirement is that the problem description contains a matrix resource
+type called 'time'.
+*/

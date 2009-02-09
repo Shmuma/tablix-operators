@@ -1,0 +1,37 @@
+Tablix was written and is maintained by Tomaz Solc.
+
+Tablix Testing Framework includes TinyScheme, a lightweight Scheme
+interpreter written by Dimitrios Souflis and Jonathan S. Shapiro.
+
+TinyScheme is copyright (c) 2000, Dimitrios Souflis. All rights reserved.
+Exact distribution terms can be found in the Appendix B of the Tablix 
+User's Manual
+
+
+Following is a list of people that have in one way or another also 
+contributed to this project:
+
+Module contributions
+====================
+
+Patrick Cronin
+Jaume Obrador
+Richard Taylor
+Nicholas Robinson
+Antonio Duran
+
+Patches, bug fixes
+==================
+
+John Winters
+Stewart Adcock
+Jaume Obrador
+
+Author would also like to thank
+===============================
+
+Metka Skornik, Gimnazija Bezigrad, Ljubljana
+Helena Santl, Gimnazija Moste, Ljubljana
+
+for their advice and sample information that made development of the
+first version of Tablix possible.

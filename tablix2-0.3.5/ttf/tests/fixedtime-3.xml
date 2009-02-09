@@ -1,0 +1,27 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(time 0 23)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="fixedtime.so" weight="60" mandatory="yes"/> 
+	</modules>
+
+	<resources>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="5" height="6"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="1">
+			<restriction type="fixed-day">3</restriction>
+			<restriction type="fixed-period">5</restriction>
+		</event>
+	</events>
+</ttm>

@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<book>
+<bookinfo>
+<title>Tablix modules HOW-TO, part 2</title>
+<author>
+<firstname>Toma&zcaron;</firstname>
+<surname>&Scaron;olc</surname>
+<authorblurb>
+<para><email>tomaz.solc@tablix.org</email></para>
+</authorblurb>
+</author>
+<pubdate>
+$Id: modules2.db,v 1.4 2006-08-29 14:32:23 avian Exp $
+</pubdate>
+<abstract>
+<para>
+Export modules are pieces of code that are dynamically linked with the <filename>tablix2_output</filename> utility at run time and provide functions for exporting data in internal kernel structures to various file formats. This document describes in detail how to write and build new export modules. It also briefly explains how to use kernel API interfaces for this kind of modules.
+</para>
+</abstract>
+<legalnotice>
+<para>
+Copyright (C) 2005 by Toma&zcaron; &Scaron;olc.
+</para>
+</legalnotice>
+
+<mediaobject>
+    <imageobject><imagedata align="center" fileref="images/lines3.pdf" format="EPS"/></imageobject>
+    <imageobject><imagedata align="center" fileref="images/lines3.png" format="PNG"/></imageobject>
+</mediaobject>
+
+</bookinfo>
+
+<toc></toc>
+
+<chapter>
+<title>Introduction</title>
+
+<para>
+Since Tablix version 0.0.6 each file format supported by the <filename>tablix_output</filename> utility is handled by a separate export module. The export module interface changed considerably with the kernel rewrite during 0.2.x branch.
+</para>
+
+<para>
+There are two distinct types of modules: <phrase>Fitness modules</phrase> contain <phrase>partial fitness functions</phrase> and provide handlers for various <phrase>restrictions</phrase>. They are loaded by the kernel as specified in the XML configuration file. <phrase>Export modules</phrase> on the other hand are loaded by the <filename>tablix2_output</filename> utility and contain functions that translate data from the internal kernel structures to a file in a certain format. For example: HTML export module, comma separated value format export module. </para>
+
+<para>
+Fitness and export modules access the kernel data structures in more or less the same way. Description of this common interface can be found in the first part of this HOW-TO and will not be repeated here. This document describes only the parts of the interface that are specific to the export modules.
+</para>
+
+<para>
+I recommend reading the Tablix User's Manual and the first part of this HOW-TO before attempting to write your own module. Also while reading this text you should keep a browser window nearby with the Tablix kernel API reference manual loaded. Some important functions are also described in the text, but mostly only references to the reference manual will be given.
+</para>
+<!--
+<note>
+<para>
+All example XML configuration files and module source code can be found in the <filename>examples/modules/</filename> subdirectory in the Tablix source tree.
+</para>
+</note>
+-->
+
+</chapter>
+
+<chapter>
+<title>
+Kernel API
+</title>
+
+<sect1>
+<title>
+Export function
+</title>
+
+<para>
+The export module interface is very simple compared to fitness modules. Each export module must contain only one function, called <function>export_function()</function>. Its single purpose is to convert the data stored in the kernel data structures into a stream of characters and store it into one or more files.
+</para>
+
+<para>
+Each time user runs <filename>tablix2_output</filename> with the proper command line arguments, the utility loads the requested export module, parses the XML  file and initializes kernel data structures and calls the <function>export_function()</function>.
+</para>
+
+<para>
+The prototype for <function>export_function()</function> can be found in <filename>output.h</filename>:
+</para>
+
+<programlisting>
+typedef int (*<function>export_f</function>)(table *<parameter>tab</parameter>, moduleoption *<parameter>opt</parameter>, char *<parameter>filename</parameter>);
+</programlisting>
+
+<para>
+<parameter>tab</parameter> is a pointer to the <structname>table</structname> structure. This structure describes the timetable that should be exported - it contains pointers to the chromosome structures.
+</para>
+
+<para>
+<parameter>opt</parameter> is a pointer to the linked list of module options. Module options are passed to the <filename>tablix2_output</filename> utility with the <parameter>-s</parameter> argument in the following form:
+</para>
+
+<screen>
+-s option1=value,option2=value,...
+</screen>
+
+<para>
+You can access this linked list in the same way as in fitness modules using functions <function>option_int()</function>, <function>option_str()</function> and <function>option_find()</function>.
+</para>
+
+<para>
+The final argument <parameter>filename</parameter> is a string holding the name of the file to be written. The <filename>tablix2_output</filename> utility simply passes this file name from its command line to the export function. The utility itself does not care if the export function actually writes anything to this file. For example, if the export function needs to write more than one file, it can use this argument as the name of the directory to put the files in. <parameter>filename</parameter> could also contain the location in a database where the timetable data should be inserted.
+</para>
+
+<note>
+<para>
+<parameter>filename</parameter> can be equal to <parameter>NULL</parameter>. The export function should treat that condition as a request to write on the standard output. If this is not possible (i.e. more than one file needs to be written) then the export function should return an error.
+</para>
+</note>
+
+<para>
+The <function>export_function()</function> should return 0 on success and -1 on error. Functions <function>error()</function>, <function>info()</function> and <function>debug()</function> can be used to report various warnings and errors back to the user.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Compiling your module
+</title>
+
+<para>
+As with fitness modules there are also two ways of compiling your export modules. You can use your own <filename>Makefile</filename> or you can modify the <filename>Makefile.am</filename> supplied in the distribution and compile your module in the exactly the same way as the official modules. See the first part of this HOW-TO for details. If you would like to use the second method, please note that the source for the export modules is in the <filename>export/</filename> subdirectory in the Tablix source tree.
+</para>
+
+<para>
+Export modules are usually stored in the same directory as the fitness modules. While fitness modules can have arbitrary names, all export modules must have the prefix "export_" in their names. <filename>tablix2_output</filename> utility gets the name of the export module to load by concatenating "export_" and the name of the export format. For example, the following command line:
+</para>
+
+<screen>
+<prompt>$</prompt> tablix2_output csv result0.xml
+</screen>
+
+<para>
+will cause the <filename>tablix2_output</filename> utility to load the <filename>export_csv.so</filename> export module.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Output extensions
+</title>
+
+<sect2>
+<title>
+Description
+</title>
+
+<para>
+As you probably noticed, export function can only access the timetable in its basic chromosome form (fitness functions can also access slist and extension forms). It has already been mentioned that chromosome extension form resembles a human readable timetable format. Because of this it is often useful to use this form in the export function instead of the chromosome form.
+</para>
+
+<para>
+However, the chromosome extension that is used in fitness functions usually isn't suitable for use in export modules because events (tuples) can be lost in the conversion from the chromosome form. Export modules therefore use another form called <phrase>output extension</phrase> that does not have this drawback.
+</para>
+
+<para>
+The output extension <structname>outputext</structname> structure closely resembles the normal chromosome extension <structname>ext</structname> structure. It also defined by one constant and one variable resource type and also consists of a two-dimensional array. However instead of single tuple IDs in the normal extension the two-dimensional array now holds lists of tuples (stored in the <structname>tuplelist</structname> structure.
+</para>
+
+<para>
+Consider the following example: if you construct an output extension <parameter>outputext</parameter> for a constant resource type with type ID <parameter>con_typeid</parameter> and a variable resource type with type ID <parameter>var_typeid</parameter>, then the following element in the two-dimensional array:
+</para>
+
+<programlisting>
+outputext.list[<parameter>c</parameter>][<parameter>v</parameter>]
+</programlisting>
+
+<para>
+is a pointer to the <structname>tuplelist</structname> structure which holds a list of tuple IDs of tuples (events) that are using both the constant resource with resource ID <parameter>c</parameter> and type ID <parameter>con_typeid</parameter> and the variable resource with resource ID <parameter>v</parameter> and type ID <parameter>var_typeid</parameter>.
+</para>
+
+<note>
+<para>
+If you don't understant this example, see the section on chromosome extensions in the first part of the HOW-TO (specially the part about visualization). Keep in mind that in most cases the variable resource type used in extensions is time. 
+</para>
+</note>
+
+<para>
+The <structname>tuplelist</structname> structure holds a simple array of tuples. The field <structfield>tupleid</structfield> is an array of <structfield>tuplenum</structfield> tuple IDs.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Associated functions
+</title>
+
+<para>
+Three functions are available for converting the chromosome form of the timetable to an output extension: <function>outputext_new()</function>, <function>outputext_update()</function> and <function>outputext_free()</function>. Following example demonstrates their use:
+</para>
+
+<programlisting>
+int export_function(table *tab, moduleoption *opt, char *file)
+{
+        outputext *ext;
+
+        ext=outputext_new("dummy-constant-type", "dummy-variable-type");
+        outputext_update(ext, tab);
+
+        ...
+
+        outputext_free(ext);
+
+        return(0);
+}
+</programlisting>
+
+<para>
+<function>outputext_new()</function> function allocates a new output extension structure and initializes its values. The first argument is the name of the constant resource type and the second argument is the name of the variable resource type. In case memory allocation fails or the requested resource types are not found, this function returns NULL. The example above doesn't do any error checking - a proper export module should report this condition as an error and about the execution.
+</para>
+
+<para>
+<function>outputext_update()</function> function fills the two-dimensional array in the output extension with values from the timetable structure. After this function is called, the output extension is ready to use.
+</para>
+
+<para>
+<function>outputext_free()</function> function frees any allocated memory taken by the output extension. It should be called after the extension is no longer needed to prevent memory leaks.
+</para>
+
+</sect2>
+
+</sect1>
+
+<sect1>
+<title>
+Internationalization
+</title>
+
+<para>
+All character strings in the kernel structures are always UTF-8 encoded, even if the input XML file was in some other encoding. If your export format requires some other character encoding, you can use the libiconv library to transcode strings into other encodings.
+</para>
+
+<para>
+If your exported format includes any messages that can be translated into other languages, please enclose them in a gettext translation macro like this:
+</para>
+
+<programlisting>
+fprintf(file, _("Hello world!"));
+</programlisting>
+
+<para>
+This way messages in your export module will be included in the Tablix translations. See <ulink url="http://www.gnu.org/software/gettext/manual/gettext.html">GNU gettext documentation</ulink> for more information.
+</para>
+
+</sect1>
+
+</chapter>
+
+<chapter>
+<title>
+Example export modules
+</title>
+
+<sect1>
+<title>
+Comma separated values
+</title>
+
+<para>
+Following is the source code of the <filename>export_csv.so</filename> export module. This is a simple export module that exports timetable data into a "comman separated values" (CSV) format that is suitable for import into other programs (for example spreadsheets). CSV format requires each line to be separated into multiple fields by the "," separator character. Fields containing strings must also be enclosed in double quotes. Fields with numbers are without quotes.
+</para>
+
+<para>
+Output consists of four header lines and a table of events. First three lines  contain the title, author and the address of the institution. Then comes a line that contains the fitness of the exported timetable and a header line for the table of events. Each event is represented as a single line. First field contains the name of the event and subsequent fields contain names of the resources used by this event, sorted by resource type.
+</para>
+
+<programlisting>
+#include "export.h"
+
+int export_function(table *tab, moduleoption *opt, char *file)
+{
+        int typeid,tupleid;
+
+        FILE *out;
+
+        char *name;
+        int resid;
+
+        assert(tab!=NULL);
+
+        if(file==NULL) {
+                out=stdout;
+        } else {
+                out=fopen(file, "w");
+                if(out==NULL) fatal(strerror(errno));
+        }
+
+        fprintf(out, "\"Title\",\"%s\"\n", dat_info.title);
+        fprintf(out, "\"Address\",\"%s\"\n", dat_info.address);
+        fprintf(out, "\"Author\",\"%s\"\n", dat_info.author);
+
+        fprintf(out, "\"Fitness\",%d\n", tab-&gt;fitness);
+
+        fprintf(out, "\"Event name\"");
+        for(typeid=0;typeid&lt;dat_typenum;typeid++) {
+                fprintf(out, ",\"%s\"", dat_restype[typeid].type);
+        }
+        fprintf(out, "\n");
+
+        assert(dat_typenum==tab-&gt;typenum);
+
+        for(tupleid=0;tupleid&lt;dat_tuplenum;tupleid++) {
+                fprintf(out, "\"%s\"", dat_tuplemap[tupleid].name);
+
+                for(typeid=0;typeid&lt;dat_typenum;typeid++) {
+                        assert(dat_tuplenum==tab-&gt;chr[typeid].gennum);
+
+                        resid=tab-&gt;chr[typeid].gen[tupleid];
+                        name=dat_restype[typeid].res[resid].name;
+
+                        fprintf(out, ",\"%s\"", name);
+                }
+
+                fprintf(out, "\n");
+        }
+
+        if(out!=stdout) fclose(out);
+
+        return 0;
+}
+</programlisting>
+
+<para>
+As you can see, this export module consists of only the export function. A more complicated export module could contain additional functions called from the export function. The <filename>export.h</filename> header contains all prototypes and type definitions required in export modules.
+</para>
+
+<para>
+Export function first opens the output file. As mentioned in the introduction, if the <parameter>filename</parameter> is NULL, then we write to the standard output instead of a file.
+</para>
+
+<para>
+Following are four calls to the <function>fprintf()</function> function to write the header lines. Title of the exported timetable and information about the author can be found in the <varname>dat_info</varname> global variable (<structname>miscinfo</structname> structure). The fitness of the timetable can be found in the <structfield>fitness</structfield> field of the <structname>table</structname> structure.
+</para>
+
+<para>
+Next we write the header of the event table. First column holds the name of the event, second column holds the resource of the first resource type, third column resource of the second resource type and so on. The first "for" loop therefore iterates through all resource types and prints out their names.
+</para>
+
+<para>
+Following are two nested "for" loops that print out the whole event table. Outer loop iterates through all events (the current tuple ID is in the <varname>tupleid</varname> variable). We print the name of the event at the beginning of the line and enter the second loop. This loop again iterates through all resource types and gets the resource ID (<varname>resid</varname> variable) of the resource that the current event is using for each resource type. We then look up the name of this resource in the <varname>dat_restype</varname> global variable that holds pointers to all <structname>resource</structname> structures and print it.
+</para>
+
+</sect1>
+</chapter>
+
+</book>

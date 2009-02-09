@@ -1,0 +1,142 @@
+.\" These macros were copied from MPlayer manpage, written by Gabucino, 
+.\" Diego Biurrun and Jonas Jermann. 
+..
+.\" default indentation is 7, don't change!
+.nr IN 7
+.\" define indentation for suboptions
+.nr SS 5
+.\" add new suboption
+.de IPs
+.IP "\\$1" \n(SS
+..
+.\" begin of first level suboptions, end with .RE
+.de RSs
+.RS \n(IN+3
+..
+.TH TABLIX 1 2005-09-03 "Tomaz Solc" "Tablix User's Manual"
+.SH NAME
+tablix2_test \- Tablix testing framework front-end
+.SH SYNOPSIS
+.B tablix2_test
+.I command options file
+.SH DESCRIPTION
+Tablix is a powerful free software kernel for solving general timetabling problems. It uses a coarse-grained parallel genetic algorithm in combination with other techniques to construct sensible timetables from XML formatted problem descriptions. Tablix can run on a single host as well as on a heterogeneous parallel virtual machine using PVM3.
+.P
+Tablix testing framework provides a way to write simple automated tests that verify if a module and/or kernel is working as expected. Framework is composed of a special export module 
+.I export_ttf.so
+and a utility program 
+.B tablix2_test.
+Each automated test case is stored in a single file with the standard Tablix XML configuration syntax and a special XML comment block containing a short program written in Scheme. 
+.P
+.B tablix2_test
+first processes each file containing the test case with 
+.B tablix
+or 
+.B tablix2
+(depending on the detected version of the XML format) and then uses 
+.I export_ttf.so
+module to run the Scheme code included in the same file to verify if the kernel has found a correct solution.
+.P
+For each test case, 
+.B tablix2_test
+reports one of the following results:
+.TP
+.B passed
+File contained XML syntax for the 0.2.x branch of kernels.
+.B tablix2
+found a solution to the test problem and Scheme code confirmed that it is correct.
+.TP
+.B passed (old syntax)
+File contained XML syntax for the 0.1.x branch of kernels.
+.B tablix 
+found a solution to the test problem and Scheme code confirmed that it is correct.
+.TP
+.B skipped
+.B tablix
+or 
+.B tablix2
+executable was not found. Test problem was skipped.
+.TP
+.B FAILED (tablix crashed)
+Tablix did not find a solution to the test problem. The reason can be a syntax error in the XML configuration file, an error in the module or a kernel crash. See any other displayed error messages for details.
+.TP
+.B FAILED (most likely scheme syntax error)
+Scheme interpreter returned an error. The reason can be a syntax error or a bug in the Scheme code block. See any other displayed error messages for details.
+.TP
+.B FAILED (ttf test failed)
+Tablix found a solution to the test problem but Scheme code did not confirm it.
+.TP
+.B FAILED (unknown error)
+Tablix returned an unknown return value. You are probably running an outdated  
+.B tablix2_test.
+.P
+Since 
+.B tablix
+or 
+.B tablix2 
+is run as part of the process,
+.B
+pvmd
+daemon must be running and be configured properly before running
+.B tablix2_test
+.SH OPTIONS
+.TP
+.B tablix2_test --file \(dqOPTIONS\(dq FILE
+Perform once a single test stored in the XML configuration file 
+.I FILE.
+.I OPTIONS
+parameter is mandatory and contains options that will be passed to the 
+.B tablix
+or 
+.B tablix2
+process. 
+.TP
+.B tablix2_test --dir \(dqOPTIONS\(dq DIRECTORY
+Perform once all tests stored in XML configuration files in the directory
+.I DIRECTORY.
+.I OPTIONS
+parameter is mandatory and contains options that will be passed to the 
+.B tablix
+or 
+.B tablix2 
+process. 
+.TP
+.B tablix2_test --multi-file N \(dqOPTIONS\(dq FILE
+Same as
+.B --file
+but performs each test
+.I N
+times. Test is considered passed only none of 
+.I N
+repetitions of the test fail.
+.TP
+.B tablix2_test --multi-dir N \(dqOPTIONS\(dq DIRECTORY
+Same as 
+.B --dir
+but performs each test in the directory 
+.I N
+times. Test is considered passed only none of 
+.I N
+repetitions of the test fail.
+.SH EXAMPLES
+To perform an exhaustive test of all kernel features and all modules in the distribution, run the following command from the top of the Tablix source tree:
+.P
+	tablix2_test --multi-dir 7 \(dq\(dq ttf/tests
+.P
+A correctly working Tablix installation should pass all tests stored in the
+.I ttf/tests/
+subdirectory except the 
+.I error-1.xml,
+.I error-2.xml
+and
+.I error-3.xml
+tests which verify that the testing framework is correctly reporting errors.
+.SH BUGS
+.B tablix2_test
+utility depends on a number of common UNIX programs (mktemp, grep, sed, awk, ...) that may not be available on all systems. The script is not currently capable of properly detecting if any required programs are missing.
+.SH AUTHOR
+Tomaz Solc (tomaz.solc@tablix.org)
+.SH SEE ALSO
+.BR tablix2 (1),
+Tablix User's Manual,
+Tablix modules HOWTO

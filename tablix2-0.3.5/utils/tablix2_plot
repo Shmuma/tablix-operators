@@ -1,0 +1,279 @@
+#!/bin/bash
+
+set -e
+
+VERSION="0.3.5"
+
+GNUPLOT="gnuplot"
+IDID='$Id: tablix2_plot,v 1.8 2007-07-03 11:22:25 avian Exp $'
+
+CMD=`basename $0`
+
+cat >&2 <<END
+TABLIX data plotter $VERSION, Copyright (C) 2002-2006 Tomaz Solc
+$IDID
+
+END
+
+function syntax {
+	cat <<END
+Following plots are supported:
+
+$CMD --conv-fitness [ --scale SCALE ] [ PREFIX ] ...
+
+	Plot population convergence graph using convergence data in files
+	"conv*.txt" in the current directory. One line is drawn for each 
+	node. It shows the fitness of the best timetable versus generation 
+	count. Use the PREFIX option, if you used the "-o" option with 
+	Tablix. Use the SCALE option to adjust the vertical scale. You can 
+	use more than one PREFIX option to plot multiple convergence graphs 
+	in one window. 
+
+$CMD --fit-fitness [ --scale SCALE ] [ PREFIX ] ...
+
+	Same as "--conv-fitness", except that an exponential function is also 
+	drawn on the graph using least squares fitting. This can be used to
+	get a rough estimate of the time required to find a solution. The
+	SCALE parameter is used to adjust the horizontal scale in this case.
+
+$CMD --functions [ --scale SCALE ] CONVFILE
+
+	Plot the return value of each fitness function versus generation 
+	count. Return values of mandatory fitness functions are plotted
+	with thicker lines. CONVFILE must be a file with Tablix population 
+	convergence data (usually named "conv*.txt"). Use the SCALE option 
+	to adjust the vertical scale.
+
+Prepend "EPSOUTPUT" to print the graph to an encapsulated postscript file:
+
+	EPSOUTPUT="example.eps" $CMD ...
+
+Prepend "SVGOUTPUT" to print the graph to an scalable vector graphics file:
+
+	SVGOUTPUT="example.svg" $CMD ...
+END
+}
+
+function test_gnuplot {
+	if ! which $GNUPLOT > /dev/null; then
+		echo "gnuplot not found."
+		exit 1
+	fi
+}
+
+function set_output {
+	if [ $EPSOUTPUT ]; then
+		echo "set term postscript eps monochrome solid"
+		echo "set output \"$EPSOUTPUT\""
+	elif [ $SVGOUTPUT ]; then
+		echo "set term svg"
+		echo "set output \"$SVGOUTPUT\""
+	fi
+}
+
+function fit_plot {
+	CMDFILE=`mktemp _plot__XXXXXX`
+
+	set_output >> $CMDFILE
+	echo "set xlabel \"Generations\"" >> $CMDFILE
+	echo "set ylabel \"Fitness\"" >> $CMDFILE
+	echo "set grid" >> $CMDFILE
+
+	B=1
+	for C in $PREFIX; do
+	        NAMES=${C}conv*.txt
+	
+	        L=-1
+	        for A in $NAMES; do
+        	        CUR=`tail -1 $A | awk '{ print $1 }'`
+	
+	                if [ $CUR -gt $L ]; then
+	                        L=$CUR
+	                        BEST=$A
+	                fi
+	        done
+
+	        echo "f$B(x)=a$B*exp(b$B*x)+c$B" >> $CMDFILE
+	        echo "a$B=40000" >> $CMDFILE
+	        echo "b$B=-0.001" >> $CMDFILE
+	        echo "c$B=1000" >> $CMDFILE
+	        echo "fit f$B(x) \"$BEST\" via a$B, b$B, c$B" >> $CMDFILE
+	        B=$(($B+1))
+	done
+
+	echo -n "plot [0:$SCALE] [0:] " >> $CMDFILE
+
+	E=1
+	B=0
+	for C in $PREFIX; do
+        	NAMES=${C}conv*.txt
+
+	        if [ $B != 0 ]; then
+        	        echo -n ", " >> $CMDFILE
+	        fi
+
+	        echo -n "f$E(x) title \"$C prediction\" with lines lt $E lw 2" >> $CMDFILE
+
+		D="a"
+	        for A in $NAMES; do
+        	        echo -n ", \"$A\"" >> $CMDFILE
+
+			if [ $D = "a" ]; then
+				echo -n " title \"$C\"" >> $CMDFILE
+			else
+				echo -n " notitle" >> $CMDFILE
+			fi
+
+			echo -n " with lines lt $E" >> $CMDFILE
+	                B=$(($B+1))
+			D="b"
+	        done
+	        E=$(($E+1))
+	done
+
+	echo >> $CMDFILE
+	echo "quit" >> $CMDFILE
+	
+	gnuplot -persist $CMDFILE 2> /dev/null
+
+	rm $CMDFILE
+}
+
+function conv_plot {
+	CMDFILE=`mktemp _plot__XXXXXX`
+
+	set_output >> $CMDFILE
+	echo "set xlabel \"Generations\"" >> $CMDFILE
+	echo "set ylabel \"Fitness\"" >> $CMDFILE
+	echo "set grid" >> $CMDFILE
+
+	echo -n "plot [:] [0:$SCALE] " >> $CMDFILE
+
+	E=1
+	B=0
+	for C in $PREFIX; do
+	        NAMES=${C}conv*.txt
+		D="a"
+
+        	for NAME in $NAMES; do
+	                if [ $B != 0 ]; then
+	                        echo -n ", " >> $CMDFILE
+	                fi
+
+	                echo -n "\"$NAME\"" >> $CMDFILE
+
+			if [ $D = "a" ]; then
+				echo -n " title \"$C\"" >> $CMDFILE
+			else
+				echo -n " notitle" >> $CMDFILE
+			fi
+			
+			echo -n " with lines lt $E" >> $CMDFILE
+
+	                B=$(($B+1))
+			D="b"
+	        done
+	        E=$(($E+1))
+	done
+
+	echo >> $CMDFILE
+	echo quit >> $CMDFILE
+
+	$GNUPLOT -persist $CMDFILE
+
+	rm $CMDFILE
+}
+
+function module_plot {
+	CMDFILE=`mktemp _plot__XXXXXX`
+
+	set_output >> $CMDFILE
+	echo "set xlabel \"Generations\"" >> $CMDFILE
+	echo "set ylabel \"Number of errors\"" >> $CMDFILE
+	echo "set grid" >> $CMDFILE
+	echo -n "plot [:] [:$SCALE]" >> $CMDFILE
+
+	C=0;
+	for FITNESS in `grep '^#' $CONVFILE | head -n1 | sed 's/.*OK\t//' | sed 's/ /_/g'`; do
+        	if [ $C -gt 0 ]; then
+        		echo -n ", " >> $CMDFILE
+        	fi
+
+		FITNESS2=`echo $FITNESS | sed 's/_/ /g'`
+
+        	echo -n "\"$CONVFILE\" using 1:$(($C+4))" >> $CMDFILE
+		echo -n " title \"$FITNESS2\" with lines" >> $CMDFILE
+
+		if echo $FITNESS | egrep '\(M\)' > /dev/null; then
+			echo -n " lw 2" >> $CMDFILE
+		fi
+
+        	C=$(($C+1))
+	done
+
+	echo >> $CMDFILE
+	echo quit >> $CMDFILE
+
+	gnuplot -persist $CMDFILE
+
+	rm $CMDFILE
+}
+
+if [ $# -lt 1 ]; then 
+	syntax
+	exit 1
+fi
+
+test_gnuplot
+
+case "$1" in
+	--fit-*|--conv-*)
+		SCALE=""
+		if [ $# -ge 3 ]; then
+			if [ $2 = "--scale" ]; then
+				SCALE=$3
+			fi
+		fi
+
+		PREFIX=`echo $@ | sed 's/--[a-z]*-[a-z]*//;s/ *--scale [0-9]* *//'`
+		
+		if [ -z "$PREFIX" ]; then
+			PREFIX="./"
+		fi
+
+		case "$1" in
+			--fit-fitness)
+				fit_plot
+				;;
+			--conv-fitness)
+				conv_plot
+				;;
+			*)
+				syntax
+				exit 1
+				;;
+		esac
+		;;
+	--functions)
+		SCALE=""
+		if [ $# -eq 4 ]; then
+			if [ $2 = "--scale" ]; then
+				SCALE=$3
+				CONVFILE=$4
+			else
+				syntax
+				exit 1
+			fi
+		elif [ $# -eq 2 ]; then
+			CONVFILE=$2
+		else
+			syntax
+			exit 1
+		fi
+
+		module_plot
+		;;
+	*)
+		syntax
+		exit 1
+esac

@@ -1,0 +1,73 @@
+<!--
+BEGIN TTF BLOCK
+(define days 5)
+(define periods 7)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+
+(define (tuple-loop i j)
+	(vector-set! perday (get-day i) (+ (vector-ref perday (get-day i)) 1))
+	(if (< i j) (tuple-loop (+ i 1) j))
+	#t
+)
+
+(define (tuple-loop-2 x i)
+	(if (< i 14) 
+		(tuple-loop-2 (and x (< (vector-ref perday (get-day i)) 1)) (+ i 1)) 
+		x
+	)
+)
+
+(test-ttf
+	(define perday (make-vector days 0))
+	(tuple-loop 0 6)
+	(tuple-loop-2 #t 7)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="events_sameday.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+				<resource name="b"/>
+				<resource name="c"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+				<resource name="2"/>
+				<resource name="3"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test-1-a" repeats="7">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test-1-b" repeats="7">
+			<resource type="teacher" name="b"/>
+			<resource type="class" name="2"/>
+			<restriction type="not-same-day-as">test-1-a</restriction>
+		</event>
+		<event name="test-1-c" repeats="5">
+			<resource type="teacher" name="b"/>
+			<resource type="class" name="3"/>
+		</event>
+	</events>
+</ttm>

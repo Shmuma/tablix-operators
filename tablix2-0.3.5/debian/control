@@ -1,0 +1,68 @@
+Source: tablix2
+Section: misc
+Priority: extra
+Maintainer: Tomaz Solc <tomaz.solc@tablix.org>
+Build-Depends: debhelper (>> 4.0.0), pvm-dev, libxml2-dev
+Standards-Version: 3.6.2
+
+Package: tablix2
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: gnuplot
+Description: Kernel for solving general timetabling problems
+ Tablix is a powerful free software kernel for solving general 
+ timetabling problems. It uses a coarse-grained parallel genetic
+ algorithm in combination with other techniques to construct 
+ sensible timetables from XML formatted problem descriptions. 
+ Tablix can run on a single host as well as on a heterogeneous 
+ parallel virtual machine using PVM3.
+ .
+ Tablix kernel supports a very wide range of timetabling 
+ problems, from high school timetabling to barge scheduling. 
+ A number of timetable constraints are already implemented 
+ in the default installation. Because of kernel's modular 
+ design it is easy to add custom timetable constraints
+ and/or modify existing ones.
+ .
+ This package contains Tablix kernel and the associated 
+ command line utilities.
+
+Package: tablix2-dev
+Architecture: all
+Description: Kernel for solving general timetabling problems
+ Tablix is a powerful free software kernel for solving general 
+ timetabling problems. It uses a coarse-grained parallel genetic
+ algorithm in combination with other techniques to construct 
+ sensible timetables from XML formatted problem descriptions. 
+ Tablix can run on a single host as well as on a heterogeneous 
+ parallel virtual machine using PVM3.
+ .
+ Tablix kernel supports a very wide range of timetabling 
+ problems, from high school timetabling to barge scheduling. 
+ A number of timetable constraints are already implemented 
+ in the default installation. Because of kernel's modular 
+ design it is easy to add custom timetable constraints
+ and/or modify existing ones.
+ .
+ This package contains header files necessary for 
+ building additional Tablix modules.
+
+Package: tablix2-doc
+Architecture: all
+Description: Kernel for solving general timetabling problems
+ Tablix is a powerful free software kernel for solving general 
+ timetabling problems. It uses a coarse-grained parallel genetic
+ algorithm in combination with other techniques to construct 
+ sensible timetables from XML formatted problem descriptions. 
+ Tablix can run on a single host as well as on a heterogeneous 
+ parallel virtual machine using PVM3.
+ .
+ Tablix kernel supports a very wide range of timetabling 
+ problems, from high school timetabling to barge scheduling. 
+ A number of timetable constraints are already implemented 
+ in the default installation. Because of kernel's modular 
+ design it is easy to add custom timetable constraints
+ and/or modify existing ones.
+ .
+ This package contains Tablix User's Manual, Tablix modules HOW-TO,
+ Modules reference documentation and Tablix kernel API reference.

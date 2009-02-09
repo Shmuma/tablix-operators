@@ -1,0 +1,59 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(time 0 (get-time 1))
+	(time 4 (get-time 3))
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+		<module name="sametimeas.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<linear name="#" from="1" to="5"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<linear name="#" from="1" to="5"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test1" repeats="1">
+			<resource type="teacher" name="1"/>
+			<resource type="class" name="1"/>
+			<restriction type="same-time-as">test2</restriction>
+		</event>
+		<event name="test2" repeats="1">
+			<resource type="teacher" name="2"/>
+			<resource type="class" name="2"/>
+		</event>
+		<event name="test3" repeats="1">
+			<resource type="teacher" name="3"/>
+			<resource type="class" name="3"/>
+		</event>
+		<event name="test4" repeats="1">
+			<resource type="teacher" name="4"/>
+			<resource type="class" name="4"/>
+			<restriction type="same-time-as">test5</restriction>
+		</event>
+		<event name="test5" repeats="1">
+			<resource type="teacher" name="5"/>
+			<resource type="class" name="5"/>
+		</event>
+	</events>
+</ttm>

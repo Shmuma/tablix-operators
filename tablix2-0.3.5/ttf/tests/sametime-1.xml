@@ -1,0 +1,74 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(not (time 0 (get-time 1)))
+	(not (time 0 (get-time 2)))
+	(not (time 0 (get-time 3)))
+	(not (time 0 (get-time 4)))
+	(not (time 1 (get-time 0)))
+	(not (time 1 (get-time 2)))
+	(not (time 1 (get-time 3)))
+	(not (time 1 (get-time 4)))
+	(not (time 2 (get-time 0)))
+	(not (time 2 (get-time 1)))
+	(not (time 2 (get-time 3)))
+	(not (time 2 (get-time 4)))
+	(not (time 3 (get-time 0)))
+	(not (time 3 (get-time 1)))
+	(not (time 3 (get-time 2)))
+	(not (time 3 (get-time 4)))
+	(not (time 4 (get-time 0)))
+	(not (time 4 (get-time 1)))
+	(not (time 4 (get-time 2)))
+	(not (time 4 (get-time 3)))
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<linear name="#" from="1" to="5"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="3" height="2"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="3"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="4"/>
+		</event>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="5"/>
+		</event>
+	</events>
+</ttm>

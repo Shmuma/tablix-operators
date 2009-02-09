@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>maxconsecutive.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>maxconsecutive.so module reference</h1>
+
+		<h2>Description</h2>
+<p>This module allows you to set a limit for the maximum number of
+consecutive events in a teacher's timetable. Additionally you can also set
+the number of different lectures that a teacher can have without a pause.</p>
+<p>Two lectures are different if they differ in the title and the attending 
+group of students (i.e. they must differ in the name of the event and all 
+assigned constant resources). The way these lectures are defined in the 
+XML file has no effect (for example with a single &lt;event&gt; tag with repeats 
+or two identical &lt;event&gt; tags - see also <a href="consecutive.html">consecutive.so</a> documentation)</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-consecutive"&gt;4&lt;/option&gt;
+	&lt;option name="max-different"&gt;3&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>With the above options the following combinations are allowed (where A, B, C
+denote time slots assigned to different lectures and . denotes a free 
+time slot):</p>
+<p>. A B C . (max-different limit reached)</p>
+<p>. A A B B . (max-consecutive limit reached)</p>
+<p>. A A B C . (both max-different and max-consecutive limits reached)</p>
+<p>And the following combination isn't allowed:</p>
+<p>A A B B C . (over the max-consecutive limit)</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>teacher</li>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+<h3>max-consecutive</h3>
+<p>Use this option to specify the maximum length of a consecutive block of 
+events in a teacher's timetable.</p>
+<p>For example:</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-consecutive"&gt;3&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>In this case a teacher can have at most 3 lectures (3 occupied time slots) 
+before requiring at least one time slot of pause.</p>
+<h3>max-different</h3>
+<p>Use this option to specify the maximum number of different events in a 
+consecutive block of events in a teacher's timetable.</p>
+<p>For example:</p>
+<pre>&lt;module name="maxconsecutive" weight="60" mandatory="yes"&gt;
+	&lt;option name="max-different"&gt;2&lt;/option&gt;
+&lt;/module&gt;</pre>
+<p>In this case a teacher can have at most 2 different lectures (and any number
+of occupied time slots) before requiring at least one time slot of pause.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

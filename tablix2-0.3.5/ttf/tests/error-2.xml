@@ -1,0 +1,39 @@
+<!--
+BEGIN TTF BLOCK
+(test-ttf
+	(invalid-function)
+)
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime.so" weight="60" mandatory="yes"/> 
+		<module name="timeplace.so" weight="60" mandatory="yes"/>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="A"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="2"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="2" height="2"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test" repeats="1">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="A"/>
+		</event>
+	</events>
+</ttm>

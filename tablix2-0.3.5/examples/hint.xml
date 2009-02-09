@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r0.dtd">
+
+<!-- ======================================================================
+
+     Example XML data file for Tablix 0.2.0                               
+     Copyright (C) 2002-2005 Tomaz Solc                        
+
+     File hint.xml
+
+     $Id: hint.xml,v 1.2 2005/10/29 18:26:19 avian Exp $
+
+     ======================================================================
+
+     This file demonstrates the use of population hinting.
+
+     "Event 2" and "Event 3" must be scheduled at the same time because
+     of the "same-time-as" restriction.
+
+     You can help Tablix find the solution by proposing a solution in the 
+     configuration file. This can be done by adding <resource> tags for 
+     variable resources to the <event> tags. Good hints are usually respected
+     by Tablix (you can set the "strength" of hints by setting the "pophint"
+     parameter), bad hints are ignored.
+
+     The following example has a hint for the "time" resource type for events
+     "Event 2" and "Event 3". 
+
+     You can see that if you uncomment the good hint, Tablix will respect it
+     and schedule both "Event 2" and "Event 3" on first period of the first
+     day.
+
+     If you uncomment the bad hint, Tablix won't respect it and both events
+     will be placed in a random timeslot (but still both will be using the
+     same timeslot, as specified with the same-time-as restriction).
+
+     ====================================================================== -->
+
+<ttm version="0.2.0">
+        <info>
+                <title>Example high school</title>
+                <author>Tablix</author>
+        </info>
+
+        <modules>
+                <module name="sametime.so" weight="60" mandatory="yes"/> 
+                <module name="timeplace.so" weight="60" mandatory="yes"/> 
+                <module name="sametimeas.so" weight="60" mandatory="yes"/> 
+		<module name="holes.so" weight="60" mandatory="yes">
+			<option name="resourcetype">class</option>
+			<option name="resourcetype">teacher</option>
+		</module>
+        </modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="Teacher 1"/>
+				<resource name="Teacher 2"/>
+				<resource name="Teacher 3"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="Class 1">
+					<restriction type="conflicts-with">Class 1a</restriction>
+					<restriction type="conflicts-with">Class 1b</restriction>
+				</resource>
+				<resource name="Class 1a"/>
+				<resource name="Class 1b"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+			<resourcetype type="room">
+				<linear name="Room #" from="1" to="10"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+                <event name="Lecture 1" repeats="12">
+			<resource type="teacher" name="Teacher 1"/>
+			<resource type="class" name="Class 1"/>
+		</event>
+		<event name="Lecture 2" repeats="1">
+			<resource type="teacher" name="Teacher 2"/>
+			<resource type="class" name="Class 1a"/>
+			<restriction type="same-time-as">Lecture 3</restriction>
+			<!-- good hint -->
+			<resource type="time" name="0 0"/> 
+			<!-- bad hint 
+			<resource type="time" name="1 0"/>
+			-->
+		</event>
+		<event name="Lecture 3" repeats="1">
+			<resource type="teacher" name="Teacher 3"/>
+			<resource type="class" name="Class 1b"/>
+			<!-- hint -->
+			<resource type="time" name="0 0"/>
+		</event>
+	</events>
+</ttm>

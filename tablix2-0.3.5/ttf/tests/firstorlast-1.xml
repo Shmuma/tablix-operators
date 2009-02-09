@@ -1,0 +1,85 @@
+<!--
+BEGIN TTF BLOCK
+(define days 5)
+(define periods 7)
+
+; number of defined events
+(define tuplenum 24)
+
+(define (get-day tupleid) (quotient (get-time tupleid) periods))
+(define (get-period tupleid) (modulo (get-time tupleid) periods))
+
+; checks if there is a lecture scheduled both in the first and the last
+; timeslot of the day.
+(define (check-day day)
+	(let loop ((i 0) (first #f) (last #f))
+		(if (< i tuplenum) (begin
+			(if (= (get-day i) day) (begin
+				(if (= (get-period i) 0) 
+					(define first #t))
+				(if (= (get-period i) (- periods 1))
+					(define last #t))))
+			(loop (+ i 1) first last))
+		(and first last))))
+
+; performs (check-day) for each day
+(define (check-days)
+	(let loop ((i 0) (result #f))
+		(if (< i days)
+			(loop (+ i 1) (or result (check-day i)))
+			result)))
+
+(test-ttf 
+	(not (check-days)))
+END TTF BLOCK
+-->
+<ttm version="0.2.0">
+	<modules>
+		<module name="sametime" weight="60" mandatory="yes"/> 
+		<module name="timeplace" weight="60" mandatory="yes"/>
+		<module name="firstorlast" weight="60" mandatory="yes">
+			<option name="resourcetype">teacher</option>
+		</module>
+	</modules>
+
+	<resources>
+		<constant>
+			<resourcetype type="teacher">
+				<resource name="a"/>
+			</resourcetype>
+			<resourcetype type="class">
+				<resource name="1"/>
+				<resource name="2"/>
+				<resource name="3"/>
+				<resource name="4"/>
+			</resourcetype>
+		</constant>
+		<variable>
+			<resourcetype type="room">
+				<linear name="#" from="1" to="40"/>
+			</resourcetype>
+			<resourcetype type="time">
+				<matrix width="5" height="7"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+		<event name="test-1-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="1"/>
+		</event>
+		<event name="test-2-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="2"/>
+		</event>
+		<event name="test-3-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="3"/>
+		</event>
+		<event name="test-4-a" repeats="6">
+			<resource type="teacher" name="a"/>
+			<resource type="class" name="4"/>
+		</event>
+	</events>
+</ttm>

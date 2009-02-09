@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>preferredtime.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>preferredtime.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds a weight whenever an event is not scheduled at the specified 
+preferred day and/or time slot.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+		<h2>Defined tuple restrictions</h2>
+<h3>preferred-day</h3>
+<pre>&lt;restriction type="preferred-day"&gt;day&lt;/restriction&gt;</pre>
+<p>This restriction specifies the preferred day for an event.</p>
+<h3>preferred-period</h3>
+<pre>&lt;restriction type="preferred-period"&gt;period&lt;/restriction&gt;</pre>
+<p>This restriction specifies the preferred period for an event.</p>
+		<h2>Supported module options</h2>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>General</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p><h2>Credits</h2><p><p>
+Ideas taken from a patch for Tablix 0.0.3 by 
+Jaume Obrador &lt;obrador@espaiweb.net&gt;</p>
+<p>Ported to version 0.2.0 and extended by Nick Robinson &lt;npr@bottlehall.co.uk&gt;</p>
+</p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

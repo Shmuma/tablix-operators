@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ttm version="0.2.0">
+        <modules>
+                <module name="row.so" weight="10" mandatory="yes"/> 
+        </modules>
+
+	<resources>
+		<variable>
+			<resourcetype type="dummy-type">
+				<matrix width="10" height="10"/>
+			</resourcetype>
+		</variable>
+	</resources>
+
+	<events>
+                <event name="dummy-event" repeats="1">
+			<restriction type="row-dummy-type">3</restriction>
+		</event>
+	</events>
+</ttm>

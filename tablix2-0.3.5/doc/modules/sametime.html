@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>sametime.so module reference</title>
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: small;
+		}
+		pre {
+			background-color: #eeeeff;
+			border: solid 1px #000000;
+			padding: 15px;
+		}
+		a {
+			text-decoration: none;
+		       	font-weight: bold;
+			color: #1A419D;
+		}
+		</style>
+	</head>
+	<body>
+		<p><a href="index.html">Back to index</a></p>
+		<h1>sametime.so module reference</h1>
+
+		<h2>Description</h2>
+<p>Adds a weight whenever a teacher or a class is required to be in two 
+rooms at the same time.</p>
+<p>Please note that this module will not consider it as an error if a teacher or
+a class has two events scheduled at the same time in the same room. This
+means that in 99% of cases you need to use this module together with
+<a href="timeplace.html">timeplace.so</a> to get the expected results.</p>
+		<h2>Required resource types</h2>
+		<p>Configuration file must define the following resource types 
+		in order to use this module:</p>
+
+		<ul>
+<li>class</li>
+<li>room</li>
+<li>teacher</li>
+<li>time</li>
+		</ul>
+		<h2>Defined resource restrictions</h2>
+<h3>conflicts-with (resource types class, teacher)</h3><pre>&lt;restriction type="conflicts-with"&gt;name&lt;/restriction&gt;</pre>
+<p>This restriction specifies that current class or teacher should never have 
+lessons at the same time as the class or teacher specified in the 
+restriction.</p>
+<p>There are two common uses for this restriction: When multiple classes share
+an event and when multiple teachers share an event. Consider the following 
+example:</p>
+<p>Let's say we have two groups of students. Each group has its own timetable
+except a couple of lessons which they share.</p>
+<p>We define each group of students plus an extra group for the shared lessons.</p>
+<pre>&lt;resourcetype type="class"&gt;
+	&lt;resource name="Group 1"&gt;
+		&lt;restriction type="conflicts-with"&gt;Group 1+2&lt;/restriction&gt;
+	&lt;/resource&gt;
+	&lt;resource name="Group 2"&gt;
+		&lt;restriction type="conflicts-with"&gt;Group 1+2&lt;/restriction&gt;
+	&lt;/resource&gt;
+	&lt;resource name="Group 1+2"/&gt;
+&lt;/resourcetype&gt;</pre>
+<p>This way group 1+2 will never have lessons at the same time as
+groups 1 and 2 and students from either group will be able to attend
+lectures in group 1+2.</p>
+<p>Multiple teachers per event can be defined in a similar way.</p>
+		<h2>Defined tuple restrictions</h2>
+		<h2>Supported module options</h2>
+<h3>recursive-conflicts</h3>
+<p>If this module option is present (any option value is ignored), then all
+"conflicts-with" restrictions become recursive.</p>
+<p>For example: if class A conflicts with class B and class A conflicts with 
+class C, then class B will also automatically conflict with class C.</p>
+<p>Without this option class C will not conflict with class B unless you 
+specify this with another "conflicts-with" restriction.</p>
+
+		<h2>Module groups</h2>
+		<p>This module belongs to the following groups:</p>
+		<ul>
+<li>School scheduling</li>
+<li>Multiweek scheduling</li>
+		</ul>
+		<h2>Author</h2>
+<p>Tomaz Solc, <a href="mailto:tomaz.solc@tablix.org">tomaz.solc@tablix.org</a></p>	<p><a href="index.html">Back to index</a></p>
+	</body>
+</html>

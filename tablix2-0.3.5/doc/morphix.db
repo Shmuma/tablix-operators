@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<article>
+<articleinfo>
+<title>Tablix on Morphix HOWTO</title>
+<author>
+<firstname>Tomaz</firstname>
+<surname>Solc</surname>
+<authorblurb>
+<para><email>tomaz.solc@tablix.org</email></para>
+</authorblurb>
+</author>
+<pubdate>
+$Id: morphix.db,v 1.2 2006-08-29 14:32:23 avian Exp $
+</pubdate>
+<abstract>
+<para>
+This document briefly describes how to use Tablix with <ulink url="http://www.morphix.org">Morphix 0.4</ulink>, a modular distribution with live-cd support. This information may be useful to people wanting to run Tablix on computers that don't have a UNIX-like operating system installed.
+</para>
+</abstract>
+</articleinfo>
+
+<sect1>
+<title>Introduction</title>
+
+<note><para>Steps in this HOW-TO assume that you have at least one computer with Linux or a similar operating system installed. You can probably achieve the same result with similar tools on other operating systems.</para></note>
+
+<para>You will need the following files from the <ulink url="http://www.morphix.org">Morphix</ulink> web site:</para>
+
+<orderedlist>
+<listitem>
+<para>A combined ISO of your choice. For this example I will choose <filename>MorphixCombined-LightGUI-0.4.iso</filename> (you probably don't want to waste precious CPU time and memory with KDE or Gnome).</para>
+</listitem>
+<listitem>
+<para>Morphix deb-morph minimodule <filename>MorphixMini-deb-morph.mod</filename>.</para>
+</listitem>
+</orderedlist>
+
+<para>Also download the following Debian packages (I recommend you use those from the stable distribution). Get them at <ulink url="http://www.debian.org">Debian web site</ulink> and <ulink url="http://www.kiss.si/~k4fe1336/tablix">Tablix home page</ulink>:</para>
+
+<orderedlist>
+<listitem>
+<para><filename>libpvm3</filename></para>
+</listitem>
+<listitem>
+<para><filename>libxml2</filename></para>
+</listitem>
+<listitem>
+<para><filename>pvm</filename></para>
+</listitem>
+<listitem>
+<para><filename>tablix</filename></para>
+</listitem>
+</orderedlist>
+
+
+
+</sect1>
+
+<sect1>
+<title>Preparing the ISO</title>
+
+<para>Mount the ISO. You will need a kernel that supports loop back devices (most Linux distributions support this out of the box).</para>
+
+<screen>
+<computeroutput>
+<prompt>$</prompt> <userinput>su</userinput>
+Password:
+<prompt>#</prompt> <userinput>mount -o loop MorphixCombined-LightGUI-0.4.iso /cdrom</userinput>
+</computeroutput>
+</screen>
+
+<para>We cannot change the ISO directly, so you must copy its contents to a temporary directory.</para>
+
+<screen>
+<computeroutput>
+<prompt>$</prompt> <userinput>cp -r /cdrom tmp</userinput>
+</computeroutput>
+</screen>
+
+<para>Copy <filename>MorphixMini-deb-morph.mod</filename> to the minimod subdirectory.</para>
+
+<screen>
+<computeroutput>
+<prompt>$</prompt> <userinput>cd tmp</userinput>
+<prompt>$</prompt> <userinput>cd minimod</userinput>
+<prompt>$</prompt> <userinput>cp ../../MorphixMini-deb-morph.mod .</userinput>
+</computeroutput>
+</screen>
+
+<para>Copy all of the debian packages you downloaded to the deb subdirectory.</para>
+
+<screen>
+<computeroutput>
+<prompt>$</prompt> <userinput>cd ..</userinput>
+<prompt>$</prompt> <userinput>mkdir deb</userinput>
+<prompt>$</prompt> <userinput>cd deb</userinput>
+<prompt>$</prompt> <userinput>cp ../../libpvm3_3.4.2-8_i386.deb .</userinput>
+<prompt>$</prompt> <userinput>cp ../../pvm_3.4.2-8_i386.deb .</userinput>
+<prompt>$</prompt> <userinput>cp ../../libxml2_2.4.19-4_i386.deb .</userinput>
+<prompt>$</prompt> <userinput>cp ../../tablix_0.0.4-1_i386.deb .</userinput>
+</computeroutput>
+</screen>
+
+<para>You are now ready to burn the modified file system to a recordable CD. Following has been copied from the Morphix ISO HOWTO.</para>
+
+<screen>
+<computeroutput>
+<prompt>$</prompt> <userinput>cd ..</userinput>
+<prompt>$</prompt> <userinput>cd ..</userinput>
+<prompt>$</prompt> <userinput>mkisofs -pad -l -r -J -v -V "Morphix" \
+-b base/boot.img -c boot.catalog -hide-rr-moved -o morphix.iso tmp</userinput>
+<prompt>$</prompt> <userinput>cdrecord morphix.iso</userinput>
+</computeroutput>
+</screen>
+
+<para>Of course, you should add any options needed by your drive to the cdrecord command line.</para>
+
+</sect1>
+
+<sect1>
+<title>Morphix settings</title>
+
+<para>Boot the computer from the CD you just made. Because settings are not saved when you shut down Morphix, you will have to go through this procedure after every boot.</para>
+
+<para>Use the Morphix' network configuration to bring up the network interfaces. Try if they work by pinging some computers on your LAN</para>
+
+<para>Now open a root console and start the ssh daemon. sshd privilege separation user is missing, so you will have to create it first.</para>
+
+<screen>
+<computeroutput>
+<prompt>#</prompt> <userinput>adduser --system sshd</userinput>
+<prompt>#</prompt> <userinput>/etc/init.d/ssh start</userinput>
+</computeroutput>
+</screen>
+
+<para>Now create a normal user. For minimum trouble choose the same username as the one that will be used to run the Tablix master process.</para>
+
+<screen>
+<computeroutput>
+<prompt>#</prompt> <userinput>adduser avian</userinput>
+</computeroutput>
+</screen>
+
+</sect1>
+
+<sect1>
+<title>Master node settings</title>
+
+<para>Once you have set up nodes, add each node into the <filename>hostfile</filename> and start the PVM. Don't forget the speed option!</para>
+
+<para>You will be prompted for a password for each node. After that, you can check the configuration by entering <userinput>conf</userinput> at the pvm console.</para>
+
+<para>If everything looks fine, you can start the Tablix master process as usual.</para>
+
+</sect1>
+</article>
