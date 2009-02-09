@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<ttm version="0.2.0">
+  <info>
+    <title>Yandex DC</title>
+    <address>www.yandex.ru</address>
+    <author>Max Lapan</author>
+  </info>
+  <modules>
+    <module name="available" weight="200" mandatory="yes"/>
+    <module name="timeplace" weight="500" mandatory="yes"/>
+    <module name="sametimelight" weight="200" mandatory="yes"/>
+    <module name="maxperday" weight="60" mandatory="yes">
+      <option name="resourcetype">teacher</option>
+      <option name="maxperday">1</option>
+    </module>
+    <module name="walk" weight="500" mandatory="yes">
+      <option name="resourcetype">teacher</option>
+    </module>
+  </modules>
+
+  <resources>
+    <constant>
+      <resourcetype type="teacher">
+        <resource name="shmuma">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="efim">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="legion">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="nab">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="khext">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="andozer">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+        <resource name="guba"/>
+        <resource name="ezhichek"/>
+        <resource name="scheg0l">
+          <restriction type="not-available">0 0</restriction>
+        </resource>
+      </resourcetype>
+    </constant>
+
+    <variable>
+      <resourcetype type="time">
+        <matrix width="7" height="3"/>
+      </resourcetype>
+      <resourcetype type="room">
+        <resource name="dc1"/>
+        <resource name="dc2"/>
+      </resourcetype>
+    </variable>
+  </resources>
+
+  <events>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="shmuma"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="efim"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="legion"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="nab"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="khext"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="andozer"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="guba"/>
+    </event>
+    <event name="Work" repeats="5">
+      <resource type="teacher" name="ezhichek"/>
+    </event>
+    <event name="Work" repeats="2">
+      <resource type="teacher" name="scheg0l"/>
+    </event>
+  </events>
+</ttm>

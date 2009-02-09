@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<ttm version="0.2.0">
+  <info>
+    <title>Yandex DC</title>
+    <address>www.yandex.ru</address>
+    <author>Max Lapan</author>
+  </info>
+  <modules>
+    <module name="available" weight="200" mandatory="yes"/>
+    <module name="timeplace" weight="500" mandatory="yes"/>
+    <module name="sametimelight" weight="500" mandatory="yes"/>
+<!--     <module name="maxperday" weight="60" mandatory="no"> -->
+<!--       <option name="resourcetype">teacher</option> -->
+<!--       <option name="maxperday">1</option> -->
+<!--     </module> -->
+    <module name="walk" weight="5" mandatory="no">
+      <option name="resourcetype">teacher</option>
+    </module>
+
+    <module name="preferredroom" weight="100" mandatory="yes"/>
+    <module name="room_available" weight="500" mandatory="yes"/>
+  </modules>
+
+  <resources>
+    <constant>
+      <resourcetype type="teacher">
+        <resource name="airdog"></resource>
+        <resource name="alex27j">
+          <restriction type="preferred-room">Stanislav</restriction>
+        </resource>
+        <resource name="astronom"></resource>
+        <resource name="bander"></resource>
+        <resource name="dukeartem"></resource>
+        <resource name="erokhin"></resource>
+        <resource name="ezhichek"></resource>
+        <resource name="gcat"></resource>
+        <resource name="ironhulk"></resource>
+        <resource name="kent">
+          <restriction type="preferred-room">Stanislav2</restriction>
+        </resource>
+        <resource name="korrus"></resource>
+        <resource name="lacitis"></resource>
+        <resource name="mixas">
+          <restriction type="preferred-room">Golem</restriction>
+        </resource>
+        <resource name="mixermsk"></resource>
+        <resource name="newins"></resource>
+        <resource name="nixx"></resource>
+        <resource name="nstd"></resource>
+        <resource name="porfel"></resource>
+        <resource name="renew"></resource>
+        <resource name="romashkin"></resource>
+        <resource name="sbalandin"></resource>
+        <resource name="shpin"></resource>
+        <resource name="teran"></resource>
+      </resourcetype>
+    </constant>
+
+    <variable>
+      <resourcetype type="time">
+        <matrix width="7" height="3"/>
+      </resourcetype>
+
+      <resourcetype type="room">
+        <resource name="Vavilova">
+          <restriction type="room-not-available-time">0</restriction>
+        </resource>
+        <resource name="ETO"/>
+        <resource name="ETO2">
+          <restriction type="room-not-available-time">0</restriction>
+        </resource>
+        <resource name="UGR"/>
+        <resource name="UGR2">
+          <restriction type="room-not-available-time">0</restriction>
+        </resource>
+        <resource name="Ivan">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+        </resource>
+        <resource name="Samokat">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-cell">5 2</restriction>
+          <restriction type="room-not-available-cell">6 2</restriction>
+        </resource>
+        <resource name="Golem">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">1</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+        </resource>
+        <resource name="Stanislav">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+        </resource>
+        <resource name="Stanislav2">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+        </resource>
+      </resourcetype>
+    </variable>
+  </resources>
+
+  <events>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="airdog"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="alex27j"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="astronom"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="bander"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="dukeartem"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="erokhin"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="ezhichek"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="gcat"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="ironhulk"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="kent"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="korrus"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="lacitis"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="mixas"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="mixermsk"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="newins"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="nixx"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="nstd"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="porfel"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="renew"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="romashkin"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="sbalandin"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="shpin"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="teacher" name="teran"/>
+    </event>
+  </events>
+</ttm>
