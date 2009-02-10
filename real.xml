@@ -19,12 +19,12 @@
       <option name="resourcetype">operator</option>
     </module>
 
-    <module name="preferredroom" weight="100" mandatory="yes"/>
     <module name="room_available" weight="500" mandatory="yes"/>
     <module name="nights" weight="500" mandatory="yes">
       <option name="max-nights-per-week">2</option>
       <option name="max-nights-weight">100</option>
     </module>
+    <module name="preference" weight="0" mandatory="yes"/>
   </modules>
 
   <resources>
@@ -32,7 +32,7 @@
       <resourcetype type="operator">
         <resource name="airdog"></resource>
         <resource name="alex27j">
-          <restriction type="preferred-room">Stanislav</restriction>
+          <restriction type="pref-room">2 Stanislav</restriction>
         </resource>
         <resource name="astronom"></resource>
         <resource name="bander"></resource>
@@ -42,12 +42,12 @@
         <resource name="gcat"></resource>
         <resource name="ironhulk"></resource>
         <resource name="kent">
-          <restriction type="preferred-room">Stanislav2</restriction>
+          <restriction type="pref-room">2 Stanislav2</restriction>
         </resource>
         <resource name="korrus"></resource>
         <resource name="lacitis"></resource>
         <resource name="mixas">
-          <restriction type="preferred-room">Golem</restriction>
+          <restriction type="pref-room">2 Golem</restriction>
         </resource>
         <resource name="mixermsk"></resource>
         <resource name="newins"></resource>

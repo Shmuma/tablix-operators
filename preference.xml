@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
+
+<ttm version="0.2.0">
+  <info>
+    <title>User's preferences module test</title>
+    <address>www.yandex.ru</address>
+    <author>Max Lapan</author>
+  </info>
+  <modules>
+    <module name="available" weight="200" mandatory="yes"/>
+    <module name="timeplace" weight="500" mandatory="yes"/>
+    <module name="sametimelight" weight="500" mandatory="yes"/>
+    <module name="room_available" weight="500" mandatory="yes"/>
+    <module name="preference" weight="0" mandatory="yes"/>
+  </modules>
+
+  <resources>
+    <constant>
+      <resourcetype type="operator">
+        <resource name="airdog"></resource>
+        <resource name="alex27j"></resource>
+        <resource name="astronom"></resource>
+        <resource name="shpin">
+          <restriction type="pref-room">!2 ETO</restriction>
+        </resource>
+        <resource name="teran">
+          <restriction type="pref-room">2 ETO</restriction>
+          <restriction type="pref-room">2 Vavilova</restriction>
+          <restriction type="pref-time-day">!2 0</restriction>
+          <restriction type="pref-time-time">!2 0</restriction>
+          <restriction type="pref-time-cell">!2 1 2</restriction>
+        </resource>
+        <resource name="shmuma"></resource>
+      </resourcetype>
+    </constant>
+
+    <variable>
+      <resourcetype type="time">
+        <matrix width="7" height="3"/>
+      </resourcetype>
+
+      <resourcetype type="room">
+        <resource name="Vavilova">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+        </resource>
+        <resource name="ETO">
+          <restriction type="room-not-available-cell">1 2</restriction>
+        </resource>
+        <resource name="Golem">
+        </resource>
+      </resourcetype>
+    </variable>
+  </resources>
+
+  <events>
+    <event name="Work" repeats="5">
+        <resource type="operator" name="airdog"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="operator" name="alex27j"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="operator" name="astronom"/>
+    </event>
+    <event name="Work" repeats="5">
+        <resource type="operator" name="shpin"/>
+    </event>
+    <event name="Work" repeats="10">
+        <resource type="operator" name="teran"/>
+    </event>
+  </events>
+</ttm>
