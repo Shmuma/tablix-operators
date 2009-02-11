@@ -18,13 +18,15 @@
     <module name="walk" weight="5" mandatory="no">
       <option name="resourcetype">operator</option>
     </module>
-
     <module name="room_available" weight="500" mandatory="yes"/>
     <module name="nights" weight="500" mandatory="yes">
       <option name="max-nights-per-week">2</option>
       <option name="max-nights-weight">100</option>
     </module>
     <module name="preference" weight="0" mandatory="yes"/>
+    <module name="time_descriptions" weight="0" mandatory="no">
+      <option name="output">time_descr.txt</option>
+    </module>
   </modules>
 
   <resources>
@@ -70,41 +72,64 @@
       <resourcetype type="room">
         <resource name="Vavilova">
           <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
         </resource>
-        <resource name="ETO"/>
+        <resource name="ETO">
+          <restriction type="room-must-be-filled">0</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
         <resource name="ETO2">
           <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
         </resource>
-        <resource name="UGR"/>
+        <resource name="UGR">
+          <restriction type="room-must-be-filled">0</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
         <resource name="UGR2">
           <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
         </resource>
         <resource name="Ivan">
           <restriction type="room-not-available-time">0</restriction>
           <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="time-descriptions">23:00,10:00,15:00</restriction>
         </resource>
         <resource name="Samokat">
           <restriction type="room-not-available-time">0</restriction>
           <restriction type="room-not-available-cell">5 2</restriction>
           <restriction type="room-not-available-cell">6 2</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
         </resource>
         <resource name="Golem">
           <restriction type="room-not-available-time">0</restriction>
           <restriction type="room-not-available-time">1</restriction>
           <restriction type="room-not-available-day">5</restriction>
           <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
         </resource>
         <resource name="Stanislav">
           <restriction type="room-not-available-time">0</restriction>
           <restriction type="room-not-available-time">2</restriction>
           <restriction type="room-not-available-day">5</restriction>
           <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
         </resource>
         <resource name="Stanislav2">
           <restriction type="room-not-available-time">0</restriction>
           <restriction type="room-not-available-time">2</restriction>
           <restriction type="room-not-available-day">5</restriction>
           <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
         </resource>
       </resourcetype>
     </variable>

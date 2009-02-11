@@ -16,7 +16,7 @@
 
   <resources>
     <constant>
-      <resourcetype type="teacher">
+      <resourcetype type="operator">
         <resource name="airdog"></resource>
         <resource name="alex27j"></resource>
         <resource name="astronom"></resource>
@@ -46,19 +46,19 @@
 
   <events>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="airdog"/>
+        <resource type="operator" name="airdog"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="alex27j"/>
+        <resource type="operator" name="alex27j"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="astronom"/>
+        <resource type="operator" name="astronom"/>
     </event>
     <event name="Work" repeats="5">
-        <resource type="teacher" name="shpin"/>
+        <resource type="operator" name="shpin"/>
     </event>
     <event name="Work" repeats="10">
-        <resource type="teacher" name="teran"/>
+        <resource type="operator" name="teran"/>
     </event>
   </events>
 </ttm>
