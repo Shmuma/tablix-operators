@@ -1,44 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE ttm PUBLIC "-//Tablix//DTD TTM 0.2.0//EN" "http://www.tablix.org/releases/dtd/tablix2r1.dtd">
-<ttm version="0.2.0" fitness="800">
+<ttm version="0.2.0" fitness="2450">
   <info>
-    <title>User's preferences module test</title>
+    <title>Yandex DC</title>
     <address>www.yandex.ru</address>
     <author>Max Lapan</author>
   </info>
   <modules>
-    <module name="available" weight="200" mandatory="yes"/>
     <module name="timeplace" weight="500" mandatory="yes"/>
     <module name="sametimelight" weight="500" mandatory="yes"/>
-    <module name="room_available" weight="500" mandatory="yes">
-      <option name="debug">0</option>
+    <module name="room_available" weight="500" mandatory="yes"/>
+    <module name="walk" weight="500" mandatory="yes">
+      <option name="resourcetype">operator</option>
+    </module>
+    <module name="nights" weight="500" mandatory="yes">
+      <option name="max-nights-per-week">2</option>
+      <option name="max-nights-weight">100</option>
     </module>
     <module name="preference" weight="50" mandatory="no"/>
     <module name="time_descriptions" weight="0" mandatory="no">
       <option name="output">time_descr.txt</option>
     </module>
+    <module name="shift" weight="500" mandatory="no"/>
   </modules>
 
   <resources>
     <constant>
       <resourcetype type="operator" typeid="0">
-        <resource name="airdog" resid="0"/>
-        <resource name="alex27j" resid="1"/>
-        <resource name="astronom" resid="2"/>
-        <resource name="shpin" resid="3">
-          <restriction type="pref-room">!2 ETO</restriction>
-          <restriction type="pref-room">1 Golem</restriction>
+        <resource name="airdog" resid="0">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
         </resource>
-        <resource name="teran" resid="4">
-          <restriction type="pref-room">2 ETO</restriction>
-          <restriction type="pref-room">2 Vavilova</restriction>
-          <restriction type="pref-time-day">!2 0</restriction>
-          <restriction type="pref-time-time">!2 0</restriction>
-          <restriction type="pref-time-cell">!2 1 2</restriction>
+        <resource name="alex27j" resid="1">
+          <restriction type="pref-room">2 Stanislav</restriction>
         </resource>
-        <resource name="shmuma" resid="5">
-          <restriction type="pref-room">1 Vavilova</restriction>
-          <restriction type="pref-room">!1 ETO</restriction>
+        <resource name="astronom" resid="2">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="bander" resid="3">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="dukeartem" resid="4">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="erokhin" resid="5">
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="ezhichek" resid="6">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="gcat" resid="7">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="ironhulk" resid="8">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="kent" resid="9">
+          <restriction type="pref-room">2 Stanislav2</restriction>
+        </resource>
+        <resource name="korrus" resid="10">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="lacitis" resid="11">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="mixas" resid="12">
+          <restriction type="pref-room">2 Golem</restriction>
+        </resource>
+        <resource name="mixermsk" resid="13">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="newins" resid="14">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="nixx" resid="15">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="nstd" resid="16">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="porfel" resid="17">
+          <restriction type="allow-double">1</restriction>
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="renew" resid="18">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="romashkin" resid="19">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="sbalandin" resid="20">
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="shpin" resid="21">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="teran" resid="22">
+          <restriction type="allow-double">1</restriction>
         </resource>
       </resourcetype>
     </constant>
@@ -50,23 +111,65 @@
 
       <resourcetype type="room" typeid="2">
         <resource name="Vavilova" resid="0">
-          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
           <restriction type="room-not-available-time">0</restriction>
-          <restriction type="room-not-available-day">5</restriction>
-          <restriction type="room-not-available-day">6</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
         </resource>
         <resource name="ETO" resid="1">
-          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
           <restriction type="room-must-be-filled">0</restriction>
           <restriction type="room-must-be-filled">1</restriction>
           <restriction type="room-must-be-filled">2</restriction>
-          <restriction type="room-not-available-cell">1 2</restriction>
-          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
         </resource>
-        <resource name="Golem" resid="2">
+        <resource name="ETO2" resid="2">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
+        <resource name="UGR" resid="3">
           <restriction type="room-must-be-filled">0</restriction>
           <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
           <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
+        <resource name="UGR2" resid="4">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-must-be-filled">2</restriction>
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
+        <resource name="Ivan" resid="5">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-must-be-filled">1</restriction>
+          <restriction type="time-descriptions">23:00,10:00,15:00</restriction>
+        </resource>
+        <resource name="Samokat" resid="6">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-cell">5 2</restriction>
+          <restriction type="room-not-available-cell">6 2</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
+        </resource>
+        <resource name="Golem" resid="7">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">1</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
+        </resource>
+        <resource name="Stanislav" resid="8">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
+        </resource>
+        <resource name="Stanislav2" resid="9">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-time">2</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+          <restriction type="time-descriptions">09:00,10:00,12:00</restriction>
         </resource>
       </resourcetype>
     </variable>
@@ -75,153 +178,486 @@
   <events>
     <event name="Work" repeats="1" tupleid="0">
         <resource type="operator" name="airdog"/>
-    	<resource type="time" name="3 0"/>
-			<resource type="room" name="Golem"/>
+    	<resource type="time" name="4 0"/>
+			<resource type="room" name="ETO"/>
 		</event><event name="Work" repeats="1" tupleid="1">
         <resource type="operator" name="airdog"/>
-    	<resource type="time" name="1 0"/>
-			<resource type="room" name="Golem"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="ETO2"/>
 		</event><event name="Work" repeats="1" tupleid="2">
         <resource type="operator" name="airdog"/>
-    	<resource type="time" name="6 0"/>
-			<resource type="room" name="ETO"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="UGR2"/>
 		</event><event name="Work" repeats="1" tupleid="3">
         <resource type="operator" name="airdog"/>
-    	<resource type="time" name="4 0"/>
-			<resource type="room" name="ETO"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="4">
+        <resource type="operator" name="airdog"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="UGR2"/>
 		</event>
-    <event name="Work" repeats="1" tupleid="4">
-        <resource type="operator" name="alex27j"/>
-    	<resource type="time" name="4 1"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="5">
+    <event name="Work" repeats="1" tupleid="5">
         <resource type="operator" name="alex27j"/>
     	<resource type="time" name="1 1"/>
-			<resource type="room" name="ETO"/>
+			<resource type="room" name="Stanislav"/>
 		</event><event name="Work" repeats="1" tupleid="6">
         <resource type="operator" name="alex27j"/>
-    	<resource type="time" name="4 0"/>
-			<resource type="room" name="Golem"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="Stanislav"/>
 		</event><event name="Work" repeats="1" tupleid="7">
         <resource type="operator" name="alex27j"/>
-    	<resource type="time" name="2 0"/>
-			<resource type="room" name="ETO"/>
-		</event>
-    <event name="Work" repeats="1" tupleid="8">
-        <resource type="operator" name="astronom"/>
-    	<resource type="time" name="5 0"/>
-			<resource type="room" name="Golem"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="Stanislav"/>
+		</event><event name="Work" repeats="1" tupleid="8">
+        <resource type="operator" name="alex27j"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="Stanislav"/>
 		</event><event name="Work" repeats="1" tupleid="9">
-        <resource type="operator" name="astronom"/>
-    	<resource type="time" name="1 0"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="10">
+        <resource type="operator" name="alex27j"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="Stanislav"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="10">
         <resource type="operator" name="astronom"/>
     	<resource type="time" name="3 1"/>
-			<resource type="room" name="Golem"/>
+			<resource type="room" name="ETO2"/>
 		</event><event name="Work" repeats="1" tupleid="11">
         <resource type="operator" name="astronom"/>
-    	<resource type="time" name="2 1"/>
-			<resource type="room" name="ETO"/>
-		</event>
-    <event name="Work" repeats="1" tupleid="12">
-        <resource type="operator" name="shpin"/>
-    	<resource type="time" name="0 1"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="13">
-        <resource type="operator" name="shpin"/>
-    	<resource type="time" name="4 1"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="14">
-        <resource type="operator" name="shpin"/>
-    	<resource type="time" name="6 0"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="15">
-        <resource type="operator" name="shpin"/>
-    	<resource type="time" name="0 0"/>
-			<resource type="room" name="Golem"/>
-		</event>
-    <event name="Work" repeats="1" tupleid="16">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="3 2"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="17">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="2 2"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="18">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="6 1"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="19">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="0 2"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="20">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="0 0"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="21">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="0 1"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="22">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="4 2"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="23">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="3 0"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="24">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="3 1"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="25">
-        <resource type="operator" name="teran"/>
-    	<resource type="time" name="4 1"/>
-			<resource type="room" name="Vavilova"/>
-		</event>
-    <event name="Work" repeats="1" tupleid="26">
-        <resource type="operator" name="shmuma"/>
-    	<resource type="time" name="2 1"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="27">
-        <resource type="operator" name="shmuma"/>
     	<resource type="time" name="5 1"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="28">
-        <resource type="operator" name="shmuma"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="12">
+        <resource type="operator" name="astronom"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="13">
+        <resource type="operator" name="astronom"/>
     	<resource type="time" name="4 2"/>
 			<resource type="room" name="Vavilova"/>
-		</event><event name="Work" repeats="1" tupleid="29">
-        <resource type="operator" name="shmuma"/>
-    	<resource type="time" name="6 2"/>
-			<resource type="room" name="ETO"/>
-		</event><event name="Work" repeats="1" tupleid="30">
-        <resource type="operator" name="shmuma"/>
-    	<resource type="time" name="5 2"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="31">
-        <resource type="operator" name="shmuma"/>
-    	<resource type="time" name="2 0"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="32">
-        <resource type="operator" name="shmuma"/>
-    	<resource type="time" name="6 1"/>
-			<resource type="room" name="Golem"/>
-		</event><event name="Work" repeats="1" tupleid="33">
-        <resource type="operator" name="shmuma"/>
+		</event><event name="Work" repeats="1" tupleid="14">
+        <resource type="operator" name="astronom"/>
     	<resource type="time" name="2 2"/>
+			<resource type="room" name="ETO2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="15">
+        <resource type="operator" name="bander"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="16">
+        <resource type="operator" name="bander"/>
+    	<resource type="time" name="3 0"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="17">
+        <resource type="operator" name="bander"/>
+    	<resource type="time" name="5 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="18">
+        <resource type="operator" name="bander"/>
+    	<resource type="time" name="6 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="19">
+        <resource type="operator" name="bander"/>
+    	<resource type="time" name="5 0"/>
+			<resource type="room" name="UGR"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="20">
+        <resource type="operator" name="dukeartem"/>
+    	<resource type="time" name="5 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="21">
+        <resource type="operator" name="dukeartem"/>
+    	<resource type="time" name="3 2"/>
 			<resource type="room" name="Vavilova"/>
-		</event><event name="Work" repeats="1" tupleid="34">
-        <resource type="operator" name="shmuma"/>
+		</event><event name="Work" repeats="1" tupleid="22">
+        <resource type="operator" name="dukeartem"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="23">
+        <resource type="operator" name="dukeartem"/>
     	<resource type="time" name="1 2"/>
 			<resource type="room" name="Vavilova"/>
-		</event><event name="Work" repeats="1" tupleid="35">
-        <resource type="operator" name="shmuma"/>
+		</event><event name="Work" repeats="1" tupleid="24">
+        <resource type="operator" name="dukeartem"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="25">
+        <resource type="operator" name="erokhin"/>
+    	<resource type="time" name="6 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="26">
+        <resource type="operator" name="erokhin"/>
     	<resource type="time" name="1 1"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="27">
+        <resource type="operator" name="erokhin"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="28">
+        <resource type="operator" name="erokhin"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="29">
+        <resource type="operator" name="erokhin"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="Samokat"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="30">
+        <resource type="operator" name="ezhichek"/>
+    	<resource type="time" name="0 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="31">
+        <resource type="operator" name="ezhichek"/>
+    	<resource type="time" name="5 1"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="32">
+        <resource type="operator" name="ezhichek"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="33">
+        <resource type="operator" name="ezhichek"/>
+    	<resource type="time" name="6 2"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="34">
+        <resource type="operator" name="ezhichek"/>
+    	<resource type="time" name="1 2"/>
+			<resource type="room" name="ETO2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="35">
+        <resource type="operator" name="gcat"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="36">
+        <resource type="operator" name="gcat"/>
+    	<resource type="time" name="2 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="37">
+        <resource type="operator" name="gcat"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="38">
+        <resource type="operator" name="gcat"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="39">
+        <resource type="operator" name="gcat"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="ETO"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="40">
+        <resource type="operator" name="ironhulk"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="41">
+        <resource type="operator" name="ironhulk"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="42">
+        <resource type="operator" name="ironhulk"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="43">
+        <resource type="operator" name="ironhulk"/>
+    	<resource type="time" name="5 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="44">
+        <resource type="operator" name="ironhulk"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="ETO"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="45">
+        <resource type="operator" name="kent"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="Stanislav2"/>
+		</event><event name="Work" repeats="1" tupleid="46">
+        <resource type="operator" name="kent"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="Stanislav2"/>
+		</event><event name="Work" repeats="1" tupleid="47">
+        <resource type="operator" name="kent"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="Stanislav2"/>
+		</event><event name="Work" repeats="1" tupleid="48">
+        <resource type="operator" name="kent"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="Stanislav2"/>
+		</event><event name="Work" repeats="1" tupleid="49">
+        <resource type="operator" name="kent"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="Stanislav2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="50">
+        <resource type="operator" name="korrus"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="51">
+        <resource type="operator" name="korrus"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="52">
+        <resource type="operator" name="korrus"/>
+    	<resource type="time" name="0 0"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="53">
+        <resource type="operator" name="korrus"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="54">
+        <resource type="operator" name="korrus"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="UGR2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="55">
+        <resource type="operator" name="lacitis"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="56">
+        <resource type="operator" name="lacitis"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="57">
+        <resource type="operator" name="lacitis"/>
+    	<resource type="time" name="3 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="58">
+        <resource type="operator" name="lacitis"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="59">
+        <resource type="operator" name="lacitis"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="ETO"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="60">
+        <resource type="operator" name="mixas"/>
+    	<resource type="time" name="1 2"/>
 			<resource type="room" name="Golem"/>
+		</event><event name="Work" repeats="1" tupleid="61">
+        <resource type="operator" name="mixas"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="Golem"/>
+		</event><event name="Work" repeats="1" tupleid="62">
+        <resource type="operator" name="mixas"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="Golem"/>
+		</event><event name="Work" repeats="1" tupleid="63">
+        <resource type="operator" name="mixas"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="Golem"/>
+		</event><event name="Work" repeats="1" tupleid="64">
+        <resource type="operator" name="mixas"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="Golem"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="65">
+        <resource type="operator" name="mixermsk"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="66">
+        <resource type="operator" name="mixermsk"/>
+    	<resource type="time" name="6 2"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="67">
+        <resource type="operator" name="mixermsk"/>
+    	<resource type="time" name="2 0"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="68">
+        <resource type="operator" name="mixermsk"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="69">
+        <resource type="operator" name="mixermsk"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="ETO2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="70">
+        <resource type="operator" name="newins"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="71">
+        <resource type="operator" name="newins"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="72">
+        <resource type="operator" name="newins"/>
+    	<resource type="time" name="5 2"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="73">
+        <resource type="operator" name="newins"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="74">
+        <resource type="operator" name="newins"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="Ivan"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="75">
+        <resource type="operator" name="nixx"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="76">
+        <resource type="operator" name="nixx"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="77">
+        <resource type="operator" name="nixx"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="78">
+        <resource type="operator" name="nixx"/>
+    	<resource type="time" name="5 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="79">
+        <resource type="operator" name="nixx"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="UGR"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="80">
+        <resource type="operator" name="nstd"/>
+    	<resource type="time" name="5 2"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="81">
+        <resource type="operator" name="nstd"/>
+    	<resource type="time" name="6 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="82">
+        <resource type="operator" name="nstd"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="83">
+        <resource type="operator" name="nstd"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="84">
+        <resource type="operator" name="nstd"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="Samokat"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="85">
+        <resource type="operator" name="porfel"/>
+    	<resource type="time" name="5 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="86">
+        <resource type="operator" name="porfel"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="87">
+        <resource type="operator" name="porfel"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="88">
+        <resource type="operator" name="porfel"/>
+    	<resource type="time" name="1 2"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="89">
+        <resource type="operator" name="porfel"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="ETO2"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="90">
+        <resource type="operator" name="renew"/>
+    	<resource type="time" name="4 0"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="91">
+        <resource type="operator" name="renew"/>
+    	<resource type="time" name="3 2"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="92">
+        <resource type="operator" name="renew"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="93">
+        <resource type="operator" name="renew"/>
+    	<resource type="time" name="6 2"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="94">
+        <resource type="operator" name="renew"/>
+    	<resource type="time" name="1 2"/>
+			<resource type="room" name="UGR"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="95">
+        <resource type="operator" name="romashkin"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="96">
+        <resource type="operator" name="romashkin"/>
+    	<resource type="time" name="1 2"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="97">
+        <resource type="operator" name="romashkin"/>
+    	<resource type="time" name="5 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="98">
+        <resource type="operator" name="romashkin"/>
+    	<resource type="time" name="1 0"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="99">
+        <resource type="operator" name="romashkin"/>
+    	<resource type="time" name="6 1"/>
+			<resource type="room" name="Vavilova"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="100">
+        <resource type="operator" name="sbalandin"/>
+    	<resource type="time" name="1 2"/>
+			<resource type="room" name="UGR2"/>
+		</event><event name="Work" repeats="1" tupleid="101">
+        <resource type="operator" name="sbalandin"/>
+    	<resource type="time" name="0 2"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="102">
+        <resource type="operator" name="sbalandin"/>
+    	<resource type="time" name="4 2"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="103">
+        <resource type="operator" name="sbalandin"/>
+    	<resource type="time" name="2 1"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="104">
+        <resource type="operator" name="sbalandin"/>
+    	<resource type="time" name="5 1"/>
+			<resource type="room" name="ETO"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="105">
+        <resource type="operator" name="shpin"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="Samokat"/>
+		</event><event name="Work" repeats="1" tupleid="106">
+        <resource type="operator" name="shpin"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="107">
+        <resource type="operator" name="shpin"/>
+    	<resource type="time" name="1 0"/>
+			<resource type="room" name="UGR"/>
+		</event><event name="Work" repeats="1" tupleid="108">
+        <resource type="operator" name="shpin"/>
+    	<resource type="time" name="3 1"/>
+			<resource type="room" name="Ivan"/>
+		</event><event name="Work" repeats="1" tupleid="109">
+        <resource type="operator" name="shpin"/>
+    	<resource type="time" name="5 2"/>
+			<resource type="room" name="Vavilova"/>
+		</event>
+    <event name="Work" repeats="1" tupleid="110">
+        <resource type="operator" name="teran"/>
+    	<resource type="time" name="2 2"/>
+			<resource type="room" name="Vavilova"/>
+		</event><event name="Work" repeats="1" tupleid="111">
+        <resource type="operator" name="teran"/>
+    	<resource type="time" name="0 1"/>
+			<resource type="room" name="ETO2"/>
+		</event><event name="Work" repeats="1" tupleid="112">
+        <resource type="operator" name="teran"/>
+    	<resource type="time" name="4 1"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="113">
+        <resource type="operator" name="teran"/>
+    	<resource type="time" name="1 1"/>
+			<resource type="room" name="ETO"/>
+		</event><event name="Work" repeats="1" tupleid="114">
+        <resource type="operator" name="teran"/>
+    	<resource type="time" name="6 0"/>
+			<resource type="room" name="UGR"/>
 		</event>
   </events>
 </ttm>

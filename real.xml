@@ -8,59 +8,100 @@
     <author>Max Lapan</author>
   </info>
   <modules>
-    <module name="available" weight="200" mandatory="yes"/>
     <module name="timeplace" weight="500" mandatory="yes"/>
     <module name="sametimelight" weight="500" mandatory="yes"/>
-    <module name="maxperday" weight="100" mandatory="no">
-      <option name="resourcetype">operator</option>
-      <option name="maxperday">1</option>
-    </module>
-    <module name="walk" weight="5" mandatory="no">
-      <option name="resourcetype">operator</option>
-    </module>
     <module name="room_available" weight="500" mandatory="yes"/>
+    <module name="walk" weight="500" mandatory="yes">
+      <option name="resourcetype">operator</option>
+    </module>
     <module name="nights" weight="500" mandatory="yes">
       <option name="max-nights-per-week">2</option>
       <option name="max-nights-weight">100</option>
     </module>
-    <module name="preference" weight="0" mandatory="yes"/>
+    <module name="preference" weight="50" mandatory="no"/>
     <module name="time_descriptions" weight="0" mandatory="no">
       <option name="output">time_descr.txt</option>
     </module>
+    <module name="shift" weight="500" mandatory="no"/>
   </modules>
 
   <resources>
     <constant>
       <resourcetype type="operator">
-        <resource name="airdog"></resource>
+        <resource name="airdog">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
         <resource name="alex27j">
           <restriction type="pref-room">2 Stanislav</restriction>
         </resource>
-        <resource name="astronom"></resource>
-        <resource name="bander"></resource>
-        <resource name="dukeartem"></resource>
-        <resource name="erokhin"></resource>
-        <resource name="ezhichek"></resource>
-        <resource name="gcat"></resource>
-        <resource name="ironhulk"></resource>
+        <resource name="astronom">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="bander">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="dukeartem">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="erokhin">
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="ezhichek">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="gcat">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="ironhulk">
+          <restriction type="allow-double">1</restriction>
+        </resource>
         <resource name="kent">
           <restriction type="pref-room">2 Stanislav2</restriction>
         </resource>
-        <resource name="korrus"></resource>
-        <resource name="lacitis"></resource>
+        <resource name="korrus">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="lacitis">
+          <restriction type="allow-double">1</restriction>
+        </resource>
         <resource name="mixas">
           <restriction type="pref-room">2 Golem</restriction>
         </resource>
-        <resource name="mixermsk"></resource>
-        <resource name="newins"></resource>
-        <resource name="nixx"></resource>
-        <resource name="nstd"></resource>
-        <resource name="porfel"></resource>
-        <resource name="renew"></resource>
-        <resource name="romashkin"></resource>
-        <resource name="sbalandin"></resource>
-        <resource name="shpin"></resource>
-        <resource name="teran"></resource>
+        <resource name="mixermsk">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="newins">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="nixx">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="nstd">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="porfel">
+          <restriction type="allow-double">1</restriction>
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="renew">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+        <resource name="romashkin">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="sbalandin">
+          <restriction type="pref-room">1 Samokat</restriction>
+        </resource>
+        <resource name="shpin">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="teran">
+          <restriction type="allow-double">1</restriction>
+        </resource>
       </resourcetype>
     </constant>
 
