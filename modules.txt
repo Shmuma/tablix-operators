@@ -1,0 +1,124 @@
+Описания модулей и параметров.
+
+Модуль available:
+Ограничение not-available:
+указывается у операторов и позволяет задавать день и смену, когда человек
+не может работать. Пример (во вторник, в ночную смену airdog работать не может):
+
+        <resource name="airdog">
+          <restriction type="not-available">1 0</restriction>
+        </resource>
+
+
+Модуль timeplace:
+Запрещает планирование двух разных событий в одном и том же месте.
+
+
+Модуль sametimelight:
+Запрещает нахождение одного оператора в двух разныхм местах.
+
+
+Модуль room_available:
+Ограничения: 
+1. room-not-available-time, 
+2. room-not-available-day, 
+3. room-not-available-cell
+
+Позволяет выкидывать дни, смены или конкретные таймслоты из планирования для определенных ДЦ. Пример
+(в выходные, ночью и во вторник утром смен в ДЦ3 нет):
+        <resource name="DC3">
+          <restriction type="room-not-available-time">0</restriction>
+          <restriction type="room-not-available-day">5</restriction>
+          <restriction type="room-not-available-day">6</restriction>
+          <restriction type="room-not-available-cell">1 1</restriction>
+        </resource>
+
+
+Модуль nights:
+Параметры: 
+1. max-nights-per-week: максимальное число ночных (нулевых) смен для человека.
+2. max-nights-weight: размер штрафа за превышение числа ночных смен
+
+Модуль проверяет ситуацию двух ночных смен подряд и кол-во ночных смен на неделе.
+
+
+Модуль time_description:
+Сохраняет времена начала смен во внешний файл, для последующего использования модулем экспорта в HTML.
+Времена начала смен указываются один раз для каждого ДЦ, в следующем виде:
+        <resource name="ETO">
+          <restriction type="time-descriptions">23:00,07:00,15:00</restriction>
+        </resource>
+
+
+Модуль shift:
+Параметры:
+1. hours - количество чесов в смене
+2. distance - минимальное расстояние между сменами
+
+Ограничения:
+1. allow-near-shifts - у операторов, указывает на возможность несоблюдения требования расстояния
+между сменами. Возможны значения 0 - требование должно соблюдатся или 1 - можно забить.
+2. allow-double - у операторов, указывает на возможность двойных смен (0 -- не возможно, 1 --
+возможно, 2 -- обязательно)
+3. allow-triple - у операторов, указывает на возможность тройных смен (0 -- не возможно, 1 --
+возможно, 2 -- обязательно)
+
+Также, модуль использует времена начала смен, указанных в ограничении time-descriptions для
+вычисления расстояния между сменами.
+
+Модуль проверяет двойные и тройные смены, а также расстояния между сменами. Пример (bander допускает
+двойные смены, для dukeartem одинарные смены недопустимы, либо двойные, либо тройные):
+
+        <resource name="bander">
+          <restriction type="allow-double">1</restriction>
+        </resource>
+        <resource name="dukeartem">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+        </resource>
+
+
+Модуль walk:
+параметр resourcetype: всегда должен быть равен operator.
+
+Проверяет перемещение операторов между ДЦ в течении дня.
+
+
+Модуль preference:
+
+Управляет предпочтениями операторов.
+
+Ограничения:
+1. pref-room -- предпочтения для датацентра
+2. pref-time-day -- предпочтение для дня
+3. pref-time-time -- предпочтение для смены
+4. pref-time-cell -- предпочтение для таймслота
+
+предпочтения задаются в виде: 'приоритет' 'объект'. 
+Где приоритет может быть:
+1. !2 - запрещено
+2. !1 - нежелательно
+3. 0 - все равно (то же самое что и не указывать)
+4. 1 - желательно
+5. 2 - обязательно
+
+Объект указывает объект предпочтений, и зависит от имени ограничения:
+1. pref-room: объектом является имя датацентра, 
+2. pref-time-day: указывается день недели (нумерация с нуля),
+3. pref-time-time: номер смены (0 - ночная, 1 - утренняя, 2 - дневная)
+4. pref-time-cell: день и смена через пробел.
+
+Пример (teran предпочитает не работать в ЭТО и на Вавилова, причем нежелательно работать в
+понедельник и воскресенье, и запрещено работать в ночь со среды на четверг, в субботу и вторник):
+        <resource name="teran">
+          <restriction type="allow-double">2</restriction>
+          <restriction type="allow-triple">2</restriction>
+               <restriction type="pref-room">!1 ETO</restriction>
+               <restriction type="pref-room">!1 Vavilova</restriction>
+               <restriction type="pref-time-day">!1 0</restriction>
+               <restriction type="pref-time-day">!1 6</restriction>
+               <restriction type="pref-time-cell">!2 3 0</restriction>
+               <restriction type="pref-time-day">!2 5</restriction>
+               <restriction type="pref-time-time">!2 1</restriction>
+        </resource>
+ 
